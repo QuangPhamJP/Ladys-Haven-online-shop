@@ -20,6 +20,13 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/additional-methods.js"></script>
+
+    <style>
+        .error{
+            color:red;
+        }
+    </style>
+
     <script>
       $( function() {
         $( "#birthDate" ).datepicker();
@@ -52,49 +59,49 @@
             <div class="form-group">
                 <label for="firstName" class="col-sm-3 control-label">First Name</label>
                 <div class="col-sm-9">
-                    <input type="text" id="firstName" placeholder="First Name" class="form-control" name="firstName" required>
+                    <input type="text" id="firstName" placeholder="First Name" class="form-control" name="firstName" required autofocus minlength>
                 </div>
             </div>
             <div class="form-group">
                 <label for="lastName" class="col-sm-3 control-label">Last Name</label>
                 <div class="col-sm-9">
-                    <input type="text" id="lastName" placeholder="Last Name" class="form-control" autofocus>
+                    <input type="text" id="lastName" placeholder="Last Name" class="form-control" autofocus required>
                 </div>
             </div>
             <div class="form-group">
                 <label for="email" class="col-sm-3 control-label">Username </label>
                 <div class="col-sm-9">
-                    <input type="text" id="username" placeholder="Username" class="form-control" name= "username">
+                    <input type="text" id="username" placeholder="Username" class="form-control" name= "username" autofocus>
                 </div>
             </div>
             <div class="form-group">
                 <label for="email" class="col-sm-3 control-label">Email </label>
                 <div class="col-sm-9">
-                    <input type="email" id="email" placeholder="Email" class="form-control" name= "email">
+                    <input type="email" id="email" placeholder="Email" class="form-control" name= "email" autofocus>
                 </div>
             </div>
             <div class="form-group">
                 <label for="password" class="col-sm-3 control-label">Password</label>
                 <div class="col-sm-9">
-                    <input type="password" id="password" placeholder="Password" class="form-control" >
+                    <input type="password" id="password" placeholder="Password" class="form-control" autofocus>
                 </div>
             </div>
             <div class="form-group">
                 <label for="password" class="col-sm-3 control-label">Confirm Password</label>
                 <div class="col-sm-9">
-                    <input type="password" id="cpassword" placeholder="Password" class="form-control" >
+                    <input type="password" id="cpassword" placeholder="Password" class="form-control" autofocus>
                 </div>
             </div>
             <div class="form-group">
                 <label for="birthDate" class="col-sm-3 control-label">Date of Birth</label>
                 <div class="col-sm-9">
-                    <input type="date" id="birthDate" class="form-control" >
+                    <input type="date" id="birthDate" class="form-control" autofocus>
                 </div>
             </div>
             <div class="form-group">
                 <label for="phoneNumber" class="col-sm-3 control-label">Phone number </label>
                 <div class="col-sm-9">
-                    <input type="phoneNumber" id="phoneNumber" placeholder="Phone number" class="form-control" >
+                    <input type="phoneNumber" id="phoneNumber" placeholder="Phone number" class="form-control" autofocus>
                 </div>
             </div>
             <div class="form-group">
@@ -162,7 +169,14 @@
     
         </footer>
         <script>
-            
+            $("#form-register").validate({
+                rules:{
+                    firstName: "required"
+                },
+                messages:{
+                    firstName: "Please enter your firstname"
+                }
+            });
         </script>
 </body>
 
