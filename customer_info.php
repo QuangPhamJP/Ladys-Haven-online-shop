@@ -105,27 +105,27 @@
             <div class="form-group">
                 <label for="phoneNumber" class="col-sm-3 control-label">Phone number </label>
                 <div class="col-sm-9">
-                    <input type="phoneNumber" id="phoneNumber" placeholder="Phone number" class="form-control" name="phoneNumber">
+                    <?=$getCustomer_Result[0]["phone"]?>
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label col-sm-3">Gender</label>
                 <div class="col-sm-6">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <label class="radio-inline">
-                                <input type="radio" id="femaleRadio" value="Female" name="gender">Female
-                            </label>
-                        </div>
-                        <div class="col-sm-4">
-                            <label class="radio-inline">
-                                <input type="radio" id="maleRadio" value="Male" name="gender">Male
-                            </label>
-                        </div>
-                    </div>
+                    <?php 
+                        if( is_null($getCustomer_Result[0]["gender"]) == true) {
+                            echo "";
+                        }
+                        else if($getCustomer_Result[0]["gender"] == 0){
+                            echo "Male";
+                        }
+                        else if($getCustomer_Result[0]["gender"] == 1){
+                            echo "Female";
+                        }
+                    ?>
                 </div>
             </div> 
-            <button type="submit" class="btn btn-primary btn-block btnUpdate">Update</button>
+            <input type="button" onclick="location.href='customer_edit.php';" value="Edit Profile" class="btn btn-primary btn-block " />
+            <input type="button" onclick="location.href='customer_changepass.php';" value="Change Password" class="btn btn-primary btn-block " />
         </form> 
     </div> 
     <footer class="footer-bottom footer-style">

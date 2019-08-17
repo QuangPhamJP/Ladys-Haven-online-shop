@@ -79,52 +79,23 @@
         <form class="form-horizontal" role="form" id="form-register">
             <h2 class="form-heading" style="margin-bottom:15px;">My Profile</h2>
             <div class="form-group">
-                <label for="firstName" class="col-sm-3 control-label">First Name</label>
+                <label for="email" class="col-sm-3 control-label">Enter Recent Password</label>
                 <div class="col-sm-9">
-                    <input type="text" id="firstName" placeholder="First Name" class="form-control" name="firstName" value="<?=$getCustomer_Result[0]["firstname"]?>">
+                    <input type="text" id="oldpassword" placeholder="oldpassword" class="form-control" name= "oldpassword">
                 </div>
             </div>
             <div class="form-group">
-                <label for="lastName" class="col-sm-3 control-label">Last Name</label>
+                <label for="password" class="col-sm-3 control-label">Enter New Password</label>
                 <div class="col-sm-9">
-                    <input type="text" id="lastName" placeholder="Last Name" class="form-control" name="lastName" value="<?=$getCustomer_Result[0]["lastname"]?>">
+                    <input type="password" id="password" placeholder="Password" class="form-control" name="password">
                 </div>
             </div>
             <div class="form-group">
-                <label for="email" class="col-sm-3 control-label">Email </label>
+                <label for="password" class="col-sm-3 control-label">Enter Confirm Password</label>
                 <div class="col-sm-9">
-                    <input type="text" id="email" placeholder="Email" class="form-control" name= "email" value="<?=$getCustomer_Result[0]["email"]?>">
+                    <input type="password" id="cpassword" placeholder="Password" class="form-control" name="cpassword">
                 </div>
             </div>
-            <div class="form-group">
-                <label for="birthDate" class="col-sm-3 control-label">Date of Birth</label>
-                <div class="col-sm-9">
-                    <input type="text" id="birthDate" class="form-control" placeholder="yyyy-mm-dd" name="birthDate" readonly style="background: white;">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="phoneNumber" class="col-sm-3 control-label">Phone number </label>
-                <div class="col-sm-9">
-                    <input type="phoneNumber" id="phoneNumber" placeholder="Phone number" class="form-control" name="phoneNumber">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-sm-3">Gender</label>
-                <div class="col-sm-6">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <label class="radio-inline">
-                                <input type="radio" id="femaleRadio" value="Female" name="gender">Female
-                            </label>
-                        </div>
-                        <div class="col-sm-4">
-                            <label class="radio-inline">
-                                <input type="radio" id="maleRadio" value="Male" name="gender">Male
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div> 
             <button type="submit" class="btn btn-primary btn-block btnUpdate">Save Changes</button>
         </form> 
     </div> 
