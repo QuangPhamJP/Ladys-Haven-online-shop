@@ -20,6 +20,7 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/additional-methods.js"></script>
+    <script src="js/register-validate.js"></script>
 
     <style>
         .error{
@@ -59,49 +60,49 @@
             <div class="form-group">
                 <label for="firstName" class="col-sm-3 control-label">First Name</label>
                 <div class="col-sm-9">
-                    <input type="text" id="firstName" placeholder="First Name" class="form-control" name="firstName" required autofocus minlength>
+                    <input type="text" id="firstName" placeholder="First Name" class="form-control" name="firstName" autofocus>
                 </div>
             </div>
             <div class="form-group">
                 <label for="lastName" class="col-sm-3 control-label">Last Name</label>
                 <div class="col-sm-9">
-                    <input type="text" id="lastName" placeholder="Last Name" class="form-control" autofocus required>
+                    <input type="text" id="lastName" placeholder="Last Name" class="form-control" autofocus name="lastName">
                 </div>
             </div>
             <div class="form-group">
                 <label for="email" class="col-sm-3 control-label">Username </label>
                 <div class="col-sm-9">
-                    <input type="text" id="username" placeholder="Username" class="form-control" name= "username" autofocus>
+                    <input type="text" id="username" placeholder="Username" class="form-control" name= "username">
                 </div>
             </div>
             <div class="form-group">
                 <label for="email" class="col-sm-3 control-label">Email </label>
                 <div class="col-sm-9">
-                    <input type="email" id="email" placeholder="Email" class="form-control" name= "email" autofocus>
+                    <input type="text" id="email" placeholder="Email" class="form-control" name= "email">
                 </div>
             </div>
             <div class="form-group">
                 <label for="password" class="col-sm-3 control-label">Password</label>
                 <div class="col-sm-9">
-                    <input type="password" id="password" placeholder="Password" class="form-control" autofocus>
+                    <input type="password" id="password" placeholder="Password" class="form-control" name="password">
                 </div>
             </div>
             <div class="form-group">
                 <label for="password" class="col-sm-3 control-label">Confirm Password</label>
                 <div class="col-sm-9">
-                    <input type="password" id="cpassword" placeholder="Password" class="form-control" autofocus>
+                    <input type="password" id="cpassword" placeholder="Password" class="form-control" name="cpassword">
                 </div>
             </div>
             <div class="form-group">
                 <label for="birthDate" class="col-sm-3 control-label">Date of Birth</label>
                 <div class="col-sm-9">
-                    <input type="date" id="birthDate" class="form-control" autofocus>
+                    <input type="text" id="birthDate" class="form-control" placeholder="mm/dd/yyyy" name="birthDate" readonly style="background: white;">
                 </div>
             </div>
             <div class="form-group">
                 <label for="phoneNumber" class="col-sm-3 control-label">Phone number </label>
                 <div class="col-sm-9">
-                    <input type="phoneNumber" id="phoneNumber" placeholder="Phone number" class="form-control" autofocus>
+                    <input type="phoneNumber" id="phoneNumber" placeholder="Phone number" class="form-control">
                 </div>
             </div>
             <div class="form-group">
@@ -168,16 +169,6 @@
             </div>
     
         </footer>
-        <script>
-            $("#form-register").validate({
-                rules:{
-                    firstName: "required"
-                },
-                messages:{
-                    firstName: "Please enter your firstname"
-                }
-            });
-        </script>
 </body>
 
 </html>
