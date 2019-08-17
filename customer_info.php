@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Customer_Info</title>
+    <title>My Profile</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/styling.css">
     <script src="js/jquery-3.3.1.min.js"></script>
@@ -42,14 +42,14 @@
      </script>
     <?php 
         session_start();
+        $_SESSION["username"] = "abc";
         require_once 'database/databaseConnect.php';
         require_once 'Constants/constants.php';
         $conn = DatabaseConnect::connect();
         if($conn != null){
-            $getCustomer_Result = DatabaseConnect::getResult(Constants::$SELECT_ALL_CUSTOMER."where username like ", $conn);
-            echo $getCustomer_Result[0]['password'];
-            DatabaseConnect::closeConnect($conn);
+            $getCustomer_Result = DatabaseConnect::getResult(Constants::$SELECT_ALL_CUSTOMER." where username like '".$_SESSION["username"]."'", $conn); 
         }
+
 
 
     ?>
@@ -76,47 +76,30 @@
     </nav>
     <div class="container">
         <form class="form-horizontal" role="form" id="form-register">
-            <h2 class="form-heading" style="margin-bottom:15px;">Customer_Info</h2>
+            <h2 class="form-heading" style="margin-bottom:15px;">My Profile</h2>
             <div class="form-group">
                 <label for="firstName" class="col-sm-3 control-label">First Name</label>
                 <div class="col-sm-9">
-                    <input type="text" id="firstName" placeholder="First Name" class="form-control" name="firstName" autofocus>
+                    <?=$getCustomer_Result[0]["firstname"]?>
                 </div>
             </div>
             <div class="form-group">
                 <label for="lastName" class="col-sm-3 control-label">Last Name</label>
                 <div class="col-sm-9">
-                    <input type="text" id="lastName" placeholder="Last Name" class="form-control" autofocus name="lastName">
+                    <?=$getCustomer_Result[0]["lastname"]?>
                 </div>
             </div>
             <div class="form-group">
-                <label for="email" class="col-sm-3 control-label">Email </label>
+                <label for="email" class="col-sm-3 control-label">Email</label>
                 <div class="col-sm-9">
-                    <input type="text" id="email" placeholder="Email" class="form-control" name= "email">
+                    <?=$getCustomer_Result[0]["email"]?>
                 </div>
             </div>
-            <div class="form-group">
-                <label for="email" class="col-sm-3 control-label">Old Password</label>
-                <div class="col-sm-9">
-                    <input type="text" id="oldpassword" placeholder="oldpassword" class="form-control" name= "oldpassword">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="password" class="col-sm-3 control-label">Password</label>
-                <div class="col-sm-9">
-                    <input type="password" id="password" placeholder="Password" class="form-control" name="password">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="password" class="col-sm-3 control-label">Confirm Password</label>
-                <div class="col-sm-9">
-                    <input type="password" id="cpassword" placeholder="Password" class="form-control" name="cpassword">
-                </div>
-            </div>
+          
             <div class="form-group">
                 <label for="birthDate" class="col-sm-3 control-label">Date of Birth</label>
                 <div class="col-sm-9">
-                    <input type="text" id="birthDate" class="form-control" placeholder="mm/dd/yyyy" name="birthDate" readonly style="background: white;">
+                    <?=$getCustomer_Result[0]["dob"]?>
                 </div>
             </div>
             <div class="form-group">
