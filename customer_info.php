@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Register</title>
+    <title>Customer_Info</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/styling.css">
     <script src="js/jquery-3.3.1.min.js"></script>
@@ -27,8 +27,12 @@
             color:red;
         }
         .form-group{
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
+        #firstName-error, #lastName-error, #username-error, #email-error, #password-error, #cpassword-error, #gender-error{
+            position: absolute;
+        }
+
     </style>
 
     <script>
@@ -36,6 +40,19 @@
         $( "#birthDate" ).datepicker();
       } );
      </script>
+    <?php 
+        session_start();
+        require_once 'database/databaseConnect.php';
+        require_once 'Constants/constants.php';
+        $conn = DatabaseConnect::connect();
+        if($conn != null){
+            $getCustomer_Result = DatabaseConnect::getResult(Constants::$SELECT_ALL_CUSTOMER."where username like ", $conn);
+            echo $getCustomer_Result[0]['password'];
+            DatabaseConnect::closeConnect($conn);
+        }
+
+
+    ?>
 </head>
 
 <body>
@@ -59,7 +76,7 @@
     </nav>
     <div class="container">
         <form class="form-horizontal" role="form" id="form-register">
-            <h2 class="form-heading" style="margin-bottom:15px;">Registration</h2>
+            <h2 class="form-heading" style="margin-bottom:15px;">Customer_Info</h2>
             <div class="form-group">
                 <label for="firstName" class="col-sm-3 control-label">First Name</label>
                 <div class="col-sm-9">
@@ -73,15 +90,15 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="email" class="col-sm-3 control-label">Username </label>
-                <div class="col-sm-9">
-                    <input type="text" id="username" placeholder="Username" class="form-control" name= "username">
-                </div>
-            </div>
-            <div class="form-group">
                 <label for="email" class="col-sm-3 control-label">Email </label>
                 <div class="col-sm-9">
                     <input type="text" id="email" placeholder="Email" class="form-control" name= "email">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="email" class="col-sm-3 control-label">Old Password</label>
+                <div class="col-sm-9">
+                    <input type="text" id="oldpassword" placeholder="oldpassword" class="form-control" name= "oldpassword">
                 </div>
             </div>
             <div class="form-group">
@@ -105,7 +122,7 @@
             <div class="form-group">
                 <label for="phoneNumber" class="col-sm-3 control-label">Phone number </label>
                 <div class="col-sm-9">
-                    <input type="phoneNumber" id="phoneNumber" placeholder="Phone number" class="form-control">
+                    <input type="phoneNumber" id="phoneNumber" placeholder="Phone number" class="form-control" name="phoneNumber">
                 </div>
             </div>
             <div class="form-group">
@@ -114,18 +131,18 @@
                     <div class="row">
                         <div class="col-sm-4">
                             <label class="radio-inline">
-                                <input type="radio" id="femaleRadio" value="Female">Female
+                                <input type="radio" id="femaleRadio" value="Female" name="gender">Female
                             </label>
                         </div>
                         <div class="col-sm-4">
                             <label class="radio-inline">
-                                <input type="radio" id="maleRadio" value="Male">Male
+                                <input type="radio" id="maleRadio" value="Male" name="gender">Male
                             </label>
                         </div>
                     </div>
                 </div>
             </div> 
-            <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+            <button type="submit" class="btn btn-primary btn-block btnUpdate">Update</button>
         </form> 
     </div> 
     <footer class="footer-bottom footer-style">

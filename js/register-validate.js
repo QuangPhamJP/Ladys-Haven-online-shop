@@ -20,9 +20,9 @@ jQuery(function(){
                 minlength: 3,
                 maxlength: 100
             },
-            username: {
+            oldpassword: {
                 required: true,
-                minlength: 3,
+                minlength: 7,
                 maxlength: 100
             },
             password: {
@@ -39,7 +39,14 @@ jQuery(function(){
             email:{
             	required: true,
             	validate_email: true
+            },
+            phoneNumber:{
+            	required: true,
+            	digits: true,
+            	minlength: 10,
+            	maxlength: 11
             }
+            
         },
         messages:{
             firstName: {
@@ -54,9 +61,28 @@ jQuery(function(){
             },
             email:{
             	required:"Please enter your email",
+            },
+            oldpassword: {
+            	required:"Please enter your oldpassword",
+            	minlength: "Oldpassword must be at least 7 characters",
+            	maxlength: "Oldpassword limit 100 characters"
+            },
+            password: {
+                required :"Please enter your password",
+                minlength:"Password must be at least 7 characters",
+                maxlength:"Password limit 100 characters"
+            },
+            cpassword: {
+                required :"Please re-enter your password",
+                minlength:"Password must be at least 7 characters",
+                maxlength:"Password limit 100 characters"
+            },
+            phoneNumber:{
+            	required: "Please enter your phone",
+            	digits: "Please enter only digits",
+            	minlength: "Length of String has range from 10 digits to 11 digits",
+            	maxlength: "Length of String has range from 10 digits to 11 digits"
             }
         }
     });
-
-    
 });
