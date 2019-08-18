@@ -52,9 +52,6 @@
         if($conn != null){
             $getCustomer_Result = DatabaseConnect::getResult(Constants::$SELECT_ALL_CUSTOMER." where username like '".$_SESSION["username"]."'", $conn); 
         }
-
-
-
     ?>
 </head>
 

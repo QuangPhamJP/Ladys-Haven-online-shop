@@ -27,10 +27,22 @@
             }
         }
 
+        public static function updateCustomerInfo($query, $conn){
+            try{
+                $stm = $conn->prepare($query);
+                $stm->execute();
+            }
+            catch(PDOException $ex){
+                echo $ex;
+            }
+        }
+
         public static function closeConnect($conn){
             if($conn != null){
                 $conn = null;
-                echo 'Da dong ket noi';
+            }
+            else{
+                printf("Fail to close connect");
             }
         }
     }        

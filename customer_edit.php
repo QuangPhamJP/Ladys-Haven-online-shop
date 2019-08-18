@@ -47,15 +47,13 @@
      </script>
     <?php 
         session_start();
-        $_SESSION["username"] = "abc";
         require_once 'database/databaseConnect.php';
         require_once 'Constants/constants.php';
         $conn = DatabaseConnect::connect();
         if($conn != null){
             $getCustomer_Result = DatabaseConnect::getResult(Constants::$SELECT_ALL_CUSTOMER." where username like '".$_SESSION["username"]."'", $conn); 
+            DatabaseConnect::closeConnect($conn);
         }
-
-
     ?>
 </head>
 
@@ -88,7 +86,7 @@
             </div>
         </div>
         <div class="col-sm-8">
-            <form class="form-horizontal" role="form" id="form-register" style="margin: 0; width: 100%;">
+            <form class="form-horizontal" role="form" id="form-register" style="margin: 0; width: 100%;" name="customer_edit" action="customer_excuteUpdate.php" method="post">
                 <h2 class="form-heading" style="margin-bottom:15px;">My Profile</h2>
                 <div class="form-group">
                     <label for="firstName" class="col-sm-3 control-label">First Name</label>
@@ -117,7 +115,7 @@
                 <div class="form-group">
                     <label for="phoneNumber" class="col-sm-3 control-label">Phone number </label>
                     <div class="col-sm-9">
-                        <input type="phoneNumber" id="phoneNumber" placeholder="Phone number" class="form-control" name="phoneNumber">
+                        <input type="phoneNumber" id="phoneNumber" placeholder="Phone number" class="form-control" name="phoneNumber" value="<?=$getCustomer_Result[0]["phone"]?>">
                     </div>
                 </div>
                 <div class="form-group">
