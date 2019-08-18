@@ -54,9 +54,6 @@
         if($conn != null){
             $getCustomer_Result = DatabaseConnect::getResult(Constants::$SELECT_ALL_CUSTOMER." where username like '".$_SESSION["username"]."'", $conn); 
         }
-        session_destroy();
-
-
     ?>
 </head>
 
@@ -82,14 +79,14 @@
     <div class="container customer_info">
         <div class="col-sm-4">
             <div class="list-group">
-                <a href="customer_info.php" class="list-group-item list-group-item-action">My Profile</a>
+                <a href="customer_info.php" class="list-group-item list-group-item-action active">My Profile</a>
                 <a href="#" class="list-group-item list-group-item-action">My Orders</a>
                 <a href="#" class="list-group-item list-group-item-action">My Reviews</a>
                 <a href="#" class="list-group-item list-group-item-action">My Wishlist</a>
             </div>
         </div>
         <div class="col-sm-8">
-            <form class="form-horizontal" role="form" id="form-register" style="margin: 0; width: 100%;">
+            <form class="form-horizontal" role="form" id="form-register" style="margin: 0; width: 100%;" action="customer_excuteUpdate.php" method="post">
                 <h2 class="form-heading" style="margin-bottom:15px;">My Profile</h2>
                 <div class="form-group">
                     <label for="email" class="col-sm-3 control-label">Enter Recent Password</label>
@@ -111,6 +108,14 @@
                 </div>
                 <button type="submit" class="btn btn-primary btn-block btnUpdate">Save Changes</button>
             </form> 
+            <?php 
+                if(isset($_SESSION[Constants::$STATUS_ERROR_CHANGEPASSWORD])){
+                    if(!is_null($_SESSION[Constants::$STATUS_ERROR_CHANGEPASSWORD])){
+                        echo "<script>alert('".$_SESSION[Constants::$STATUS_ERROR_CHANGEPASSWORD]."')</script>";
+                    }
+                    unset($_SESSION[Constants::$STATUS_ERROR_CHANGEPASSWORD]);
+                }
+             ?>
         </div>
     </div> 
     <footer class="footer-bottom footer-style" style="position: fixed; width: 100%; left: 0; bottom: 0;">

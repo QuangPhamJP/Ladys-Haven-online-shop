@@ -9,5 +9,7 @@
 		public static $GENDER = "gender";
 		public static $PASSWORD = "password";
 		public static $CPASSWORD = "cpassword";
+		public static $OPASSWORD = "oldpassword";
+		public static $STATUS_ERROR_CHANGEPASSWORD = "Fail! Current password is difference from your current password";
 	}
  ?>

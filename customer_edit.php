@@ -79,7 +79,7 @@
     <div class="container customer_info">
         <div class="col-sm-4">
             <div class="list-group">
-                <a href="customer_info.php" class="list-group-item list-group-item-action">My Profile</a>
+                <a href="customer_info.php" class="list-group-item list-group-item-action active">My Profile</a>
                 <a href="#" class="list-group-item list-group-item-action">My Orders</a>
                 <a href="#" class="list-group-item list-group-item-action">My Reviews</a>
                 <a href="#" class="list-group-item list-group-item-action">My Wishlist</a>

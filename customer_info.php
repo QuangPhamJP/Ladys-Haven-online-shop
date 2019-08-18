@@ -35,6 +35,9 @@
         .label-customer{
             font-weight: bold;
         }
+        .customer_info{
+            margin-top: 50px;
+        }
 
     </style>
 
@@ -74,11 +77,11 @@
             </ul>
         </div>
     </nav>
-    <div class="container">
+    <div class="container customer_info">
         <div class="row">
             <div class="col-sm-4">
                 <div class="list-group">
-                    <a href="customer_info.php" class="list-group-item list-group-item-action">My Profile</a>
+                    <a href="customer_info.php" class="list-group-item list-group-item-action active">My Profile</a>
                     <a href="#" class="list-group-item list-group-item-action">My Orders</a>
                     <a href="#" class="list-group-item list-group-item-action">My Reviews</a>
                     <a href="#" class="list-group-item list-group-item-action">My Wishlist</a>
@@ -137,6 +140,12 @@
                 <input type="button" onclick="location.href='customer_edit.php';" value="Edit Profile" class="btn btn-primary btn-block " />
                 <input type="button" onclick="location.href='customer_changepass.php';" value="Change Password" class="btn btn-primary btn-block " />
             </form> 
+            <?php 
+                if(isset($_SESSION[Constants::$STATUS_ERROR_CHANGEPASSWORD])){
+                    echo "<script>alert('Change password success!')</script>";
+                    unset($_SESSION[Constants::$STATUS_ERROR_CHANGEPASSWORD]);
+                }
+             ?>
             </div>
             
         </div>
