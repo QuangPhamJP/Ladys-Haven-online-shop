@@ -7,5 +7,7 @@
 		public static $BIRTHDAY = "birthDate";
 		public static $PHONENUMBER = "phoneNumber";
 		public static $GENDER = "gender";
+		public static $PASSWORD = "password";
+		public static $CPASSWORD = "cpassword";
 	}
  ?>

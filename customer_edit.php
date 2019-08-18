@@ -109,7 +109,16 @@
                 <div class="form-group">
                     <label for="birthDate" class="col-sm-3 control-label">Date of Birth</label>
                     <div class="col-sm-9">
-                        <input type="text" id="birthDate" class="form-control" placeholder="yyyy-mm-dd" name="birthDate" readonly style="background: white;">
+                        <?php 
+                            if(strcmp($getCustomer_Result[0]["dob"] == 0)){
+                                $dob = "null";
+                            }
+                            else {
+                                $dob = $getCustomer_Result[0]["dob"];
+                            }
+                         ?>
+                        <input type="text" id="birthDate" class="form-control" placeholder="yyyy-mm-dd" name="birthDate" readonly style="background: white;" 
+                        value="<?=$dob?>">
                     </div>
                 </div>
                 <div class="form-group">
@@ -121,7 +130,7 @@
                 <div class="form-group">
                     <label class="control-label col-sm-3">Gender</label>
                     <div class="col-sm-6">
-                        <div class="row">
+                        <div class="row">`
                             <div class="col-sm-4">
                                 <label class="radio-inline">
                                     <input type="radio" id="femaleRadio" value="Female" name="gender">Female

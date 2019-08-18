@@ -108,8 +108,16 @@
               
                 <div class="form-group">
                     <div class="col-sm-3 label-customer">Date of Birth</div>
-                    <div class="col-sm-9">
-                        <?=$getCustomer_Result[0]["dob"]?>
+                    <div class="col-sm-9" style="height: 20px;">
+                         <?php 
+                            if(strcmp($getCustomer_Result[0]["dob"], "" == 0)){
+                                $dob = "";
+                            }
+                            else {
+                                $dob = $getCustomer_Result[0]["dob"];
+                            }
+                         ?>
+                        <?=$dob?>
                     </div>
                 </div>
                 <div class="form-group">
