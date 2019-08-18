@@ -32,6 +32,9 @@
         #firstName-error, #lastName-error, #username-error, #email-error, #password-error, #cpassword-error, #gender-error{
             position: absolute;
         }
+        .customer_info{
+            margin-top: 50px;
+        }
 
     </style>
 
@@ -75,60 +78,70 @@
             </ul>
         </div>
     </nav>
-    <div class="container">
-        <form class="form-horizontal" role="form" id="form-register">
-            <h2 class="form-heading" style="margin-bottom:15px;">My Profile</h2>
-            <div class="form-group">
-                <label for="firstName" class="col-sm-3 control-label">First Name</label>
-                <div class="col-sm-9">
-                    <input type="text" id="firstName" placeholder="First Name" class="form-control" name="firstName" value="<?=$getCustomer_Result[0]["firstname"]?>">
-                </div>
+    <div class="container customer_info">
+        <div class="col-sm-4">
+            <div class="list-group">
+                <a href="customer_info.php" class="list-group-item list-group-item-action">My Profile</a>
+                <a href="#" class="list-group-item list-group-item-action">My Orders</a>
+                <a href="#" class="list-group-item list-group-item-action">My Reviews</a>
+                <a href="#" class="list-group-item list-group-item-action">My Wishlist</a>
             </div>
-            <div class="form-group">
-                <label for="lastName" class="col-sm-3 control-label">Last Name</label>
-                <div class="col-sm-9">
-                    <input type="text" id="lastName" placeholder="Last Name" class="form-control" name="lastName" value="<?=$getCustomer_Result[0]["lastname"]?>">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="email" class="col-sm-3 control-label">Email </label>
-                <div class="col-sm-9">
-                    <input type="text" id="email" placeholder="Email" class="form-control" name= "email" value="<?=$getCustomer_Result[0]["email"]?>">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="birthDate" class="col-sm-3 control-label">Date of Birth</label>
-                <div class="col-sm-9">
-                    <input type="text" id="birthDate" class="form-control" placeholder="yyyy-mm-dd" name="birthDate" readonly style="background: white;">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="phoneNumber" class="col-sm-3 control-label">Phone number </label>
-                <div class="col-sm-9">
-                    <input type="phoneNumber" id="phoneNumber" placeholder="Phone number" class="form-control" name="phoneNumber">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-sm-3">Gender</label>
-                <div class="col-sm-6">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <label class="radio-inline">
-                                <input type="radio" id="femaleRadio" value="Female" name="gender">Female
-                            </label>
-                        </div>
-                        <div class="col-sm-4">
-                            <label class="radio-inline">
-                                <input type="radio" id="maleRadio" value="Male" name="gender">Male
-                            </label>
-                        </div>
+        </div>
+        <div class="col-sm-8">
+            <form class="form-horizontal" role="form" id="form-register" style="margin: 0; width: 100%;">
+                <h2 class="form-heading" style="margin-bottom:15px;">My Profile</h2>
+                <div class="form-group">
+                    <label for="firstName" class="col-sm-3 control-label">First Name</label>
+                    <div class="col-sm-9">
+                        <input type="text" id="firstName" placeholder="First Name" class="form-control" name="firstName" value="<?=$getCustomer_Result[0]["firstname"]?>">
                     </div>
                 </div>
-            </div> 
-            <button type="submit" class="btn btn-primary btn-block btnUpdate">Save Changes</button>
-        </form> 
+                <div class="form-group">
+                    <label for="lastName" class="col-sm-3 control-label">Last Name</label>
+                    <div class="col-sm-9">
+                        <input type="text" id="lastName" placeholder="Last Name" class="form-control" name="lastName" value="<?=$getCustomer_Result[0]["lastname"]?>">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email" class="col-sm-3 control-label">Email </label>
+                    <div class="col-sm-9">
+                        <input type="text" id="email" placeholder="Email" class="form-control" name= "email" value="<?=$getCustomer_Result[0]["email"]?>">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="birthDate" class="col-sm-3 control-label">Date of Birth</label>
+                    <div class="col-sm-9">
+                        <input type="text" id="birthDate" class="form-control" placeholder="yyyy-mm-dd" name="birthDate" readonly style="background: white;">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="phoneNumber" class="col-sm-3 control-label">Phone number </label>
+                    <div class="col-sm-9">
+                        <input type="phoneNumber" id="phoneNumber" placeholder="Phone number" class="form-control" name="phoneNumber">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-3">Gender</label>
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <label class="radio-inline">
+                                    <input type="radio" id="femaleRadio" value="Female" name="gender">Female
+                                </label>
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="radio-inline">
+                                    <input type="radio" id="maleRadio" value="Male" name="gender">Male
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+                <button type="submit" class="btn btn-primary btn-block btnUpdate">Save Changes</button>
+            </form> 
+    </div>
     </div> 
-    <footer class="footer-bottom footer-style">
+    <footer class="footer-bottom footer-style" style="position: fixed; width: 100%; left: 0; bottom: 0;">
             <div class="container">
     
                 <div class="row">

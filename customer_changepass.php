@@ -32,6 +32,9 @@
         #firstName-error, #lastName-error, #username-error, #email-error, #password-error, #cpassword-error, #gender-error{
             position: absolute;
         }
+        .customer_info{
+            margin-top: 50px;
+        }
 
     </style>
 
@@ -75,31 +78,41 @@
             </ul>
         </div>
     </nav>
-    <div class="container">
-        <form class="form-horizontal" role="form" id="form-register">
-            <h2 class="form-heading" style="margin-bottom:15px;">My Profile</h2>
-            <div class="form-group">
-                <label for="email" class="col-sm-3 control-label">Enter Recent Password</label>
-                <div class="col-sm-9">
-                    <input type="text" id="oldpassword" placeholder="oldpassword" class="form-control" name= "oldpassword">
-                </div>
+    <div class="container customer_info">
+        <div class="col-sm-4">
+            <div class="list-group">
+                <a href="customer_info.php" class="list-group-item list-group-item-action">My Profile</a>
+                <a href="#" class="list-group-item list-group-item-action">My Orders</a>
+                <a href="#" class="list-group-item list-group-item-action">My Reviews</a>
+                <a href="#" class="list-group-item list-group-item-action">My Wishlist</a>
             </div>
-            <div class="form-group">
-                <label for="password" class="col-sm-3 control-label">Enter New Password</label>
-                <div class="col-sm-9">
-                    <input type="password" id="password" placeholder="Password" class="form-control" name="password">
+        </div>
+        <div class="col-sm-8">
+            <form class="form-horizontal" role="form" id="form-register" style="margin: 0; width: 100%;">
+                <h2 class="form-heading" style="margin-bottom:15px;">My Profile</h2>
+                <div class="form-group">
+                    <label for="email" class="col-sm-3 control-label">Enter Recent Password</label>
+                    <div class="col-sm-9">
+                        <input type="text" id="oldpassword" placeholder="oldpassword" class="form-control" name= "oldpassword">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label for="password" class="col-sm-3 control-label">Enter Confirm Password</label>
-                <div class="col-sm-9">
-                    <input type="password" id="cpassword" placeholder="Password" class="form-control" name="cpassword">
+                <div class="form-group">
+                    <label for="password" class="col-sm-3 control-label">Enter New Password</label>
+                    <div class="col-sm-9">
+                        <input type="password" id="password" placeholder="Password" class="form-control" name="password">
+                    </div>
                 </div>
-            </div>
-            <button type="submit" class="btn btn-primary btn-block btnUpdate">Save Changes</button>
-        </form> 
+                <div class="form-group">
+                    <label for="password" class="col-sm-3 control-label">Enter Confirm Password</label>
+                    <div class="col-sm-9">
+                        <input type="password" id="cpassword" placeholder="Password" class="form-control" name="cpassword">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block btnUpdate">Save Changes</button>
+            </form> 
+        </div>
     </div> 
-    <footer class="footer-bottom footer-style">
+    <footer class="footer-bottom footer-style" style="position: fixed; width: 100%; left: 0; bottom: 0;">
             <div class="container">
     
                 <div class="row">

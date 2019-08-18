@@ -32,6 +32,9 @@
         #firstName-error, #lastName-error, #username-error, #email-error, #password-error, #cpassword-error, #gender-error{
             position: absolute;
         }
+        .label-customer{
+            font-weight: bold;
+        }
 
     </style>
 
@@ -75,60 +78,73 @@
         </div>
     </nav>
     <div class="container">
-        <form class="form-horizontal" role="form" id="form-register">
-            <h2 class="form-heading" style="margin-bottom:15px;">My Profile</h2>
-            <div class="form-group">
-                <label for="firstName" class="col-sm-3 control-label">First Name</label>
-                <div class="col-sm-9">
-                    <?=$getCustomer_Result[0]["firstname"]?>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="list-group">
+                    <a href="customer_info.php" class="list-group-item list-group-item-action">My Profile</a>
+                    <a href="#" class="list-group-item list-group-item-action">My Orders</a>
+                    <a href="#" class="list-group-item list-group-item-action">My Reviews</a>
+                    <a href="#" class="list-group-item list-group-item-action">My Wishlist</a>
                 </div>
             </div>
-            <div class="form-group">
-                <label for="lastName" class="col-sm-3 control-label">Last Name</label>
-                <div class="col-sm-9">
-                    <?=$getCustomer_Result[0]["lastname"]?>
+            <div class="col-sm-8">
+                <form role="form" id="form-register" style="margin: 0; width: auto;">
+                <h2 class="form-heading" style="margin-bottom:15px;">My Profile</h2>
+                <div class="form-group">
+                    <div class="col-sm-3 label-customer">First Name</div>
+                    <div class="col-sm-9">
+                        <?=$getCustomer_Result[0]["firstname"]?>
+                    </div>
                 </div>
+                <div class="form-group">
+                    <div class="col-sm-3 label-customer">LastName</div>
+                    <div class="col-sm-9">
+                        <?=$getCustomer_Result[0]["lastname"]?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-3 label-customer">Email</div>
+                    <div class="col-sm-9">
+                        <?=$getCustomer_Result[0]["email"]?>
+                    </div>
+                </div>
+              
+                <div class="form-group">
+                    <div class="col-sm-3 label-customer">Date of Birth</div>
+                    <div class="col-sm-9">
+                        <?=$getCustomer_Result[0]["dob"]?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-3 label-customer">Phone Number</div>
+                    <div class="col-sm-9">
+                        <?=$getCustomer_Result[0]["phone"]?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-3 label-customer">Gender</div>
+                    <div class="col-sm-9">
+                        <?php 
+                            if( is_null($getCustomer_Result[0]["gender"]) == true) {
+                                echo "";
+                            }
+                            else if($getCustomer_Result[0]["gender"] == 0){
+                                echo "Male";
+                            }
+                            else if($getCustomer_Result[0]["gender"] == 1){
+                                echo "Female";
+                            }
+                        ?>
+                    </div>
+                </div> 
+                <input type="button" onclick="location.href='customer_edit.php';" value="Edit Profile" class="btn btn-primary btn-block " />
+                <input type="button" onclick="location.href='customer_changepass.php';" value="Change Password" class="btn btn-primary btn-block " />
+            </form> 
             </div>
-            <div class="form-group">
-                <label for="email" class="col-sm-3 control-label">Email</label>
-                <div class="col-sm-9">
-                    <?=$getCustomer_Result[0]["email"]?>
-                </div>
-            </div>
-          
-            <div class="form-group">
-                <label for="birthDate" class="col-sm-3 control-label">Date of Birth</label>
-                <div class="col-sm-9">
-                    <?=$getCustomer_Result[0]["dob"]?>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="phoneNumber" class="col-sm-3 control-label">Phone number </label>
-                <div class="col-sm-9">
-                    <?=$getCustomer_Result[0]["phone"]?>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-sm-3">Gender</label>
-                <div class="col-sm-6">
-                    <?php 
-                        if( is_null($getCustomer_Result[0]["gender"]) == true) {
-                            echo "";
-                        }
-                        else if($getCustomer_Result[0]["gender"] == 0){
-                            echo "Male";
-                        }
-                        else if($getCustomer_Result[0]["gender"] == 1){
-                            echo "Female";
-                        }
-                    ?>
-                </div>
-            </div> 
-            <input type="button" onclick="location.href='customer_edit.php';" value="Edit Profile" class="btn btn-primary btn-block " />
-            <input type="button" onclick="location.href='customer_changepass.php';" value="Change Password" class="btn btn-primary btn-block " />
-        </form> 
+            
+        </div>
     </div> 
-    <footer class="footer-bottom footer-style">
+    <footer class="footer-bottom footer-style" style="position: fixed; width: 100%; left: 0;bottom: 0;">
             <div class="container">
     
                 <div class="row">
