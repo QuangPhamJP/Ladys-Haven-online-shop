@@ -109,16 +109,9 @@
                 <div class="form-group">
                     <label for="birthDate" class="col-sm-3 control-label">Date of Birth</label>
                     <div class="col-sm-9">
-                        <?php 
-                            if(strcmp($getCustomer_Result[0]["dob"] == 0)){
-                                $dob = "null";
-                            }
-                            else {
-                                $dob = $getCustomer_Result[0]["dob"];
-                            }
-                         ?>
+                       
                         <input type="text" id="birthDate" class="form-control" placeholder="yyyy-mm-dd" name="birthDate" readonly style="background: white;" 
-                        value="<?=$dob?>">
+                        value="<?=$getCustomer_Result[0]["dob"]?>">
                     </div>
                 </div>
                 <div class="form-group">
@@ -141,6 +134,15 @@
                                     <input type="radio" id="maleRadio" value="Male" name="gender">Male
                                 </label>
                             </div>
+                            <?php 
+                                if($getCustomer_Result[0]["gender"] == 0){
+                                    echo "<script>$('#maleRadio').attr('checked', true)</script>";
+                                }
+                                else{
+                                    echo "<script>$('#femaleRadio').attr('checked', true)</script>";
+                                }
+
+                             ?>
                         </div>
                     </div>
                 </div> 
