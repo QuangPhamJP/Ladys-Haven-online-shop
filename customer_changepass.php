@@ -47,7 +47,6 @@
      </script>
     <?php 
         session_start();
-        $_SESSION["username"] = "abc";
         require_once 'database/databaseConnect.php';
         require_once 'Constants/constants.php';
         $conn = DatabaseConnect::connect();
@@ -118,7 +117,7 @@
              ?>
         </div>
     </div> 
-    <footer class="footer-bottom footer-style">
+    <footer class="footer-bottom footer-style" style="position: fixed; bottom: 0; left: 0; width: 100%;">
             <div class="container">
     
                 <div class="row">
