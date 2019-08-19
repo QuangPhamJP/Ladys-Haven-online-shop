@@ -1,8 +1,7 @@
 <?php 
 	class Constants{
 		public static $SELECT_ALL_CUSTOMER = "select * from customer";
-		public static $FIRSTNAME = "firstName";
-		public static $LASTNAME = "lastName";
+		public static $FULLNAME = "fullName";
 		public static $EMAIL = "email";
 		public static $BIRTHDAY = "birthDate";
 		public static $PHONENUMBER = "phoneNumber";

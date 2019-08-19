@@ -52,7 +52,7 @@
         require_once 'Constants/constants.php';
         $conn = DatabaseConnect::connect();
         if($conn != null){
-            $getCustomer_Result = DatabaseConnect::getResult(Constants::$SELECT_ALL_CUSTOMER." where username like '".$_SESSION["username"]."'", $conn); 
+            $getCustomer_Result = DatabaseConnect::getResult(Constants::$SELECT_ALL_CUSTOMER." where customer_username like '".$_SESSION["username"]."'", $conn); 
         }
     ?>
 </head>

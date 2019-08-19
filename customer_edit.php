@@ -51,7 +51,7 @@
         require_once 'Constants/constants.php';
         $conn = DatabaseConnect::connect();
         if($conn != null){
-            $getCustomer_Result = DatabaseConnect::getResult(Constants::$SELECT_ALL_CUSTOMER." where username like '".$_SESSION["username"]."'", $conn); 
+            $getCustomer_Result = DatabaseConnect::getResult(Constants::$SELECT_ALL_CUSTOMER." where customer_username like '".$_SESSION["username"]."'", $conn); 
             DatabaseConnect::closeConnect($conn);
         }
     ?>
@@ -89,21 +89,15 @@
             <form class="form-horizontal" role="form" id="form-register" style="margin: 0; width: 100%;" name="customer_edit" action="customer_excuteUpdate.php" method="post">
                 <h2 class="form-heading" style="margin-bottom:15px;">My Profile</h2>
                 <div class="form-group">
-                    <label for="firstName" class="col-sm-3 control-label">First Name</label>
+                    <label for="firstName" class="col-sm-3 control-label">Fullname</label>
                     <div class="col-sm-9">
-                        <input type="text" id="firstName" placeholder="First Name" class="form-control" name="firstName" value="<?=$getCustomer_Result[0]["firstname"]?>">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="lastName" class="col-sm-3 control-label">Last Name</label>
-                    <div class="col-sm-9">
-                        <input type="text" id="lastName" placeholder="Last Name" class="form-control" name="lastName" value="<?=$getCustomer_Result[0]["lastname"]?>">
+                        <input type="text" id="firstName" placeholder="Fullname" class="form-control" name="fullName" value="<?=$getCustomer_Result[0]["customer_name"]?>">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="email" class="col-sm-3 control-label">Email </label>
                     <div class="col-sm-9">
-                        <input type="text" id="email" placeholder="Email" class="form-control" name= "email" value="<?=$getCustomer_Result[0]["email"]?>">
+                        <input type="text" id="email" placeholder="Email" class="form-control" name= "email" value="<?=$getCustomer_Result[0]["customer_email"]?>">
                     </div>
                 </div>
                 <div class="form-group">
@@ -111,13 +105,13 @@
                     <div class="col-sm-9">
                        
                         <input type="text" id="birthDate" class="form-control" placeholder="yyyy-mm-dd" name="birthDate" readonly style="background: white;" 
-                        value="<?=$getCustomer_Result[0]["dob"]?>">
+                        value="<?=$getCustomer_Result[0]["customer_dob"]?>">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="phoneNumber" class="col-sm-3 control-label">Phone number </label>
                     <div class="col-sm-9">
-                        <input type="phoneNumber" id="phoneNumber" placeholder="Phone number" class="form-control" name="phoneNumber" value="<?=$getCustomer_Result[0]["phone"]?>">
+                        <input type="phoneNumber" id="phoneNumber" placeholder="Phone number" class="form-control" name="phoneNumber" value="<?=$getCustomer_Result[0]["customer_mobile"]?>">
                     </div>
                 </div>
                 <div class="form-group">
@@ -135,7 +129,7 @@
                                 </label>
                             </div>
                             <?php 
-                                if($getCustomer_Result[0]["gender"] == 0){
+                                if($getCustomer_Result[0]["customer_gender"] == 0){
                                     echo "<script>$('#maleRadio').attr('checked', true)</script>";
                                 }
                                 else{

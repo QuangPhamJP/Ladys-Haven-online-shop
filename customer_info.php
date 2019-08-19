@@ -48,12 +48,12 @@
      </script>
     <?php 
         session_start();
-        $_SESSION["username"] = "abc";
+        $_SESSION["username"] = "doraemon";
         require_once 'database/databaseConnect.php';
         require_once 'Constants/constants.php';
         $conn = DatabaseConnect::connect();
         if($conn != null){
-            $getCustomer_Result = DatabaseConnect::getResult(Constants::$SELECT_ALL_CUSTOMER." where username like '".$_SESSION["username"]."'", $conn); 
+            $getCustomer_Result = DatabaseConnect::getResult(Constants::$SELECT_ALL_CUSTOMER." where customer_username like '".$_SESSION["username"]."'", $conn); 
         }
     ?>
 </head>
@@ -91,47 +91,41 @@
                 <form role="form" id="form-register" style="margin: 0; width: auto;">
                 <h2 class="form-heading" style="margin-bottom:15px;">My Profile</h2>
                 <div class="form-group">
-                    <div class="col-sm-3 label-customer">First Name</div>
+                    <div class="col-sm-3 label-customer">FullName</div>
                     <div class="col-sm-9">
-                        <?=$getCustomer_Result[0]["firstname"]?>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-3 label-customer">LastName</div>
-                    <div class="col-sm-9">
-                        <?=$getCustomer_Result[0]["lastname"]?>
+                        <?=$getCustomer_Result[0]["customer_name"]?>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-3 label-customer">Email</div>
                     <div class="col-sm-9">
-                        <?=$getCustomer_Result[0]["email"]?>
+                        <?=$getCustomer_Result[0]["customer_email"]?>
                     </div>
                 </div>
               
                 <div class="form-group">
                     <div class="col-sm-3 label-customer">Date of Birth</div>
                     <div class="col-sm-9" style="height: 20px">
-                        <?=$getCustomer_Result[0]["dob"]?>
+                        <?=$getCustomer_Result[0]["customer_dob"]?>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-3 label-customer">Phone Number</div>
                     <div class="col-sm-9">
-                        <?=$getCustomer_Result[0]["phone"]?>
+                        <?=$getCustomer_Result[0]["customer_mobile"]?>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-3 label-customer">Gender</div>
                     <div class="col-sm-9">
                         <?php 
-                            if( is_null($getCustomer_Result[0]["gender"]) == true) {
+                            if( is_null($getCustomer_Result[0]["customer_gender"]) == true) {
                                 echo "";
                             }
-                            else if($getCustomer_Result[0]["gender"] == 0){
+                            else if($getCustomer_Result[0]["customer_gender"] == 0){
                                 echo "Male";
                             }
-                            else if($getCustomer_Result[0]["gender"] == 1){
+                            else if($getCustomer_Result[0]["customer_gender"] == 1){
                                 echo "Female";
                             }
                         ?>
