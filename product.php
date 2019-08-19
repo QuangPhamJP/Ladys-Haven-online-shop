@@ -617,16 +617,11 @@
                         <li><a href="Register.html">Sign up</a></li>
                         <li><a href="Login.html">Sign in</a></li>
                     </ul>
-
+                    
                 </div>
             </div>
-
-
         </div>
-
     </footer>
-
-
 </body>
 <script>
     $("#searchBtn").click(function () {

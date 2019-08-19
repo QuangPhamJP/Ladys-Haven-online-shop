@@ -150,7 +150,7 @@
             </form> 
     </div>
     </div> 
-    <footer class="footer-bottom footer-style" style="position: fixed; width: 100%; left: 0; bottom: 0;">
+    <footer class="footer-bottom footer-style">
             <div class="container">
     
                 <div class="row">
