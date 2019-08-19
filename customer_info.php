@@ -135,9 +135,9 @@
                 <input type="button" onclick="location.href='customer_changepass.php';" value="Change Password" class="btn btn-primary btn-block " />
             </form> 
             <?php 
-                if(isset($_SESSION[Constants::$STATUS_ERROR_CHANGEPASSWORD])){
+                if(isset($_SESSION[Constants::$STATUS_SUCCESS_CHANGEPASSWORD])){
                     echo "<script>alert('Change password success!')</script>";
-                    unset($_SESSION[Constants::$STATUS_ERROR_CHANGEPASSWORD]);
+                    unset($_SESSION[Constants::$STATUS_SUCCESS_CHANGEPASSWORD]);
                 }
              ?>
             </div>

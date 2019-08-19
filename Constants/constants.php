@@ -10,5 +10,6 @@
 		public static $CPASSWORD = "cpassword";
 		public static $OPASSWORD = "oldpassword";
 		public static $STATUS_ERROR_CHANGEPASSWORD = "Fail! Current password is difference from your current password";
+		public static $STATUS_SUCCESS_CHANGEPASSWORD = "Update Success! ";
 	}
  ?>

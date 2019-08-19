@@ -44,6 +44,7 @@
 		if(strcmp($password,$oldpassword) == 0){
 			if(strcmp($newpassword,$renewpassword) == 0){
 				DatabaseConnect::updateCustomerInfo("update customer set customer_password = '".$newpassword."'", $conn);
+				$_SESSION[Constants::$STATUS_SUCCESS_CHANGEPASSWORD] = Constants::$STATUS_SUCCESS_CHANGEPASSWORD;
 				header("Location: customer_info.php");
 			}
 		}
