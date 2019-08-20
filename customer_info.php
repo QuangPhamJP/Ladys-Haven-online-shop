@@ -54,6 +54,7 @@
         $conn = DatabaseConnect::connect();
         if($conn != null){
             $getCustomer_Result = DatabaseConnect::getResult(Constants::$SELECT_ALL_CUSTOMER." where customer_username like '".$_SESSION["username"]."'", $conn); 
+            DatabaseConnect::closeConnect($conn);
         }
     ?>
 </head>

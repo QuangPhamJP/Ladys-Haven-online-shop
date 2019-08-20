@@ -16,7 +16,6 @@
     <nav class="navbar navbar-static-top top-nav">
         <div class="container">
             <div class="navbar-header">
-
                 <a href="Home.html" class="navbar-brand" style="text-shadow: 2px 2px 2px">BagBagOnlineShop</a>
             </div>
             <ul class="nav navbar-nav">
