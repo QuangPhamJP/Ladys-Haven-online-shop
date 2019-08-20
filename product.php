@@ -13,6 +13,17 @@
 </head>
 
 <body>
+        <?php 
+            session_start();
+            $_SESSION["username"] = "doraemon";
+            require_once 'database/databaseConnect.php';
+            require_once 'Constants/constants.php';
+            $conn = DatabaseConnect::connect();
+            if($conn != null){
+                $getProduct = DatabaseConnect::getResult("select * from products", $conn); 
+                DatabaseConnect::closeConnect($conn);
+            }
+        ?>
     <nav class="navbar navbar-static-top top-nav">
         <div class="container">
             <div class="navbar-header">
@@ -60,7 +71,7 @@
                 <div class="row list-group" id="Products">
                     <div class="item col-lg-6 col-xs-4">
                         <div class="thumbnail">
-                            <img src="images/24.jpg" class="img-responsive" alt="Image">
+                            <img src="<?=$getProduct[0]['images']?>" class="img-responsive" alt="Image">
                         </div>
                         <div class="caption">
                             <h4 class="list-group-item-heading"><a href="product1.html">Gucci Oak Leather Backpack</a>
