@@ -142,36 +142,66 @@
                             ?>
                                     <li><a class="previous-isDisabled" href="product.php?page=<?=($index-1)?>" style="margin-left: 3px;"><</a></li>
                             <?php
-                                    if($index < 3){
-
-                                    }
-                                    for($i = 1; $i <= $page; $i++){
+                                    if($page <= 6){
+                                        for($i = 1; $i <= $page; $i++){
                             ?>        
-                                        <li class="nav-<?=$i?>"><a href="product.php?page=<?=$i?>" style="margin-left: 3px;"><?=$i?></a></li>
-                            <?php  
+                                            <li class="nav-<?=$i?>"><a href="product.php?page=<?=$i?>" style="margin-left: 3px;"><?=$i?></a></li>
+                            <?php
+                                        }
                                     }
+                                    else{
+
+                                        if($index <= 3){
+                                            for($i = 1; $i <= 5; $i++){
+                            ?>
+                                                <li class="nav-<?=$i?>"><a href="product.php?page=<?=$i?>" style="margin-left: 3px;"><?=$i?></a></li>
+                            <?php
+                                            }
+                            ?>
+                                            <li class="nav-<?=$i?>"><a href="" style="margin-left: 3px;">...</a></li>
+                                            <li class="nav-<?=$i?>"><a href="product.php?page=<?=$page?>" style="margin-left: 3px;"><?=$page?></a></li>
+                            <?php
+                                        }
+                                        else if($index >= $page - 2){
+                            ?>
+                                            <li class="nav-1"><a href="product.php?page=1" style="margin-left: 3px;">1</a></li>
+                                            <li class="nav-"><a href="" style="margin-left: 3px;">...</a></li>
+                                            
+                            <?php
+                                            for($i = $page - 4; $i <= $page; $i++){
+                            ?>
+                                                <li class="nav-<?=$i?>"><a href="product.php?page=<?=$i?>" style="margin-left: 3px;"><?=$i?></a></li>
+                            <?php
+                                            }
+
+                                        }
+                                        else{
+                                            
+                            ?>
+                            <?php
+                                        }
+                                    }    
+                                }
                             ?>
                                     <li><a class="next-isDisabled" href="product.php?page=<?=($index+1)?>" style="margin-left: 3px;">></a></li>
                             <?php
-                                    echo "<script>$('.nav-".$index."').addClass('active')</script>";
+                                echo "<script>$('.nav-".$index."').addClass('active')</script>";
 
-                                    if($page == 1){
+                                if($page == 1){
+                                    echo "<script>$('.previous-isDisabled').css({'color':'darkgray','cursor':'not-allowed','text-decoration':'none'});</script>";
+                                    echo "<script>$('.previous-isDisabled').removeAttr('href');</script>";
+                                    echo "<script>$('.next-isDisabled').css({'color':'darkgray','cursor':'not-allowed','text-decoration':'none'});</script>";
+                                    echo "<script>$('.next-isDisabled').removeAttr('href');</script>";
+                                }
+                                else{
+                                    if($index == 1){
                                         echo "<script>$('.previous-isDisabled').css({'color':'darkgray','cursor':'not-allowed','text-decoration':'none'});</script>";
                                         echo "<script>$('.previous-isDisabled').removeAttr('href');</script>";
+                                    }
+                                    if($index == $page){
                                         echo "<script>$('.next-isDisabled').css({'color':'darkgray','cursor':'not-allowed','text-decoration':'none'});</script>";
                                         echo "<script>$('.next-isDisabled').removeAttr('href');</script>";
                                     }
-                                    else{
-                                        if($index == 1){
-                                            echo "<script>$('.previous-isDisabled').css({'color':'darkgray','cursor':'not-allowed','text-decoration':'none'});</script>";
-                                            echo "<script>$('.previous-isDisabled').removeAttr('href');</script>";
-                                        }
-                                        if($index == $page){
-                                            echo "<script>$('.next-isDisabled').css({'color':'darkgray','cursor':'not-allowed','text-decoration':'none'});</script>";
-                                            echo "<script>$('.next-isDisabled').removeAttr('href');</script>";
-                                        }
-                                    }
-                                   
                                 }
                             ?>
                         </ul>
@@ -232,5 +262,4 @@
         });
     });
 </script>
-
 </html>
