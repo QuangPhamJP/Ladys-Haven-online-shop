@@ -90,7 +90,13 @@
                         if(isset($_REQUEST["page"])){
                             if(is_numeric($_REQUEST["page"])){
                                 if(!strpos($_REQUEST["page"], ".")){
-                                   $index = $_REQUEST["page"];
+                                    if((int)$_REQUEST["page"] > 0){
+                                        $index = $_REQUEST["page"];     
+                                    }
+                                    else{
+                                        $index = 1;
+                                    }
+                                   
                                 }
                                 else{
                                     $index = 1;
@@ -158,14 +164,14 @@
                             <?php
                                             }
                             ?>
-                                            <li class="nav-<?=$i?>"><a href="" style="margin-left: 3px;">...</a></li>
+                                            <li class="nav-<?=$index+3?>"><a href="product.php?page=<?=$index+3?>" style="margin-left: 3px;">...</a></li>
                                             <li class="nav-<?=$i?>"><a href="product.php?page=<?=$page?>" style="margin-left: 3px;"><?=$page?></a></li>
                             <?php
                                         }
                                         else if($index >= $page - 2){
                             ?>
                                             <li class="nav-1"><a href="product.php?page=1" style="margin-left: 3px;">1</a></li>
-                                            <li class="nav-"><a href="" style="margin-left: 3px;">...</a></li>
+                                            <li class="nav-<?=$index-3?>"><a href="product.php?page=<?=$index-3?>" style="margin-left: 3px;">...</a></li>
                                             
                             <?php
                                             for($i = $page - 4; $i <= $page; $i++){
@@ -176,8 +182,18 @@
 
                                         }
                                         else{
-                                            
                             ?>
+                                            <li class="nav-1"><a href="product.php?page=1" style="margin-left: 3px;">1</a></li>
+                                            <li class="nav-<?=$index-3?>"><a href="product.php?page=<?=$index-3?>" style="margin-left: 3px;">...</a></li>             
+                            <?php
+                                            for($i = $index - 1; $i <= $index + 1; $i++){
+                            ?>
+                                                <li class="nav-<?=$i?>"><a href="product.php?page=<?=$i?>" style="margin-left: 3px;"><?=$i?></a></li>
+                            <?php
+                                            }
+                            ?>
+                                            <li class="nav-<?=$index+3?>"><a href="product.php?page=<?=$index+3?>" style="margin-left: 3px;">...</a></li>
+                                            <li class="nav-<?=$i?>"><a href="product.php?page=<?=$page?>" style="margin-left: 3px;"><?=$page?></a></li>
                             <?php
                                         }
                                     }    
