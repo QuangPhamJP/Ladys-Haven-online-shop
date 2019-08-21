@@ -68,17 +68,56 @@
                 <div class="row list-group" id="Products">
                     <?php 
                         $productList = null;
-                        foreach ($getProduct as $key => $value) {
-                            $productList = explode("-", $getProduct[$key]["images"]);
+                        $index = null;
+                        $count = count($getProduct);
+                        $page = 0;
+                        if(intdiv($count,Constants::$PAGENUM) > 0 && $count % Constants::$PAGENUM == 0){  // vua du? so trang
+                            $page  = $count / Constants::$PAGENUM;
+                        }
+                        else if(intdiv($count,Constants::$PAGENUM) > 0 && $count % Constants::$PAGENUM != 0){ // page bi du
+                            $page = ($count / Constants::$PAGENUM) + 1;
+                        }
+                        else{                               // san pham < 6
+                            if($count > 0){
+                                $page = 1;
+                            }
+                            else{   
+                                $page = 0;    
+                            }
+                        }
+
+                        
+                        if(isset($_REQUEST["page"])){
+                            if(is_numeric($_REQUEST["page"])){
+                                if(!strpos($_REQUEST["page"], ".")){
+                                   $index = $_REQUEST["page"];
+                                }
+                                else{
+                                    $index = 1;
+                                }
+                            }
+                            else{
+                                $index = 1;
+                            }
+                        }
+                        else{
+                            $index = 1;
+                        }
+
+                        for($i = ($index - 1) * Constants::$PAGENUM; $i <= ($index*Constants::$PAGENUM)-1; $i++){
+                            if(!isset($getProduct[$i])){
+                                break;
+                            }
+                            $productList = explode("-", $getProduct[$i]["images"]);
                     ?>
                     <div class="item col-lg-6 col-xs-4">
                         <div class="thumbnail">
                             <img src="images/<?=$productList[0]?>.jpg" class="img-responsive" alt="Image">
                         </div>
                         <div class="caption">
-                            <h4 class="list-group-item-heading"><a href="product1.html"><?=$value["prod_name"]?></a>
+                            <h4 class="list-group-item-heading"><a href="product1.html"><?=$getProduct[$i]["prod_name"]?></a>
                             </h4>
-                            <h5 class="list-group-item-text"><?php $summary = explode(".",$value["prod_description"]); echo $summary[0]."..."?></h5>
+                            <h5 class="list-group-item-text"><?php $summary = explode(".",$getProduct[$i]["prod_description"]); echo $summary[0]."..."?></h5>
                             <div class="row">
                                 <div class="col-xs-12 col-md-6">
                                     <h2 class="price-tag">$300.00</h2>
@@ -93,6 +132,52 @@
                         }
                     ?>
                 </div>
+                <div class="row">
+                    <div class="col-lg-2 col-xs-2"></div>
+                    <div class="col-lg-2 col-xs-2"></div>
+                    <div class="col-lg-8 col-xs-8">
+                        <ul class="pagination">
+                            <?php 
+                                if($page != 0){      
+                            ?>
+                                    <li><a class="previous-isDisabled" href="product.php?page=<?=($index-1)?>" style="margin-left: 3px;"><</a></li>
+                            <?php
+                                    if($index < 3){
+
+                                    }
+                                    for($i = 1; $i <= $page; $i++){
+                            ?>        
+                                        <li class="nav-<?=$i?>"><a href="product.php?page=<?=$i?>" style="margin-left: 3px;"><?=$i?></a></li>
+                            <?php  
+                                    }
+                            ?>
+                                    <li><a class="next-isDisabled" href="product.php?page=<?=($index+1)?>" style="margin-left: 3px;">></a></li>
+                            <?php
+                                    echo "<script>$('.nav-".$index."').addClass('active')</script>";
+
+                                    if($page == 1){
+                                        echo "<script>$('.previous-isDisabled').css({'color':'darkgray','cursor':'not-allowed','text-decoration':'none'});</script>";
+                                        echo "<script>$('.previous-isDisabled').removeAttr('href');</script>";
+                                        echo "<script>$('.next-isDisabled').css({'color':'darkgray','cursor':'not-allowed','text-decoration':'none'});</script>";
+                                        echo "<script>$('.next-isDisabled').removeAttr('href');</script>";
+                                    }
+                                    else{
+                                        if($index == 1){
+                                            echo "<script>$('.previous-isDisabled').css({'color':'darkgray','cursor':'not-allowed','text-decoration':'none'});</script>";
+                                            echo "<script>$('.previous-isDisabled').removeAttr('href');</script>";
+                                        }
+                                        if($index == $page){
+                                            echo "<script>$('.next-isDisabled').css({'color':'darkgray','cursor':'not-allowed','text-decoration':'none'});</script>";
+                                            echo "<script>$('.next-isDisabled').removeAttr('href');</script>";
+                                        }
+                                    }
+                                   
+                                }
+                            ?>
+                        </ul>
+                    </div> 
+                </div>
+                
             </div>
         </div>
     </div>
