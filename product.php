@@ -10,6 +10,18 @@
     <link rel="stylesheet" href="css/styling.css">
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <style>
+        .showSearch:hover{
+            background-color: whitesmoke;
+        }
+        .showSearch{
+            padding-top: 40px;
+            margin-bottom: 0;
+        }
+        .showSearch li{
+            display: inline-block;
+        }
+    </style>
 </head>
 
 <body>
@@ -43,15 +55,15 @@
     </nav>
     <div class="container">
         <div class="row">
-            <div class="well well-sm col-md-3">
+            <div class="well well-sm col-md-4">
                 <div id="search-bar">
-                    <form action="" class="form-group">
+                    <form action="" class="form-group" style="display: inline-block;">
                         <label for="input-id">Product Search</label>
-
-                        <input type="text" name="" id="searchBox" class="form-control" style="width:200px;">
-                        <br>
+                        </br>
+                        <input type="text" name="" id="searchBox" class="form-control" style="width:200px; float: left;">
                         <input type="button" value="Search" class="btn btn-success" id="searchBtn">
                     </form>
+                    <div class="row" id="result" style="width: 340px; background-color:white;"></div>
                 </div>
                 <label for=""> <span class="glyphicon glyphicon-arrow-right"></span> <b
                         style="font-size: 150%;">Category:</b></label>
@@ -64,7 +76,7 @@
                 </ul>
             </div>
 
-            <div class="col-md-9">
+            <div class="col-md-8">
                 <div class="row list-group" id="Products">
                     <?php 
                         $productList = null;
@@ -72,10 +84,10 @@
                         $count = count($getProduct);
                         $page = 0;
                         if(intdiv($count,Constants::$PAGENUM) > 0 && $count % Constants::$PAGENUM == 0){  // vua du? so trang
-                            $page  = $count / Constants::$PAGENUM;
+                            $page  = intdiv($count,Constants::$PAGENUM);
                         }
                         else if(intdiv($count,Constants::$PAGENUM) > 0 && $count % Constants::$PAGENUM != 0){ // page bi du
-                            $page = ($count / Constants::$PAGENUM) + 1;
+                            $page = intdiv($count,Constants::$PAGENUM) + 1;
                         }
                         else{                               // san pham < 6
                             if($count > 0){
@@ -197,10 +209,10 @@
                             <?php
                                         }
                                     }    
-                                }
                             ?>
-                                    <li><a class="next-isDisabled" href="product.php?page=<?=($index+1)?>" style="margin-left: 3px;">></a></li>
+                                            <li><a class="next-isDisabled" href="product.php?page=<?=($index+1)?>" style="margin-left: 3px;">></a></li> 
                             <?php
+                                }
                                 echo "<script>$('.nav-".$index."').addClass('active')</script>";
 
                                 if($page == 1){
@@ -279,3 +291,28 @@
     });
 </script>
 </html>
+
+<script>
+    $(document).ready(function(){
+        $("#searchBox").keyup(function(){
+            var txt = $(this).val();
+            if(txt == ''){
+                $("#result").empty();
+            }
+            else{
+                $("#result").html('');
+                $.ajax({
+                    url: "quick_search.php",
+                    method: "post",
+                    data:{search:txt},
+                    dataType:"text",
+                    success:function(data){
+                        $("#result").html(data);
+                    }
+                });
+            }
+        });
+
+        $("")
+    });
+</script>
