@@ -11,15 +11,15 @@
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <style>
-        .showSearch:hover{
+        .showSearch li:hover, .selected{
             background-color: whitesmoke;
-        }
-        .showSearch{
-            padding-top: 40px;
-            margin-bottom: 0;
         }
         .showSearch li{
             display: inline-block;
+        }
+        .showSearch{
+            width: 300px;
+            background-color: white;
         }
     </style>
 </head>
@@ -63,7 +63,7 @@
                         <input type="text" name="" id="searchBox" class="form-control" style="width:200px; float: left;">
                         <input type="button" value="Search" class="btn btn-success" id="searchBtn">
                     </form>
-                    <div class="row" id="result" style="width: 340px; background-color:white;"></div>
+                    <div class="row" id="result"></div>
                 </div>
                 <label for=""> <span class="glyphicon glyphicon-arrow-right"></span> <b
                         style="font-size: 150%;">Category:</b></label>
@@ -294,25 +294,59 @@
 
 <script>
     $(document).ready(function(){
-        $("#searchBox").keyup(function(){
+        $("#searchBox").keyup(function(event){
             var txt = $(this).val();
-            if(txt == ''){
+            if(txt.length <= 1){
                 $("#result").empty();
             }
             else{
-                $("#result").html('');
-                $.ajax({
-                    url: "quick_search.php",
-                    method: "post",
-                    data:{search:txt},
-                    dataType:"text",
-                    success:function(data){
-                        $("#result").html(data);
+                if(event.which != 32 && event.which != 38 && event.which != 39 && event.which != 40 && event.which!=37){
+                    $("#result").html('');
+                    $.ajax({
+                        url: "quick_search.php",
+                        method: "post",
+                        data:{search:txt},
+                        dataType:"text",
+                        success:function(data){
+                            $("#result").html(data);
+                        }
+                    });
+                }
+                else{
+                    if(event.which == 40){
+                        if(!$(".showProductSearch").hasClass("selected")){
+                            $(".showProductSearch").eq(0).addClass("selected");
+                        }
+                        else{
+                            var $index = $(".showProductSearch").filter(".selected").index();
+                            $(".showProductSearch").eq($index).removeClass("selected");
+                            if($index != $(".showProductSearch").length-1){
+                                $(".showProductSearch").eq($index+1).addClass("selected");
+                            }
+                        }
                     }
-                });
+                    if(event.which == 38){
+                        if(!$(".showProductSearch").hasClass("selected")){
+                            $(".showProductSearch").eq($(".showProductSearch").length - 1).addClass("selected");
+                        }
+                        else{
+                            var $index = $(".showProductSearch").filter(".selected").index();
+                            $(".showProductSearch").eq($index).removeClass("selected");
+                            if($index != 0){
+                                $(".showProductSearch").eq($index-1).addClass("selected");
+                            }
+                        }
+                    }
+                    if(event.which == 13){
+                        if($(".showProductSearch").hasClass("selected")){
+                            $(".showProductSearch").click();
+                        }
+                    }
+                }
+                
             }
+
         });
 
-        $("")
     });
 </script>
