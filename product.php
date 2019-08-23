@@ -21,6 +21,19 @@
             width: 300px;
             background-color: white;
         }
+        .li_sort{
+            width: 130px;
+            padding: 10px 0;
+        }
+        .sort-hidden{
+            display: none;
+        }
+        .sort-show{
+            display: block;
+        }
+        .active-category{
+            font-weight: bold;
+        }
     </style>
 </head>
 
@@ -31,19 +44,59 @@
             require_once 'database/databaseConnect.php';
             require_once 'Constants/constants.php';
             $conn = DatabaseConnect::connect();
+            $gender = null;
+            $category = null;
+            $query_string = null;
             if($conn != null){
-                $getProduct = DatabaseConnect::getResult("select * from products", $conn); 
+                if(isset($_REQUEST["category"])){
+                    if(strcasecmp($_REQUEST["category"], Constants::$CATEGORY_BACKPACK) == 0){
+                        $category = Constants::$CATEGORY_BACKPACK;         
+                    }
+                    else if(strcasecmp($_REQUEST["category"], Constants::$CATEGORY_HANDBAG) == 0){
+                        $category = Constants::$CATEGORY_HANDBAG;   
+                    }
+
+                    if($category != null){
+                        $query_string =  Constants::$PRODUCT_CATEGORY." like '".$category."'"; 
+                    }
+                }
+                if(isset($_REQUEST["gender"])){
+                    if(strcasecmp($_REQUEST["gender"], Constants::$GENDER_MEN) == 0){
+                        $gender = Constants::$GENDER_MEN;
+                    }
+                    else if(strcasecmp($_REQUEST["gender"], Constants::$GENDER_WOMEN) == 0){
+                        $gender = Constants::$GENDER_WOMEN;
+                    }
+
+                    if($gender != null){
+                        if($query_string != null){
+                            $query_string = " and product_gender like '".$gender."'";
+                        }
+                        else{
+                            $query_string = "product_gender like '".$gender."'";   
+                        }
+                    }
+                }
+
+                if($query_string != null){
+                    $getProduct = DatabaseConnect::getResult("select * from products where ".$query_string, $conn); 
+                }
+                
+                if($category == null && $gender == null){
+                    $getProduct = DatabaseConnect::getResult("select * from products", $conn);    
+                }
+
                 DatabaseConnect::closeConnect($conn);
             }
         ?>
     <nav class="navbar navbar-static-top top-nav">
         <div class="container">
             <div class="navbar-header">
-                <a href="Home.html" class="navbar-brand" style="text-shadow: 2px 2px 2px">BagBagOnlineShop</a>
+                <a href="Home.html" class="navbar-brand" style="text-shadow: 2px 2px 2px;">BagBagOnlineShop</a>
             </div>
             <ul class="nav navbar-nav">
                 <li><a href="Home.html"><span class="glyphicon glyphicon-home"></span><b> Home</b></a></li>
-                <li class="active"><a href="product.php"><b>Products</b></a></li>
+                <li class="active"><a href="product.php?category=all&sort=1"><b>Products</b></a></li>
                 <li><a href="contact.html"><b>Contact</b></a></li>
                 <li><a href="aboutus.html"><b>About us</b></a></li>
             </ul>
@@ -54,9 +107,68 @@
         </div>
     </nav>
 
-    <div class="row">
-        <div class="col-md-3 col-lg-4"></div>
-        <div class="col-md-9 col-lg-8"></div>
+    <div class="container">
+        <?php 
+            $pagination_url_request = "";
+            if(isset($_REQUEST["category"]) && isset($_REQUEST["gender"])){
+                $pagination_url_request = Constants::$PAGINATION_URL_CATEGORY.$_REQUEST["category"]."&".Constants::$PAGINATION_URL_GENDER.$_REQUEST["gender"];
+                $message = "Catagory & Gender";
+            }
+            else if(isset($_REQUEST["category"])){
+                if(strcasecmp($_REQUEST["category"], "all") == 0){
+                    $message = "All";
+                    $pagination_url_request = Constants::$PAGINATION_URL_CATEGORY."all";
+                }
+                else if (strcasecmp($_REQUEST["category"], "backpack") == 0){
+                    $message = "Backpack";
+                    $pagination_url_request = Constants::$PAGINATION_URL_CATEGORY.Constants::$CATEGORY_BACKPACK;
+                }
+                else if (strcasecmp($_REQUEST["category"], "handbag") == 0){
+                    $message = "HandBag";
+                    $pagination_url_request = Constants::$PAGINATION_URL_CATEGORY.Constants::$CATEGORY_HANDBAG;
+                }
+            }
+            else if(isset($_REQUEST["gender"])){
+                if(strcasecmp($_REQUEST["gender"], "men") == 0){
+                    $message = "Men";
+                    $pagination_url_request = Constants::$PAGINATION_URL_GENDER.Constants::$GENDER_MEN;
+
+                }
+                else if(strcasecmp($_REQUEST["gender"], "women") == 0){
+                    $message = "Women";
+                    $pagination_url_request = Constants::$PAGINATION_URL_GENDER.Constants::$GENDER_WOMEN;
+                }
+            }
+            
+        ?>
+                <div class="col-md-3 col-lg-3"></div>
+                <div class="col-md-8 col-lg-8">
+                    <p style="font-size: 26px; float: left;" id="title-category">
+                        <?php echo (isset($message))?$message:"All";?>
+                    </p>    
+                    <?php 
+                        if(isset($_REQUEST["sort"])){
+                    ?>
+                    <div style="float: right;" id="sort-product">
+                        <span>Sort By:</span>
+                        <div style="border: 1px solid darkgray; float: right; width: 120px;">
+                            <span>Porpularity</span>
+                            <span class="glyphicon glyphicon-menu-down" style="float: right;"></span>
+                        </div>
+                        <div style="position: relative;" >
+                            <ul style="list-style: none; margin:0 ; padding: 0; border: 1px solid #f5f5f5; position: absolute;
+                                         z-index:1; background-color: #f5f5f5; left: 50px; top: 5px;" class="sort-hidden">
+                            <li class="li_sort"><a src="product.php?category="><span>Porpularity</span></a></li>
+                            <li class="li_sort">Price low to high</li>
+                            <li class="li_sort">Price high to low</li>
+                        </ul>    
+                        </div>
+                    </div>
+                    <?php 
+                        }
+                    ?>
+                </div>
+        </div>
     </div>
     <div class="container">
         <div class="row">
@@ -72,18 +184,21 @@
                 </div>
                 <label for=""> <span class="glyphicon glyphicon-arrow-right"></span> <b
                         style="font-size: 150%;">Category:</b></label>
-                <ul>
-                    <li class="list-active"><a href="producMain.html">All</a></li>
-                    <li><a href="productman.html">Men</a></li>
-                    <li><a href="productwomen.html">Women</a></li>
-                    <li><a href="productbackpack.html">Backpack</a></li>
-                    <li><a href="productbag.html">Bag</a></li>
+                <ul class="nav-category">
+                    <li class=""><a href="product.php?category=all&sort=1">All</a></li>
+                    <li><a href="product.php?gender=men">Men</a></li>
+                    <li><a href="product.php?gender=women">Women</a></li>
+                    <li><a href="product.php?category=backpack">Backpack</a></li>
+                    <li><a href="product.php?category=handbag">HandBag</a></li>
                 </ul>
             </div>
 
             <div class="col-md-9">
+                <?php
+                    if(isset($getProduct)) {
+                ?>
                 <div class="row list-group" id="Products">
-                    <?php 
+                <?php      
                         $productList = null;
                         $index = null;
                         $count = count($getProduct);
@@ -159,6 +274,9 @@
                     <div class="col-lg-2 col-xs-2"></div>
                     <div class="col-lg-2 col-xs-2"></div>
                     <div class="col-lg-8 col-xs-8">
+                        <?php 
+                            if($index > 0 && $index <= $page){
+                        ?>
                         <ul class="pagination">
                             <?php 
                                 if($page != 0){      
@@ -168,7 +286,10 @@
                                     if($page <= 6){
                                         for($i = 1; $i <= $page; $i++){
                             ?>        
-                                            <li class="nav-<?=$i?>"><a href="product.php?page=<?=$i?>" style="margin-left: 3px;"><?=$i?></a></li>
+                                            <li class="nav-<?=$i?>"><a href="product.php?page=<?php echo $i;
+                                                if(strcasecmp($pagination_url_request,'') != 0){
+                                                    echo '&'.$pagination_url_request;        
+                                                }?>" style="margin-left: 3px;"><?=$i?></a></li>
                             <?php
                                         }
                                     }
@@ -238,13 +359,25 @@
                                 }
                             ?>
                         </ul>
-                    </div> 
+                        <?php 
+                                }
+                                else{
+                                    echo    '<script>alert("Page not exits")</script>';
+                                    echo    "<script>
+                                                $('#title-category').remove();
+                                                $('#sort-product').remove();
+                                            </script>";
+                                }
+                        ?>
+                    </div>
+                <?php 
+                    }
+                ?> 
                 </div>
                 
             </div>
         </div>
     </div>
-
     <footer class="footer-bottom footer-style">
         <div class="container">
 
