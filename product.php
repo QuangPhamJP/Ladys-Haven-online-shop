@@ -55,7 +55,7 @@
     </nav>
     <div class="container">
         <div class="row">
-            <div class="well well-sm col-md-4">
+            <div class="well well-sm col-md-3">
                 <div id="search-bar">
                     <form action="" class="form-group" style="display: inline-block;">
                         <label for="input-id">Product Search</label>
@@ -76,7 +76,7 @@
                 </ul>
             </div>
 
-            <div class="col-md-8">
+            <div class="col-md-9">
                 <div class="row list-group" id="Products">
                     <?php 
                         $productList = null;
@@ -343,10 +343,7 @@
                         }
                     }
                 }
-                
             }
-
         });
-
     });
 </script>
