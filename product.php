@@ -53,6 +53,11 @@
             </ul>
         </div>
     </nav>
+
+    <div class="row">
+        <div class="col-md-3 col-lg-4"></div>
+        <div class="col-md-9 col-lg-8"></div>
+    </div>
     <div class="container">
         <div class="row">
             <div class="well well-sm col-md-3">
