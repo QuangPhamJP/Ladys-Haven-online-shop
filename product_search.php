@@ -1,6 +1,9 @@
+<?php 
+    require_once 'database/databaseConnect.php';
+    require_once 'Constants/constants.php';
+ ?>
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,6 +12,7 @@
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/styling.css">
+    <link rel="stylesheet" type="text/css" href="css/style-Quang.css"/>
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
 </head>
@@ -33,19 +37,73 @@
         </div>
     </nav>
     
-    <div class="container-fluid">
+    <div class="container">
         <div class="row">
             <div class="col-lg-3">
-                <h5>Filter Products</h5>
+                <h3 class="text-info">Filter Products</h3>
                 <hr>
-                <h6>Select Brand</h6>
+                <h4 class="text-info">Brand</h4>
+                <ul class="list-group checkbox">
+                    <?php 
+                        $conn = DatabaseConnect::connect();
+                        $getBrand = DatabaseConnect::getResult("select name from brand", $conn);  
+                        foreach ($getBrand as $value) {
+                    ?>
+                        <li class="list-group-item">
+                            <label class="text-info-label">
+                                <input type="checkbox" value="<?=$value['name'] ?>" class="brand"/>
+                                <?=$value['name']; ?>
+                            </label>
+                        </li>    
+                    <?php
+                        }
+                     ?>
+                </ul>
+
+                <h4 class="text-info">Category</h4>
+                <ul class="list-group checkbox">
+                    <?php 
+                        $getCategory = DatabaseConnect::getResult("select distinct product_category from products", $conn);
+                        foreach ($getCategory as $value) {
+                    ?>                            
+                        <li class="list-group-item">
+                            <label class="text-info-label">
+                                <input type="checkbox" value="<?=$value['product_category']?>" class="category">
+                                <?=$value['product_category'];?>
+                            </label>
+                        </li>
+                    <?php
+                        }
+                     ?>
+                </ul>
+                <h4 class="text-info">Gender</h4>
+                <ul class="list-group checkbox">
+                    <?php
+                        $getGender = DatabaseConnect::getResult("select distinct product_gender from products", $conn);
+                        foreach ($getGender as $value) {
+                    ?>
+                        <li class="list-group-item">
+                            <label class="text-info-label">
+                                <input type="checkbox" value="<?=$value['product_gender']?>" class="gender">
+                                <?=$value['product_gender'];?>
+                            </label>
+                        </li>
+                    <?php
+                        }
+                     ?>
+                </ul>
             </div>
-            <div class="col-lg-9"></div>
+            <div class="col-lg-9">
+                <h3 class="text-info">Products</h3>
+                <hr>    
+                <h4 class="text-info">Results</h4>
+                <div class="row filter_product"></div>
+            </div>
         </div>
     </div>
+    <?php DatabaseConnect::closeConnect($conn) ?>
     <footer class="footer-bottom footer-style">
         <div class="container">
-
             <div class="row">
                 <div class="col-md-5">
                     <p>We are a respectable and reputable resellers, where most of the backpacks and bags will be
@@ -90,11 +148,48 @@
 
 
 </body>
+
+<style>
+    #loading{
+        text-align: center;
+        background: url('images/loading.gif') no-repeat center;
+        height: 150px;
+        margin-top: 220px;
+    }    
+</style>
+
 <script>
-    $("#searchBtn").click(function () {
-        var value1 = $("#searchBox").val().toLowerCase();
-        $("#Products .item").filter(function () {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value1) > -1)
+    function get_filter(classname){
+        var value_checked = [];
+        $("."+classname+":checked").each(function(){
+            value_checked.push($(this).val());
+
+        });
+        return value_checked;
+    }
+    
+    function filter(){
+        $(".filter_product").html("<div id='loading'></div>");
+        var brand = get_filter('brand');
+        var category = get_filter('category');
+        var gender = get_filter('gender');
+        $.ajax({
+            url: "fetch_data_product.php",
+            method: "post",
+            data: {brand:brand, category:category, gender:gender},
+            dataType:"text",
+            success:function(data){
+                $(".filter_product").html(data);
+            }
+        });
+
+    }
+
+
+
+    $(document).ready(function(){
+        $("input[type='checkbox'").click(function(){
+            filter();
         });
     });
 </script>
