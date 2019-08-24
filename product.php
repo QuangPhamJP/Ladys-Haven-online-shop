@@ -190,11 +190,11 @@
         <div class="row">
             <div class="well well-sm col-md-3">
                 <div id="search-bar">
-                    <form action="" class="form-group" style="display: inline-block;">
+                    <form action="product_search.php" class="form-group" style="display: inline-block;" method="get">
                         <label for="input-id">Product Search</label>
                         </br>
-                        <input type="text" name="" id="searchBox" class="form-control" style="width:200px; float: left;">
-                        <input type="button" value="Search" class="btn btn-success" id="searchBtn">
+                        <input type="text" name="search-key" id="searchBox" class="form-control" style="width:200px; float: left;">
+                        <input type="submit" value="Search" class="btn btn-success" id="searchBtn">
                     </form>
                     <div class="row" id="result"></div>
                 </div>
