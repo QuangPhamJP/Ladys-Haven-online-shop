@@ -141,10 +141,25 @@
             }
             
         ?>
+            <div class="row">
+                <div class="col-md-3 col-lg-3"></div>
+                <div class="col-md-9 col-lg-9" align="center" style="margin-bottom: 20px; font-size: 20px;">
+                    <?php echo isset($message)?$message:"ALL"?>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-3 col-lg-3"></div>
                 <div class="col-md-8 col-lg-8">
-                    <p style="font-size: 26px; float: left;" id="title-category">
-                        <?php echo (isset($message))?$message:"All";?>
+                    <p style="font-size: 17px; float: left;" id="title-category">
+                        <?php                         
+                            if(isset($getProduct)){
+                                echo count($getProduct)." results";
+                            }
+                            else{
+                                echo "All";
+                            }
+
+                        ?>
                     </p>    
                     <?php 
                         if(isset($_REQUEST["sort"])){
@@ -168,6 +183,7 @@
                         }
                     ?>
                 </div>
+            </div>
         </div>
     </div>
     <div class="container">
@@ -186,10 +202,10 @@
                         style="font-size: 150%;">Category:</b></label>
                 <ul class="nav-category">
                     <li class=""><a href="product.php?category=all&sort=1">All</a></li>
-                    <li><a href="product.php?gender=men">Men</a></li>
-                    <li><a href="product.php?gender=women">Women</a></li>
-                    <li><a href="product.php?category=backpack">Backpack</a></li>
-                    <li><a href="product.php?category=handbag">HandBag</a></li>
+                    <li><a href="product.php?gender=men&sort=1">Men</a></li>
+                    <li><a href="product.php?gender=women&sort=1">Women</a></li>
+                    <li><a href="product.php?category=backpack&sort=1">Backpack</a></li>
+                    <li><a href="product.php?category=handbag&sort=1">HandBag</a></li>
                 </ul>
             </div>
 
@@ -281,12 +297,17 @@
                             <?php 
                                 if($page != 0){      
                             ?>
-                                    <li><a class="previous-isDisabled" href="product.php?page=<?=($index-1)?>" style="margin-left: 3px;"><</a></li>
+                                    <li><a class="previous-isDisabled" href="product.php?sort=1&page=<?php
+                                                    echo $i-1;
+                                                    if(strcasecmp($pagination_url_request,'') != 0){
+                                                        echo '&'.$pagination_url_request;        
+                                                    }  
+                                                ?>" style="margin-left: 3px;"><</a></li>
                             <?php
                                     if($page <= 6){
                                         for($i = 1; $i <= $page; $i++){
                             ?>        
-                                            <li class="nav-<?=$i?>"><a href="product.php?page=<?php echo $i;
+                                            <li class="nav-<?=$i?>"><a href="product.php?sort=1&page=<?php echo $i;
                                                 if(strcasecmp($pagination_url_request,'') != 0){
                                                     echo '&'.$pagination_url_request;        
                                                 }?>" style="margin-left: 3px;"><?=$i?></a></li>
@@ -298,45 +319,105 @@
                                         if($index <= 3){
                                             for($i = 1; $i <= 5; $i++){
                             ?>
-                                                <li class="nav-<?=$i?>"><a href="product.php?page=<?=$i?>" style="margin-left: 3px;"><?=$i?></a></li>
+                                                <li class="nav-<?=$i?>"><a href="product.php?sort=1&page=<?php
+                                                    echo $i;
+                                                    if(strcasecmp($pagination_url_request,'') != 0){
+                                                        echo '&'.$pagination_url_request;        
+                                                    }  
+                                                ?>" style="margin-left: 3px;"><?=$i?></a></li>
                             <?php
                                             }
                             ?>
-                                            <li class="nav-<?=$index+3?>"><a href="product.php?page=<?=$index+3?>" style="margin-left: 3px;">...</a></li>
-                                            <li class="nav-<?=$i?>"><a href="product.php?page=<?=$page?>" style="margin-left: 3px;"><?=$page?></a></li>
+                                            <li class="nav-<?=$index+3?>"><a href="product.php?sort=1&page=<?php
+                                                    echo $i+3;
+                                                    if(strcasecmp($pagination_url_request,'') != 0){
+                                                        echo '&'.$pagination_url_request;        
+                                                    }  
+                                                ?>" style="margin-left: 3px;">...</a></li>
+                                            <li class="nav-<?=$i?>"><a href="product.php?sort=1&page=<?php
+                                                    echo $page;
+                                                    if(strcasecmp($pagination_url_request,'') != 0){
+                                                        echo '&'.$pagination_url_request;        
+                                                    }  
+                                                ?>" style="margin-left: 3px;"><?=$page?></a></li>
                             <?php
                                         }
                                         else if($index >= $page - 2){
                             ?>
-                                            <li class="nav-1"><a href="product.php?page=1" style="margin-left: 3px;">1</a></li>
-                                            <li class="nav-<?=$index-3?>"><a href="product.php?page=<?=$index-3?>" style="margin-left: 3px;">...</a></li>
+                                            <li class="nav-1"><a href="product.php?sort=1&page=<?php
+                                                    echo 1;
+                                                    if(strcasecmp($pagination_url_request,'') != 0){
+                                                        echo '&'.$pagination_url_request;        
+                                                    }  
+                                                ?>" style="margin-left: 3px;">1</a></li>
+                                            <li class="nav-<?=$index-3?>"><a href="product.php?sort=1&page=<?php
+                                                    echo $i-3;
+                                                    if(strcasecmp($pagination_url_request,'') != 0){
+                                                        echo '&'.$pagination_url_request;        
+                                                    }  
+                                                ?>" style="margin-left: 3px;">...</a></li>
                                             
                             <?php
                                             for($i = $page - 4; $i <= $page; $i++){
                             ?>
-                                                <li class="nav-<?=$i?>"><a href="product.php?page=<?=$i?>" style="margin-left: 3px;"><?=$i?></a></li>
+                                                <li class="nav-<?=$i?>"><a href="product.php?sort=1&page=<?php
+                                                    echo $i;
+                                                    if(strcasecmp($pagination_url_request,'') != 0){
+                                                        echo '&'.$pagination_url_request;        
+                                                    }  
+                                                ?>" style="margin-left: 3px;"><?=$i?></a></li>
                             <?php
                                             }
 
                                         }
                                         else{
                             ?>
-                                            <li class="nav-1"><a href="product.php?page=1" style="margin-left: 3px;">1</a></li>
-                                            <li class="nav-<?=$index-3?>"><a href="product.php?page=<?=$index-3?>" style="margin-left: 3px;">...</a></li>             
+                                            <li class="nav-1"><a href="product.php?sort=1&page=<?php
+                                                    echo 1;
+                                                    if(strcasecmp($pagination_url_request,'') != 0){
+                                                        echo '&'.$pagination_url_request;        
+                                                    }  
+                                                ?>" style="margin-left: 3px;">1</a></li>
+                                            <li class="nav-<?=$index-3?>"><a href="product.php?sort=1&page=<?php
+                                                    echo $i-3;
+                                                    if(strcasecmp($pagination_url_request,'') != 0){
+                                                        echo '&'.$pagination_url_request;        
+                                                    }  
+                                                ?>" style="margin-left: 3px;">...</a></li>             
                             <?php
                                             for($i = $index - 1; $i <= $index + 1; $i++){
                             ?>
-                                                <li class="nav-<?=$i?>"><a href="product.php?page=<?=$i?>" style="margin-left: 3px;"><?=$i?></a></li>
+                                                <li class="nav-<?=$i?>"><a href="product.php?sort=1&page=<?php
+                                                    echo $i;
+                                                    if(strcasecmp($pagination_url_request,'') != 0){
+                                                        echo '&'.$pagination_url_request;        
+                                                    }  
+                                                ?>" style="margin-left: 3px;"><?=$i?></a></li>
                             <?php
                                             }
                             ?>
-                                            <li class="nav-<?=$index+3?>"><a href="product.php?page=<?=$index+3?>" style="margin-left: 3px;">...</a></li>
-                                            <li class="nav-<?=$i?>"><a href="product.php?page=<?=$page?>" style="margin-left: 3px;"><?=$page?></a></li>
+                                            <li class="nav-<?=$index+3?>"><a href="product.php?sort=1&page=<?php
+                                                    echo $i+3;
+                                                    if(strcasecmp($pagination_url_request,'') != 0){
+                                                        echo '&'.$pagination_url_request;        
+                                                    }  
+                                                ?>" style="margin-left: 3px;">...</a></li>
+                                            <li class="nav-<?=$i?>"><a href="product.php?sort=1&page=<?php
+                                                    echo $page;
+                                                    if(strcasecmp($pagination_url_request,'') != 0){
+                                                        echo '&'.$pagination_url_request;        
+                                                    }  
+                                                ?>" style="margin-left: 3px;"><?=$page?></a></li>
                             <?php
                                         }
                                     }    
                             ?>
-                                            <li><a class="next-isDisabled" href="product.php?page=<?=($index+1)?>" style="margin-left: 3px;">></a></li> 
+                                            <li><a class="next-isDisabled" href="product.php?sort=1&page=<?php
+                                                    echo $i+1;
+                                                    if(strcasecmp($pagination_url_request,'') != 0){
+                                                        echo '&'.$pagination_url_request;        
+                                                    }  
+                                                ?>" style="margin-left: 3px;">></a></li> 
                             <?php
                                 }
                                 echo "<script>$('.nav-".$index."').addClass('active')</script>";
