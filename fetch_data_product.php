@@ -2,19 +2,30 @@
  	require_once 'database/databaseConnect.php';
     require_once 'Constants/constants.php';
 
-    $query = "";
-    if(isset($_POST['brand']) && isset($_POST['category']) && isset($_POST['gender'])){
-    	$brand_list = implode("','",$_POST['brand']);
-    	$category_list = implode("','", $_POST['category']);
-    	$gender_list = implode("','", $_POST['gender']);
-    	$query = "select * from products product, brand brand where product.prod_name like '%".$_POST['search']."%' 
-    				and product.brand_id = brand.id 
-    				and name IN ("."'".$brand_list."'".")
-    				and product_category IN ("."'".$category_list."'".")
-    				and product_gender IN ("."'".$gender_list."'".")";
-
+    $query = "select * from products product, brand brand where product.prod_name like '%".$_POST['search']."%' and product.brand_id = brand.id ";
+    $brand_list = null;
+    $category_list = null;
+    $gender_list = null;
+    if(isset($_POST['brand'])){
+    	$brand_list = implode("','",$_POST['brand']);	
     }
-    else{
+    if(isset($_POST['category'])){
+		$category_list = implode("','", $_POST['category']);	
+    }
+    if(isset($_POST['gender'])){
+    	$gender_list = implode("','", $_POST['gender']);
+    }
+
+    if($brand_list != null){
+    	$query .= "and name IN ("."'".$brand_list."'".") ";
+    }
+    if($category_list != null){
+    	$query .= "and product_category IN ("."'".$category_list."'".") ";	
+    }
+    if($gender_list != null){
+    	$query .= "and product_gender IN ("."'".$gender_list."'".") ";	
+    }
+    if($brand_list == null && $category_list == null && $gender_list == null){
 
     }
 
@@ -37,7 +48,7 @@
 		}
 	}
 	else{
-		$output = '<h3>No Data Found</h3>';
+		$output = '<h3>No Filter Product Found</h3>';
 	}
 	echo $output;
  ?>
