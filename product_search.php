@@ -97,7 +97,24 @@
                 <h3 class="text-info">Products</h3>
                 <hr>    
                 <h4 class="text-info">Results</h4>
-                <div class="row filter_product"></div>
+                <div class="row filter_product">
+                    <?php  
+                        $getResult = DatabaseConnect::getResult("select * from products product, brand brand where product.brand_id = brand.id 
+                                                                and product.prod_name like '%".$_REQUEST['search-key']."%' ",$conn);
+                        foreach ($getResult as $row) {
+                    ?>
+                        <div class = "col-lg-3 col-md-3">
+                            <div style="border:1px solid #ccc; border-radius:5px;padding:16px; margin-bottom:16px; height:300px;">
+                                <img style="width: 200px; height: 140px;" src="images/<?php echo explode('-',$row['images'])[0]?>.jpg" alt="" class="img-responsive"/>
+                                <p align="center"><strong><a href="#"><?=$row['prod_name']?><a/></strong></p>
+                                <h4 style="text-align:center;" class="text-danger" ><?=$row['prod_price']?></h4>
+                                Brand : <?=$row['name']?><br/>
+                            </div>
+                        </div>
+                    <?php
+                        }
+                    ?>
+                </div>
             </div>
         </div>
     </div>
