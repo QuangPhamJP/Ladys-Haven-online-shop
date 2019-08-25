@@ -298,7 +298,7 @@
                                 if($page != 0){      
                             ?>
                                     <li><a class="previous-isDisabled" href="product.php?sort=1&page=<?php
-                                                    echo $i-1;
+                                                    echo $index-1;
                                                     if(strcasecmp($pagination_url_request,'') != 0){
                                                         echo '&'.$pagination_url_request;        
                                                     }  
@@ -413,7 +413,7 @@
                                     }    
                             ?>
                                             <li><a class="next-isDisabled" href="product.php?sort=1&page=<?php
-                                                    echo $i+1;
+                                                    echo $index+1;
                                                     if(strcasecmp($pagination_url_request,'') != 0){
                                                         echo '&'.$pagination_url_request;        
                                                     }  
@@ -441,14 +441,14 @@
                             ?>
                         </ul>
                         <?php 
-                                }
-                                else{
-                                    echo    '<script>alert("Page not exits")</script>';
-                                    echo    "<script>
-                                                $('#title-category').remove();
-                                                $('#sort-product').remove();
-                                            </script>";
-                                }
+                            }
+                            else{
+                                echo    '<script>alert("Page not exits")</script>';
+                                echo    "<script>
+                                            $('#title-category').remove();
+                                            $('#sort-product').remove();
+                                        </script>";
+                            }
                         ?>
                     </div>
                 <?php 

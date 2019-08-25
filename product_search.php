@@ -26,7 +26,7 @@
             </div>
             <ul class="nav navbar-nav">
                 <li><a href="Home.html"><span class="glyphicon glyphicon-home"></span><b> Home</b></a></li>
-                <li class="active"><a href="producMain.html"><b>Products</b></a></li>
+                <li class="active"><a href="product.php"><b>Products</b></a></li>
                 <li><a href="contact.html"><b>Contact</b></a></li>
                 <li><a href="aboutus.html"><b>About us</b></a></li>
             </ul>
@@ -113,12 +113,18 @@
                         </div>
                     <?php
                         }
+                        if(!isset($getResult) || count($getResult) == 0){
+                            echo    '<div class = "col-lg-3 col-md-3" style = "font-size: 20px;">
+                                           <p>No result found</p>
+                                    </div>';
+                        }
                     ?>
                 </div>
             </div>
         </div>
     </div>
     <?php DatabaseConnect::closeConnect($conn) ?>
+    <input type="hidden" value="<?=$_REQUEST['search-key']?>">
     <footer class="footer-bottom footer-style">
         <div class="container">
             <div class="row">
@@ -190,10 +196,11 @@
         var brand = get_filter('brand');
         var category = get_filter('category');
         var gender = get_filter('gender');
+        var search = $("input[type='hidden']").val();
         $.ajax({
             url: "fetch_data_product.php",
             method: "post",
-            data: {brand:brand, category:category, gender:gender},
+            data: {brand:brand, category:category, gender:gender, search:search},
             dataType:"text",
             success:function(data){
                 $(".filter_product").html(data);
