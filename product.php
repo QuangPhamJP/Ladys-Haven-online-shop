@@ -5,7 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Products</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/styling.css">
     <script src="js/jquery-3.3.1.min.js"></script>
@@ -24,6 +23,13 @@
         .li_sort{
             width: 130px;
             padding: 10px 0;
+            cursor: pointer;
+        }
+        .li_sort a:hover{
+            text-decoration: none;
+        }
+        .li_sort a{
+            color: black;
         }
         .sort-hidden{
             display: none;
@@ -33,6 +39,9 @@
         }
         .active-category{
             font-weight: bold;
+        }
+        .sort-show li:hover{
+            background-color: darkgray;
         }
     </style>
 </head>
@@ -173,9 +182,9 @@
                         <div style="position: relative;" >
                             <ul style="list-style: none; margin:0 ; padding: 0; border: 1px solid #f5f5f5; position: absolute;
                                          z-index:1; background-color: #f5f5f5; left: 50px; top: 5px;" class="sort-hidden">
-                            <li class="li_sort"><a src="product.php?category="><span>Porpularity</span></a></li>
-                            <li class="li_sort">Price low to high</li>
-                            <li class="li_sort">Price high to low</li>
+                            <li class="li_sort"><a href="product.php?<?=$pagination_url_request?>&porpularity=1">Porpularity</a></li>
+                            <li class="li_sort"><a href="product.php?<?=$pagination_url_request?>&price=1">Price low to high</a></li>
+                            <li class="li_sort"><a href="product.php?<?=$pagination_url_request?>&price=2">Price high to low</a></li>
                         </ul>    
                         </div>
                     </div>
@@ -190,7 +199,7 @@
         <div class="row">
             <div class="well well-sm col-md-3">
                 <div id="search-bar">
-                    <form action="product_search.php" class="form-group" style="display: inline-block;" method="get">
+                    <form action="product_search.php" class="form-group product_search" style="display: inline-block;" method="get" onsubmit="return hasSelected();" autocomplete="off">
                         <label for="input-id">Product Search</label>
                         </br>
                         <input type="text" name="search-key" id="searchBox" class="form-control" style="width:200px; float: left;">
@@ -502,16 +511,42 @@
     </footer>
 </body>
 <script>
-    $("#searchBtn").click(function () {
-        var value1 = $("#searchBox").val().toLowerCase();
-        $("#Products .item").filter(function () {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value1) > -1)
-        });
-    });
-</script>
-</html>
+    function hasSelected(){
+        if($("#searchBox").val().trim().length == 0){
+            return false;
+        }
+        if($(".showProductSearch").hasClass("selected")){
+            return false;
+        }
+        return true;
+    }
 
-<script>
+    function showSort(){
+        $("#sort-product").click(function(){
+            if($(".sort-hidden").hasClass("sort-hidden")){
+                $(".sort-hidden").addClass("sort-show");
+                $(".sort-hidden").removeClass("sort-hidden");
+            }
+            else if($(".sort-show").hasClass("sort-show")){
+                $(".sort-show").addClass("sort-hidden");
+                $(".sort-show").removeClass("sort-show");   
+            }
+        });
+
+        $(document).mouseup(function(e){
+            var container = $("#sort-product");
+
+            // if the target of the click isn't the container nor a descendant of the container
+            if (!container.is(e.target) && container.has(e.target).length === 0) 
+            {
+                if(typeof $(".sort-show") !== "underfined"){
+                    $(".sort-show").addClass("sort-hidden");
+                    $(".sort-show").removeClass("sort-show"); 
+                }
+            }
+        });
+
+    }
     $(document).ready(function(){
         $("#searchBox").keyup(function(event){
             var txt = $(this).val();
@@ -519,7 +554,7 @@
                 $("#result").empty();
             }
             else{
-                if(event.which != 32 && event.which != 38 && event.which != 39 && event.which != 40 && event.which!=37){
+                if(event.which != 32 && event.which != 38 && event.which != 39 && event.which != 40 && event.which!=37 && event.which != 13){
                     $("#result").html('');
                     $.ajax({
                         url: "quick_search.php",
@@ -558,11 +593,17 @@
                     }
                     if(event.which == 13){
                         if($(".showProductSearch").hasClass("selected")){
-                            $(".showProductSearch").click();
+                            var href = $(".selected").children("a").attr("href");
+                            location.href = href;
                         }
                     }
                 }
             }
         });
+
+        showSort();
     });
 </script>
+
+</html>
+

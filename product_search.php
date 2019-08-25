@@ -18,6 +18,11 @@
 </head>
 
 <body>
+    <?php 
+        if(!isset($_REQUEST['search-key'])){
+            header('location: product.php');
+        }
+     ?>
     <nav class="navbar navbar-static-top top-nav">
         <div class="container">
             <div class="navbar-header">
@@ -93,7 +98,7 @@
                      ?>
                 </ul>
             </div>
-            <div class="col-lg-9">
+            <div class="col-md-9 col-lg-9">
                 <h3 class="text-info">Products</h3>
                 <hr>    
                 <h4 class="text-info">Results</h4>
@@ -103,18 +108,19 @@
                                                                 and product.prod_name like '%".$_REQUEST['search-key']."%' ",$conn);
                         foreach ($getResult as $row) {
                     ?>
-                        <div class = "col-lg-3 col-md-3">
+                        <div class = "col-lg-4 col-md-4">
                             <div style="border:1px solid #ccc; border-radius:5px;padding:16px; margin-bottom:16px; height:300px;">
                                 <img style="width: 200px; height: 140px;" src="images/<?php echo explode('-',$row['images'])[0]?>.jpg" alt="" class="img-responsive"/>
                                 <p align="center"><strong><a href="#"><?=$row['prod_name']?><a/></strong></p>
                                 <h4 style="text-align:center;" class="text-danger" ><?=$row['prod_price']?></h4>
                                 Brand : <?=$row['name']?><br/>
+                                <a class="btn btn-success" style="width: 100%;" href="product_detail.php">View</a>
                             </div>
                         </div>
                     <?php
                         }
                         if(!isset($getResult) || count($getResult) == 0){
-                            echo    '<div class = "col-lg-3 col-md-3" style = "font-size: 20px;">
+                            echo    '<div class = "col-lg-4 col-md-4" style = "font-size: 20px;">
                                            <p>No result found</p>
                                     </div>';
                         }
