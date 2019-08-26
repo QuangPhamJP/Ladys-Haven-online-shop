@@ -47,57 +47,6 @@
 </head>
 
 <body>
-        <?php 
-            session_start();
-            $_SESSION["username"] = "doraemon";
-            require_once 'database/databaseConnect.php';
-            require_once 'Constants/constants.php';
-            $conn = DatabaseConnect::connect();
-            $gender = null;
-            $category = null;
-            $query_string = null;
-            if($conn != null){
-                if(isset($_REQUEST["category"])){
-                    if(strcasecmp($_REQUEST["category"], Constants::$CATEGORY_BACKPACK) == 0){
-                        $category = Constants::$CATEGORY_BACKPACK;         
-                    }
-                    else if(strcasecmp($_REQUEST["category"], Constants::$CATEGORY_HANDBAG) == 0){
-                        $category = Constants::$CATEGORY_HANDBAG;   
-                    }
-
-                    if($category != null){
-                        $query_string =  Constants::$PRODUCT_CATEGORY." like '".$category."'"; 
-                    }
-                }
-                if(isset($_REQUEST["gender"])){
-                    if(strcasecmp($_REQUEST["gender"], Constants::$GENDER_MEN) == 0){
-                        $gender = Constants::$GENDER_MEN;
-                    }
-                    else if(strcasecmp($_REQUEST["gender"], Constants::$GENDER_WOMEN) == 0){
-                        $gender = Constants::$GENDER_WOMEN;
-                    }
-
-                    if($gender != null){
-                        if($query_string != null){
-                            $query_string = " and product_gender like '".$gender."'";
-                        }
-                        else{
-                            $query_string = "product_gender like '".$gender."'";   
-                        }
-                    }
-                }
-
-                if($query_string != null){
-                    $getProduct = DatabaseConnect::getResult("select * from products where ".$query_string, $conn); 
-                }
-                
-                if($category == null && $gender == null){
-                    $getProduct = DatabaseConnect::getResult("select * from products", $conn);    
-                }
-
-                DatabaseConnect::closeConnect($conn);
-            }
-        ?>
     <nav class="navbar navbar-static-top top-nav">
         <div class="container">
             <div class="navbar-header">
@@ -118,12 +67,24 @@
 
     <div class="container">
         <?php 
+            session_start();
+            $_SESSION["username"] = "doraemon";
+            require_once 'database/databaseConnect.php';
+            require_once 'Constants/constants.php';
+            $conn = DatabaseConnect::connect();
+            $gender = null;
+            $category = null;
+            $sort = null;
+            $query_string = null;
+            
+
             $pagination_url_request = "";
-            if(isset($_REQUEST["category"]) && isset($_REQUEST["gender"])){
-                $pagination_url_request = Constants::$PAGINATION_URL_CATEGORY.$_REQUEST["category"]."&".Constants::$PAGINATION_URL_GENDER.$_REQUEST["gender"];
+            $pagination_url_all = "";
+            if(isset($_REQUEST["category"]) && isset($_REQUEST["gender"]) && isset($_REQUEST["sort"])){
+                $pagination_url_request = Constants::$PAGINATION_URL_CATEGORY.$_REQUEST["category"]."&".Constants::$PAGINATION_URL_GENDER.$_REQUEST["gender"]."&".Constants::$PAGINATION_URL_SORT;
                 $message = "Catagory & Gender";
             }
-            else if(isset($_REQUEST["category"])){
+            if(isset($_REQUEST["category"])){
                 if(strcasecmp($_REQUEST["category"], "all") == 0){
                     $message = "All";
                     $pagination_url_request = Constants::$PAGINATION_URL_CATEGORY."all";
@@ -136,17 +97,121 @@
                     $message = "HandBag";
                     $pagination_url_request = Constants::$PAGINATION_URL_CATEGORY.Constants::$CATEGORY_HANDBAG;
                 }
+                $pagination_url_all = $pagination_url_request;
             }
-            else if(isset($_REQUEST["gender"])){
+            if(isset($_REQUEST["gender"])){
                 if(strcasecmp($_REQUEST["gender"], "men") == 0){
                     $message = "Men";
-                    $pagination_url_request = Constants::$PAGINATION_URL_GENDER.Constants::$GENDER_MEN;
-
+                    if(strlen($pagination_url_request) !== 0){
+                        $pagination_url_request .= "&".Constants::$PAGINATION_URL_GENDER.Constants::$GENDER_MEN;
+                    }
+                    else{
+                        $pagination_url_request .= Constants::$PAGINATION_URL_GENDER.Constants::$GENDER_MEN;
+                    }
                 }
                 else if(strcasecmp($_REQUEST["gender"], "women") == 0){
                     $message = "Women";
-                    $pagination_url_request = Constants::$PAGINATION_URL_GENDER.Constants::$GENDER_WOMEN;
+                    if(strlen($pagination_url_request) !== 0){
+                        $pagination_url_request .= "&".Constants::$PAGINATION_URL_GENDER.Constants::$GENDER_WOMEN;
+                    }
+                    else{
+                        $pagination_url_request .= Constants::$PAGINATION_URL_GENDER.Constants::$GENDER_WOMEN;
+                    }
                 }
+                $pagination_url_all = $pagination_url_request;
+            }
+            if(isset($_REQUEST["sort"])){
+                if(strcasecmp($_REQUEST["sort"], Constants::$SORT_PORPULARITY) == 0){
+                    if(strlen($pagination_url_request) !== 0){
+                        $pagination_url_request .= "&".Constants::$PAGINATION_URL_SORT.Constants::$SORT_PORPULARITY;
+                    }
+                    else{
+                        $pagination_url_request .= Constants::$PAGINATION_URL_SORT.Constants::$SORT_PORPULARITY;
+                    }
+                }
+                else if(strcasecmp($_REQUEST["sort"], Constants::$SORT_PRICE_LOW_HIGH) == 0){
+                    if(strlen($pagination_url_request) !== 0){
+                        $pagination_url_request .= "&".Constants::$PAGINATION_URL_SORT.Constants::$SORT_PRICE_LOW_HIGH;
+                    }
+                    else{
+                        $pagination_url_request .= Constants::$PAGINATION_URL_SORT.Constants::$SORT_PRICE_LOW_HIGH;
+                    }
+                }
+                else if(strcasecmp($_REQUEST["sort"], Constants::$SORT_PRICE_HIGH_LOW) == 0){
+                    if(strlen($pagination_url_request) !== 0){
+                        $pagination_url_request .= "&".Constants::$PAGINATION_URL_SORT.Constants::$SORT_PRICE_HIGH_LOW;
+                    }
+                    else{
+                        $pagination_url_request .= Constants::$PAGINATION_URL_SORT.Constants::$SORT_PRICE_HIGH_LOW;
+                    }
+                }
+            }
+
+            if($conn != null){
+                if(isset($_REQUEST["category"])){
+                    if(strcasecmp($_REQUEST["category"], Constants::$CATEGORY_BACKPACK) == 0){
+                        $category = Constants::$CATEGORY_BACKPACK;         
+                    }
+                    else if(strcasecmp($_REQUEST["category"], Constants::$CATEGORY_HANDBAG) == 0){
+                        $category = Constants::$CATEGORY_HANDBAG;   
+                    }
+                    else if(strcasecmp($_REQUEST["category"], Constants::$CATEGORY_ALL) == 0){
+                        $category = Constants::$CATEGORY_ALL;   
+                    }
+
+                    if($category != null){
+                        $query_string =  Constants::$PRODUCT_CATEGORY." like '".$category."'"; 
+                    }
+                }
+                if(isset($_REQUEST["gender"])){
+                    if(strcasecmp($_REQUEST["gender"], Constants::$GENDER_MEN) == 0){
+                        $gender = Constants::$GENDER_MEN;
+                    }
+                    else if(strcasecmp($_REQUEST["gender"], Constants::$GENDER_WOMEN) == 0){
+                        $gender = Constants::$GENDER_WOMEN;
+                    }
+
+                    if($gender != null){
+                        if($query_string != null){
+                            $query_string .= " and product_gender like '".$gender."'";
+                        }
+                        else{
+                            $query_string .= " product_gender like '".$gender."'";   
+                        }
+                    }
+                }
+
+                if(isset($_REQUEST["sort"])){
+                    if(strcasecmp($_REQUEST["sort"], Constants::$SORT_PORPULARITY) == 0){
+                        $sort = Constants::$SORT_PORPULARITY;
+                    }
+                    else if(strcasecmp($_REQUEST["sort"], Constants::$SORT_PRICE_LOW_HIGH) == 0){
+                        $sort = Constants::$SORT_PRICE_LOW_HIGH;
+                        $query_string .= " order by prod_price ASC";
+                    }
+                    else if(strcasecmp($_REQUEST["sort"], Constants::$SORT_PRICE_HIGH_LOW) == 0){
+                        $sort = Constants::$SORT_PRICE_HIGH_LOW;
+                        $query_string .= " order by prod_price DESC";
+                    }
+
+                        
+                }
+                
+
+                if($query_string != null){
+                    if(strcasecmp($category, Constants::$CATEGORY_ALL) == 0){
+                        $getProduct = DatabaseConnect::getResult("select * from products", $conn);     
+                    }
+                    else{
+                        $getProduct = DatabaseConnect::getResult("select * from products where ".$query_string, $conn); 
+                    }
+                }
+                
+                if($category == null && $gender == null && $sort == null){
+                    $getProduct = DatabaseConnect::getResult("select * from products", $conn);    
+                }
+
+                DatabaseConnect::closeConnect($conn);
             }
             
         ?>
@@ -171,20 +236,30 @@
                         ?>
                     </p>    
                     <?php 
+                        $sort_title = "";
                         if(isset($_REQUEST["sort"])){
+                            if(strcasecmp($_REQUEST["sort"], Constants::$SORT_PORPULARITY) == 0){
+                                $sort_title = "Porpularity";
+                            }
+                            else if(strcasecmp($_REQUEST["sort"], Constants::$SORT_PRICE_LOW_HIGH) == 0){
+                                $sort_title = "Price Low To High";
+                            }
+                            else if(strcasecmp($_REQUEST["sort"], Constants::$SORT_PRICE_HIGH_LOW) == 0){
+                                $sort_title = "Price High To Low";
+                            }
                     ?>
                     <div style="float: right;" id="sort-product">
                         <span>Sort By:</span>
-                        <div style="border: 1px solid darkgray; float: right; width: 120px;">
-                            <span>Porpularity</span>
+                        <div style="border: 1px solid darkgray; float: right; width: 140px;">
+                            <span><?=$sort_title?></span>
                             <span class="glyphicon glyphicon-menu-down" style="float: right;"></span>
                         </div>
                         <div style="position: relative;" >
                             <ul style="list-style: none; margin:0 ; padding: 0; border: 1px solid #f5f5f5; position: absolute;
                                          z-index:1; background-color: #f5f5f5; left: 50px; top: 5px;" class="sort-hidden">
-                            <li class="li_sort"><a href="product.php?<?=$pagination_url_request?>&porpularity=1">Porpularity</a></li>
-                            <li class="li_sort"><a href="product.php?<?=$pagination_url_request?>&price=1">Price low to high</a></li>
-                            <li class="li_sort"><a href="product.php?<?=$pagination_url_request?>&price=2">Price high to low</a></li>
+                            <li class="li_sort"><a href="product.php?<?=$pagination_url_all?>&sort=1">Porpularity</a></li>
+                            <li class="li_sort"><a href="product.php?<?=$pagination_url_all?>&sort=2">Price low to high</a></li>
+                            <li class="li_sort"><a href="product.php?<?=$pagination_url_all?>&sort=3">Price high to low</a></li>
                         </ul>    
                         </div>
                     </div>
@@ -283,7 +358,7 @@
                             <h5 class="list-group-item-text"><?php $summary = explode(".",$getProduct[$i]["prod_description"]); echo $summary[0]."..."?></h5>
                             <div class="row">
                                 <div class="col-xs-12 col-md-6">
-                                    <h2 class="price-tag">$300.00</h2>
+                                    <h2 class="price-tag"><?=$getProduct[$i]['prod_price']?>$</h2>
                                 </div>
                                 <div class="col-xs-12 col-md-6">
                                     <button type="button" class="btn btn-success">Add to cart</button>
@@ -306,7 +381,7 @@
                             <?php 
                                 if($page != 0){      
                             ?>
-                                    <li><a class="previous-isDisabled" href="product.php?sort=1&page=<?php
+                                    <li><a class="previous-isDisabled" href="product.php?page=<?php
                                                     echo $index-1;
                                                     if(strcasecmp($pagination_url_request,'') != 0){
                                                         echo '&'.$pagination_url_request;        
@@ -316,7 +391,7 @@
                                     if($page <= 6){
                                         for($i = 1; $i <= $page; $i++){
                             ?>        
-                                            <li class="nav-<?=$i?>"><a href="product.php?sort=1&page=<?php echo $i;
+                                            <li class="nav-<?=$i?>"><a href="product.php?page=<?php echo $i;
                                                 if(strcasecmp($pagination_url_request,'') != 0){
                                                     echo '&'.$pagination_url_request;        
                                                 }?>" style="margin-left: 3px;"><?=$i?></a></li>
@@ -328,7 +403,7 @@
                                         if($index <= 3){
                                             for($i = 1; $i <= 5; $i++){
                             ?>
-                                                <li class="nav-<?=$i?>"><a href="product.php?sort=1&page=<?php
+                                                <li class="nav-<?=$i?>"><a href="product.php?page=<?php
                                                     echo $i;
                                                     if(strcasecmp($pagination_url_request,'') != 0){
                                                         echo '&'.$pagination_url_request;        
@@ -337,13 +412,13 @@
                             <?php
                                             }
                             ?>
-                                            <li class="nav-<?=$index+3?>"><a href="product.php?sort=1&page=<?php
+                                            <li class="nav-<?=$index+3?>"><a href="product.php?page=<?php
                                                     echo $i+3;
                                                     if(strcasecmp($pagination_url_request,'') != 0){
                                                         echo '&'.$pagination_url_request;        
                                                     }  
                                                 ?>" style="margin-left: 3px;">...</a></li>
-                                            <li class="nav-<?=$i?>"><a href="product.php?sort=1&page=<?php
+                                            <li class="nav-<?=$i?>"><a href="product.php?page=<?php
                                                     echo $page;
                                                     if(strcasecmp($pagination_url_request,'') != 0){
                                                         echo '&'.$pagination_url_request;        
@@ -353,13 +428,13 @@
                                         }
                                         else if($index >= $page - 2){
                             ?>
-                                            <li class="nav-1"><a href="product.php?sort=1&page=<?php
+                                            <li class="nav-1"><a href="product.php?page=<?php
                                                     echo 1;
                                                     if(strcasecmp($pagination_url_request,'') != 0){
                                                         echo '&'.$pagination_url_request;        
                                                     }  
                                                 ?>" style="margin-left: 3px;">1</a></li>
-                                            <li class="nav-<?=$index-3?>"><a href="product.php?sort=1&page=<?php
+                                            <li class="nav-<?=$index-3?>"><a href="product.php?page=<?php
                                                     echo $i-3;
                                                     if(strcasecmp($pagination_url_request,'') != 0){
                                                         echo '&'.$pagination_url_request;        
@@ -369,7 +444,7 @@
                             <?php
                                             for($i = $page - 4; $i <= $page; $i++){
                             ?>
-                                                <li class="nav-<?=$i?>"><a href="product.php?sort=1&page=<?php
+                                                <li class="nav-<?=$i?>"><a href="product.php?page=<?php
                                                     echo $i;
                                                     if(strcasecmp($pagination_url_request,'') != 0){
                                                         echo '&'.$pagination_url_request;        
@@ -381,13 +456,13 @@
                                         }
                                         else{
                             ?>
-                                            <li class="nav-1"><a href="product.php?sort=1&page=<?php
+                                            <li class="nav-1"><a href="product.php?page=<?php
                                                     echo 1;
                                                     if(strcasecmp($pagination_url_request,'') != 0){
                                                         echo '&'.$pagination_url_request;        
                                                     }  
                                                 ?>" style="margin-left: 3px;">1</a></li>
-                                            <li class="nav-<?=$index-3?>"><a href="product.php?sort=1&page=<?php
+                                            <li class="nav-<?=$index-3?>"><a href="product.php?page=<?php
                                                     echo $i-3;
                                                     if(strcasecmp($pagination_url_request,'') != 0){
                                                         echo '&'.$pagination_url_request;        
@@ -396,7 +471,7 @@
                             <?php
                                             for($i = $index - 1; $i <= $index + 1; $i++){
                             ?>
-                                                <li class="nav-<?=$i?>"><a href="product.php?sort=1&page=<?php
+                                                <li class="nav-<?=$i?>"><a href="product.php?page=<?php
                                                     echo $i;
                                                     if(strcasecmp($pagination_url_request,'') != 0){
                                                         echo '&'.$pagination_url_request;        
@@ -405,13 +480,13 @@
                             <?php
                                             }
                             ?>
-                                            <li class="nav-<?=$index+3?>"><a href="product.php?sort=1&page=<?php
+                                            <li class="nav-<?=$index+3?>"><a href="product.php?page=<?php
                                                     echo $i+3;
                                                     if(strcasecmp($pagination_url_request,'') != 0){
                                                         echo '&'.$pagination_url_request;        
                                                     }  
                                                 ?>" style="margin-left: 3px;">...</a></li>
-                                            <li class="nav-<?=$i?>"><a href="product.php?sort=1&page=<?php
+                                            <li class="nav-<?=$i?>"><a href="product.php?page=<?php
                                                     echo $page;
                                                     if(strcasecmp($pagination_url_request,'') != 0){
                                                         echo '&'.$pagination_url_request;        
@@ -421,7 +496,7 @@
                                         }
                                     }    
                             ?>
-                                            <li><a class="next-isDisabled" href="product.php?sort=1&page=<?php
+                                            <li><a class="next-isDisabled" href="product.php?page=<?php
                                                     echo $index+1;
                                                     if(strcasecmp($pagination_url_request,'') != 0){
                                                         echo '&'.$pagination_url_request;        
@@ -604,6 +679,4 @@
         showSort();
     });
 </script>
-
 </html>
-
