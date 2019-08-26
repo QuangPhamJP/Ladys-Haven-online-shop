@@ -42,7 +42,7 @@
 						<p align="center"><strong><a href="#">'.$row['prod_name'].'<a/></strong></p>
 						<h4 style="text-align:center;" class="text-danger" >'.$row['prod_price'].'</h4>
 						Brand : '.$row['name'].'<br/>
-						<button type="button" class="btn btn-success">Add to cart</button>
+						<a  href="#" class="btn btn-success" style="width:100%;">View</a>
 					</div>
 				</div>
 			';

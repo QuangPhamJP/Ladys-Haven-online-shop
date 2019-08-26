@@ -15,6 +15,19 @@
     <link rel="stylesheet" type="text/css" href="css/style-Quang.css"/>
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/search.js"></script>
+    <style>
+        .showSearch li:hover, .selected{
+            background-color: whitesmoke;
+        }
+        .showSearch li{
+            display: inline-block;
+        }
+        .showSearch{
+            width: 300px;
+            background-color: white;
+        }
+    </style>
 </head>
 
 <body>
@@ -47,6 +60,15 @@
             <div class="col-lg-3">
                 <h3 class="text-info">Filter Products</h3>
                 <hr>
+                <div id="search-bar">
+                    <form action="product_search.php" class="form-group product_search" style="display: inline-block;" method="get" onsubmit="return hasSelected();" autocomplete="off">
+                        <label for="input-id">Product Search</label>
+                        </br>
+                        <input type="text" name="search-key" id="searchBox" class="form-control" style="width:200px; float: left;">
+                        <input type="submit" value="Search" class="btn btn-success" id="searchBtn">
+                    </form>
+                    <div class="row" id="result"></div>
+                </div>
                 <h4 class="text-info">Brand</h4>
                 <ul class="list-group checkbox">
                     <?php 
@@ -98,10 +120,19 @@
                      ?>
                 </ul>
             </div>
+            <?php 
+                $getResult = DatabaseConnect::getResult("select * from products product, brand brand where product.brand_id = brand.id 
+                                                                and product.prod_name like '%".$_REQUEST['search-key']."%' ",$conn);
+             ?>
             <div class="col-md-9 col-lg-9">
                 <h3 class="text-info">Products</h3>
                 <hr>    
-                <h4 class="text-info">Results</h4>
+                <h4 class="text-info">Results 
+                <?php 
+                    if(isset($getResult)){
+                        echo count($getResult); 
+                    }
+                 ?></h4>
                 <div class="row filter_product">
                     <?php  
                         $getResult = DatabaseConnect::getResult("select * from products product, brand brand where product.brand_id = brand.id 

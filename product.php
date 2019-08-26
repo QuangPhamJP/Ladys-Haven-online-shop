@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css/styling.css">
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/search.js"></script>
     <style>
         .showSearch li:hover, .selected{
             background-color: whitesmoke;
@@ -42,6 +43,37 @@
         }
         .sort-show li:hover{
             background-color: darkgray;
+        }
+        .div-product-thumbnail>.product_thumbnail{
+            position: relative;
+        }
+
+        .img-responsive{
+            opacity: 1;
+            display: block;
+            height: auto;
+            transition: .5s ease;
+            backface-visibility: hidden;
+        }
+        .div-product-thumbnail>.product_thumbnail>.show-view-image-product{
+            position: absolute; 
+            top: 50%; 
+            left: 50%;
+            font-size: 16px; 
+            opacity: 0;
+            transition: .5s ease; 
+            transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+        }
+        .product_thumbnail:hover .img-responsive{
+            opacity: 0.2;
+        }
+        .product_thumbnail:hover .show-view-image-product{
+            opacity: 1;
+        }
+
+        .show-view-image-product a{
+            text-decoration: none;
         }
     </style>
 </head>
@@ -91,17 +123,23 @@
                 }
                 else if (strcasecmp($_REQUEST["category"], "backpack") == 0){
                     $message = "Backpack";
+                    $category = Constants::$CATEGORY_BACKPACK;   
                     $pagination_url_request = Constants::$PAGINATION_URL_CATEGORY.Constants::$CATEGORY_BACKPACK;
                 }
                 else if (strcasecmp($_REQUEST["category"], "handbag") == 0){
                     $message = "HandBag";
+                    $category = Constants::$CATEGORY_HANDBAG;
                     $pagination_url_request = Constants::$PAGINATION_URL_CATEGORY.Constants::$CATEGORY_HANDBAG;
+                }
+                if($category != null){
+                    $query_string =  Constants::$PRODUCT_CATEGORY." like '".$category."'"; 
                 }
                 $pagination_url_all = $pagination_url_request;
             }
             if(isset($_REQUEST["gender"])){
                 if(strcasecmp($_REQUEST["gender"], "men") == 0){
                     $message = "Men";
+                    $gender = Constants::$GENDER_MEN;
                     if(strlen($pagination_url_request) !== 0){
                         $pagination_url_request .= "&".Constants::$PAGINATION_URL_GENDER.Constants::$GENDER_MEN;
                     }
@@ -111,6 +149,7 @@
                 }
                 else if(strcasecmp($_REQUEST["gender"], "women") == 0){
                     $message = "Women";
+                    $gender = Constants::$GENDER_WOMEN;
                     if(strlen($pagination_url_request) !== 0){
                         $pagination_url_request .= "&".Constants::$PAGINATION_URL_GENDER.Constants::$GENDER_WOMEN;
                     }
@@ -118,10 +157,19 @@
                         $pagination_url_request .= Constants::$PAGINATION_URL_GENDER.Constants::$GENDER_WOMEN;
                     }
                 }
+                if($gender != null){
+                    if($query_string != null){
+                        $query_string .= " and product_gender like '".$gender."'";
+                    }
+                    else{
+                        $query_string .= " product_gender like '".$gender."'";   
+                    }
+                }
                 $pagination_url_all = $pagination_url_request;
             }
             if(isset($_REQUEST["sort"])){
                 if(strcasecmp($_REQUEST["sort"], Constants::$SORT_PORPULARITY) == 0){
+                    $sort = Constants::$SORT_PORPULARITY;
                     if(strlen($pagination_url_request) !== 0){
                         $pagination_url_request .= "&".Constants::$PAGINATION_URL_SORT.Constants::$SORT_PORPULARITY;
                     }
@@ -130,6 +178,8 @@
                     }
                 }
                 else if(strcasecmp($_REQUEST["sort"], Constants::$SORT_PRICE_LOW_HIGH) == 0){
+                    $sort = Constants::$SORT_PRICE_LOW_HIGH;
+                    $query_string .= " order by prod_price ASC";
                     if(strlen($pagination_url_request) !== 0){
                         $pagination_url_request .= "&".Constants::$PAGINATION_URL_SORT.Constants::$SORT_PRICE_LOW_HIGH;
                     }
@@ -138,6 +188,8 @@
                     }
                 }
                 else if(strcasecmp($_REQUEST["sort"], Constants::$SORT_PRICE_HIGH_LOW) == 0){
+                    $sort = Constants::$SORT_PRICE_HIGH_LOW;
+                    $query_string .= " order by prod_price DESC";
                     if(strlen($pagination_url_request) !== 0){
                         $pagination_url_request .= "&".Constants::$PAGINATION_URL_SORT.Constants::$SORT_PRICE_HIGH_LOW;
                     }
@@ -147,72 +199,25 @@
                 }
             }
 
-            if($conn != null){
-                if(isset($_REQUEST["category"])){
-                    if(strcasecmp($_REQUEST["category"], Constants::$CATEGORY_BACKPACK) == 0){
-                        $category = Constants::$CATEGORY_BACKPACK;         
-                    }
-                    else if(strcasecmp($_REQUEST["category"], Constants::$CATEGORY_HANDBAG) == 0){
-                        $category = Constants::$CATEGORY_HANDBAG;   
-                    }
-                    else if(strcasecmp($_REQUEST["category"], Constants::$CATEGORY_ALL) == 0){
-                        $category = Constants::$CATEGORY_ALL;   
-                    }
-
-                    if($category != null){
-                        $query_string =  Constants::$PRODUCT_CATEGORY." like '".$category."'"; 
-                    }
+            if($query_string != null){
+                if($category == null && $gender == null){
+                    $getProduct = DatabaseConnect::getResult("select * from products ".$query_string, $conn); 
                 }
-                if(isset($_REQUEST["gender"])){
-                    if(strcasecmp($_REQUEST["gender"], Constants::$GENDER_MEN) == 0){
-                        $gender = Constants::$GENDER_MEN;
-                    }
-                    else if(strcasecmp($_REQUEST["gender"], Constants::$GENDER_WOMEN) == 0){
-                        $gender = Constants::$GENDER_WOMEN;
-                    }
-
-                    if($gender != null){
-                        if($query_string != null){
-                            $query_string .= " and product_gender like '".$gender."'";
-                        }
-                        else{
-                            $query_string .= " product_gender like '".$gender."'";   
-                        }
-                    }
-                }
-
-                if(isset($_REQUEST["sort"])){
-                    if(strcasecmp($_REQUEST["sort"], Constants::$SORT_PORPULARITY) == 0){
-                        $sort = Constants::$SORT_PORPULARITY;
-                    }
-                    else if(strcasecmp($_REQUEST["sort"], Constants::$SORT_PRICE_LOW_HIGH) == 0){
-                        $sort = Constants::$SORT_PRICE_LOW_HIGH;
-                        $query_string .= " order by prod_price ASC";
-                    }
-                    else if(strcasecmp($_REQUEST["sort"], Constants::$SORT_PRICE_HIGH_LOW) == 0){
-                        $sort = Constants::$SORT_PRICE_HIGH_LOW;
-                        $query_string .= " order by prod_price DESC";
-                    }
-
-                        
+                else{
+                    $getProduct = DatabaseConnect::getResult("select * from products where ".$query_string, $conn);     
                 }
                 
-
-                if($query_string != null){
-                    if(strcasecmp($category, Constants::$CATEGORY_ALL) == 0){
-                        $getProduct = DatabaseConnect::getResult("select * from products", $conn);     
-                    }
-                    else{
-                        $getProduct = DatabaseConnect::getResult("select * from products where ".$query_string, $conn); 
-                    }
-                }
-                
-                if($category == null && $gender == null && $sort == null){
-                    $getProduct = DatabaseConnect::getResult("select * from products", $conn);    
-                }
-
-                DatabaseConnect::closeConnect($conn);
             }
+            else{
+                $getProduct = DatabaseConnect::getResult("select * from products", $conn);     
+            }
+            
+            if($category == null && $gender == null && $sort == null){
+                $getProduct = DatabaseConnect::getResult("select * from products", $conn);    
+            }
+
+            DatabaseConnect::closeConnect($conn);
+            
             
         ?>
             <div class="row">
@@ -348,23 +353,26 @@
                             }
                             $productList = explode("-", $getProduct[$i]["images"]);
                     ?>
-                    <div class="item col-lg-6 col-xs-4">
-                        <div class="thumbnail">
-                            <img src="images/<?=$productList[0]?>.jpg" class="img-responsive" alt="Image">
-                        </div>
-                        <div class="caption">
-                            <h4 class="list-group-item-heading"><a href="product1.html"><?=$getProduct[$i]["prod_name"]?></a>
+                    <div class="item col-lg-6 col-xs-4 div-product-thumbnail" >
+                        <div class="thumbnail product_thumbnail">
+                            <img src="images/<?=$productList[0]?>.jpg" class="img-responsive" alt="Image"/>
+                            <h4 class="list-group-item-heading"><span style="color: #3aa5ab;"><?=$getProduct[$i]["prod_name"]?></span>
                             </h4>
                             <h5 class="list-group-item-text"><?php $summary = explode(".",$getProduct[$i]["prod_description"]); echo $summary[0]."..."?></h5>
-                            <div class="row">
-                                <div class="col-xs-12 col-md-6">
-                                    <h2 class="price-tag"><?=$getProduct[$i]['prod_price']?>$</h2>
-                                </div>
-                                <div class="col-xs-12 col-md-6">
-                                    <button type="button" class="btn btn-success">Add to cart</button>
-                                </div>
+                            <div class="show-view-image-product" >
+                                <a href="product_detail.php?<?=$getProduct[$i]['prod_id']?>" style="padding: 16px 26px; background-color: #5450506b; color: white;">View</a>
                             </div>
                         </div>
+                        <br/><br/><br/><br/><br/>
+                        <div class="row">
+                            <div class="col-xs-12 col-md-6">
+                                <h2 class="price-tag"><?=$getProduct[$i]['prod_price']?>$</h2>
+                            </div>
+                            <div class="col-xs-12 col-md-6">
+                                <button type="button" class="btn btn-success">Add to cart</button>
+                            </div>
+                        </div>
+                        
                     </div>
                     <?php
                         }
@@ -586,97 +594,34 @@
     </footer>
 </body>
 <script>
-    function hasSelected(){
-        if($("#searchBox").val().trim().length == 0){
-            return false;
-        }
-        if($(".showProductSearch").hasClass("selected")){
-            return false;
-        }
-        return true;
-    }
-
     function showSort(){
-        $("#sort-product").click(function(){
-            if($(".sort-hidden").hasClass("sort-hidden")){
-                $(".sort-hidden").addClass("sort-show");
-                $(".sort-hidden").removeClass("sort-hidden");
-            }
-            else if($(".sort-show").hasClass("sort-show")){
-                $(".sort-show").addClass("sort-hidden");
-                $(".sort-show").removeClass("sort-show");   
-            }
-        });
-
-        $(document).mouseup(function(e){
-            var container = $("#sort-product");
-
-            // if the target of the click isn't the container nor a descendant of the container
-            if (!container.is(e.target) && container.has(e.target).length === 0) 
-            {
-                if(typeof $(".sort-show") !== "underfined"){
-                    $(".sort-show").addClass("sort-hidden");
-                    $(".sort-show").removeClass("sort-show"); 
-                }
-            }
-        });
-
-    }
-    $(document).ready(function(){
-        $("#searchBox").keyup(function(event){
-            var txt = $(this).val();
-            if(txt.length <= 1){
-                $("#result").empty();
-            }
-            else{
-                if(event.which != 32 && event.which != 38 && event.which != 39 && event.which != 40 && event.which!=37 && event.which != 13){
-                    $("#result").html('');
-                    $.ajax({
-                        url: "quick_search.php",
-                        method: "post",
-                        data:{search:txt},
-                        dataType:"text",
-                        success:function(data){
-                            $("#result").html(data);
-                        }
-                    });
-                }
-                else{
-                    if(event.which == 40){
-                        if(!$(".showProductSearch").hasClass("selected")){
-                            $(".showProductSearch").eq(0).addClass("selected");
-                        }
-                        else{
-                            var $index = $(".showProductSearch").filter(".selected").index();
-                            $(".showProductSearch").eq($index).removeClass("selected");
-                            if($index != $(".showProductSearch").length-1){
-                                $(".showProductSearch").eq($index+1).addClass("selected");
-                            }
-                        }
-                    }
-                    if(event.which == 38){
-                        if(!$(".showProductSearch").hasClass("selected")){
-                            $(".showProductSearch").eq($(".showProductSearch").length - 1).addClass("selected");
-                        }
-                        else{
-                            var $index = $(".showProductSearch").filter(".selected").index();
-                            $(".showProductSearch").eq($index).removeClass("selected");
-                            if($index != 0){
-                                $(".showProductSearch").eq($index-1).addClass("selected");
-                            }
-                        }
-                    }
-                    if(event.which == 13){
-                        if($(".showProductSearch").hasClass("selected")){
-                            var href = $(".selected").children("a").attr("href");
-                            location.href = href;
-                        }
-                    }
-                }
-            }
-        });
-
-        showSort();
+    $("#sort-product").click(function(){
+        if($(".sort-hidden").hasClass("sort-hidden")){
+            $(".sort-hidden").addClass("sort-show");
+            $(".sort-hidden").removeClass("sort-hidden");
+        }
+        else if($(".sort-show").hasClass("sort-show")){
+            $(".sort-show").addClass("sort-hidden");
+            $(".sort-show").removeClass("sort-show");   
+        }
     });
+
+    $(document).mouseup(function(e){
+        var container = $("#sort-product");
+
+        // if the target of the click isn't the container nor a descendant of the container
+        if (!container.is(e.target) && container.has(e.target).length === 0) 
+        {
+            if(typeof $(".sort-show") !== "underfined"){
+                $(".sort-show").addClass("sort-hidden");
+                $(".sort-show").removeClass("sort-show"); 
+            }
+        }
+    });
+
+    $(document).ready(function()){
+        showSort();
+    }
+}
 </script>
 </html>
