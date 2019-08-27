@@ -14,11 +14,12 @@
         .showSearch li:hover, .selected{
             background-color: whitesmoke;
         }
-        .showSearch li{
-            display: inline-block;
-        }
         .showSearch{
             background-color: #d2a9a9;
+            left: 16%;
+        }
+        .showSearch li{
+            width: 400px;
         }
         .li_sort{
             width: 130px;
@@ -74,16 +75,24 @@
         .show-view-image-product a{
             text-decoration: none;
         }
-        #result{
-            margin-left:110px;
-        }
         .product_search div{
             width: 70%;
             margin: auto;
         }
         .product_search input:first-child{
-            width: 70%;
+            width: 400px;
             display: inline-block;
+        }
+        .btn{
+            vertical-align: unset;
+        }
+        .category-product a{
+            padding: 10px 15px;
+            display: block;
+            text-decoration: none;
+            border: 1px solid #ddd;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
         }
     </style>
 </head>
@@ -96,7 +105,7 @@
             </div>
             <ul class="nav navbar-nav">
                 <li><a href="Home.html"><span class="glyphicon glyphicon-home"></span><b> Home</b></a></li>
-                <li class="active"><a href="product.php?category=all&sort=1"><b>Products</b></a></li>
+                <li><a href="product.php?category=all&sort=1"><b>Products</b></a></li>
                 <li><a href="contact.html"><b>Contact</b></a></li>
                 <li><a href="aboutus.html"><b>About us</b></a></li>
             </ul>
@@ -117,7 +126,7 @@
                     <input type="submit" value="Search" class="btn btn-success" id="searchBtn">
                     </div>
                 </form>
-                <div class="row" id="result" style="position: relative;"></div>
+                <div class="row" id="result"></div>
             </div>
             <div class="col-md-1 col-xs-1 col-lg-1"></div>
         </div>
@@ -242,7 +251,6 @@
 
             DatabaseConnect::closeConnect($conn);
             
-            
         ?>
             <div class="row">
                 <div class="col-md-3 col-lg-3"></div>
@@ -306,12 +314,12 @@
     <div class="container">
         <div class="row">
             <div class="col-md-3">
-                <ul class="list-group">
-                    <li class="list-group-item"><a href="product.php?category=all&sort=1">All</a></li>
-                    <li class="list-group-item"><a href="product.php?gender=men&sort=1">Men</a></li>
-                    <li class="list-group-item"><a href="product.php?gender=women&sort=1">Women</a></li>
-                    <li class="list-group-item"><a href="product.php?category=backpack&sort=1">Backpack</a></li>
-                    <li class="list-group-item"><a href="product.php?category=handbag&sort=1">HandBag</a></li>
+                <ul class="list-group" style="list-style-type: none;">
+                    <li class="category-product"><a href="product.php?category=all&sort=1">All</a></li>
+                    <li class="category-product"><a href="product.php?gender=men&sort=1">Men</a></li>
+                    <li class="category-product"><a href="product.php?gender=women&sort=1">Women</a></li>
+                    <li class="category-product"><a href="product.php?category=backpack&sort=1">Backpack</a></li>
+                    <li class="category-product"><a href="product.php?category=handbag&sort=1">HandBag</a></li>
                 </ul>
             </div>
 
@@ -609,9 +617,52 @@
             </div>
         </div>
     </footer>
+    <?php 
+            if(isset($_REQUEST['category'])){
+                if(strcasecmp($_REQUEST['category'], "all") == 0){
+                    echo    "<script>
+                                $('.category-product:first-child').addClass('active'); 
+                                $('.active').css('background-color','#97a8b7');
+                            </script>";
+                }
+            }
+            if(isset($_REQUEST['gender'])){
+                if(strcasecmp($_REQUEST['gender'], "men") == 0){
+                    echo    "<script>
+                                $('.category-product:nth-child(2)').addClass('active');
+                                $('.active').css('background-color','#97a8b7');
+                            </script>";
+                }
+            }
+            if(isset($_REQUEST['gender'])){
+                if(strcasecmp($_REQUEST['gender'], "women") == 0){
+                    echo    "<script>
+                                $('.category-product:nth-child(3)').addClass('active');
+                                $('.active').css('background-color','#97a8b7');
+                            </script>";
+                }
+            }
+            if(isset($_REQUEST['category'])){
+                if(strcasecmp($_REQUEST['category'], "backpack") == 0){
+                    echo    "<script>
+                                $('.category-product:nth-child(4)').addClass('active'); 
+                                $('.active').css('background-color','#97a8b7');
+                            </script>";
+                }
+            }
+            if(isset($_REQUEST['category'])){
+                if(strcasecmp($_REQUEST['category'], "handbag") == 0){
+                    echo    "<script>
+                                $('.category-product:nth-child(5)').addClass('active'); 
+                                $('.active').css('background-color','#97a8b7');
+                            </script>";
+                }
+            }
+            
+    ?>
 </body>
 <script>
-    function showSort(){
+function showSort(){
     $("#sort-product").click(function(){
         if($(".sort-hidden").hasClass("sort-hidden")){
             $(".sort-hidden").addClass("sort-show");
@@ -635,10 +686,6 @@
             }
         }
     });
-
-    $(document).ready(function()){
-        showSort();
-    }
 }
 </script>
 </html>

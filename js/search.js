@@ -8,32 +8,6 @@ function hasSelected(){
     return true;
 }
 
-function showSort(){
-    $("#sort-product").click(function(){
-        if($(".sort-hidden").hasClass("sort-hidden")){
-            $(".sort-hidden").addClass("sort-show");
-            $(".sort-hidden").removeClass("sort-hidden");
-        }
-        else if($(".sort-show").hasClass("sort-show")){
-            $(".sort-show").addClass("sort-hidden");
-            $(".sort-show").removeClass("sort-show");   
-        }
-    });
-
-    $(document).mouseup(function(e){
-        var container = $("#sort-product");
-
-        // if the target of the click isn't the container nor a descendant of the container
-        if (!container.is(e.target) && container.has(e.target).length === 0) 
-        {
-            if(typeof $(".sort-show") !== "underfined"){
-                $(".sort-show").addClass("sort-hidden");
-                $(".sort-show").removeClass("sort-show"); 
-            }
-        }
-    });
-    }
-
 $(document).ready(function(){
     $("#searchBox").keyup(function(event){
         var txt = $(this).val();
@@ -86,6 +60,6 @@ $(document).ready(function(){
                 }
             }
         }
-    });
+    }); 
     showSort();
 });
