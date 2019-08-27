@@ -8,7 +8,7 @@
         
         public static function connect(){
             try{
-                return $conn = new PDO("mysql:host=localhost;dbname=phpproject", "root", "");
+                return $conn = new PDO("mysql:host=localhost;dbname=bagstore", "root", "");
             }catch(PDOException $e){
                 echo "Connection failed: " . $e->getMessage();
                 return null;

@@ -18,8 +18,7 @@
             display: inline-block;
         }
         .showSearch{
-            width: 300px;
-            background-color: white;
+            background-color: #d2a9a9;
         }
         .li_sort{
             width: 130px;
@@ -75,6 +74,17 @@
         .show-view-image-product a{
             text-decoration: none;
         }
+        #result{
+            margin-left:110px;
+        }
+        .product_search div{
+            width: 70%;
+            margin: auto;
+        }
+        .product_search input:first-child{
+            width: 70%;
+            display: inline-block;
+        }
     </style>
 </head>
 
@@ -98,9 +108,23 @@
     </nav>
 
     <div class="container">
+         <div class="row">
+            <div class="col-md-1 col-xs-1 col-lg-1"></div>
+            <div class="col-md-10 col-xs-10 col-lg-10">
+                <form action="product_search.php" class="form-group product_search" method="get" onsubmit="return hasSelected();" autocomplete="off">
+                    <div>
+                    <input type="text" name="search-key" id="searchBox" class="form-control" placeholder="Search">
+                    <input type="submit" value="Search" class="btn btn-success" id="searchBtn">
+                    </div>
+                </form>
+                <div class="row" id="result" style="position: relative;"></div>
+            </div>
+            <div class="col-md-1 col-xs-1 col-lg-1"></div>
+        </div>
+    </div>
+
+    <div class="container">
         <?php 
-            session_start();
-            $_SESSION["username"] = "doraemon";
             require_once 'database/databaseConnect.php';
             require_once 'Constants/constants.php';
             $conn = DatabaseConnect::connect();
@@ -227,8 +251,12 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3 col-lg-3"></div>
+                <div class="col-md-3 col-lg-3">
+                    <h3 style="color: #A0522D;">Category</h3>
+                    <hr>
+                </div>
                 <div class="col-md-8 col-lg-8">
+                    <br>
                     <p style="font-size: 17px; float: left;" id="title-category">
                         <?php                         
                             if(isset($getProduct)){
@@ -277,24 +305,13 @@
     </div>
     <div class="container">
         <div class="row">
-            <div class="well well-sm col-md-3">
-                <div id="search-bar">
-                    <form action="product_search.php" class="form-group product_search" style="display: inline-block;" method="get" onsubmit="return hasSelected();" autocomplete="off">
-                        <label for="input-id">Product Search</label>
-                        </br>
-                        <input type="text" name="search-key" id="searchBox" class="form-control" style="width:200px; float: left;">
-                        <input type="submit" value="Search" class="btn btn-success" id="searchBtn">
-                    </form>
-                    <div class="row" id="result"></div>
-                </div>
-                <label for=""> <span class="glyphicon glyphicon-arrow-right"></span> <b
-                        style="font-size: 150%;">Category:</b></label>
-                <ul class="nav-category">
-                    <li class=""><a href="product.php?category=all&sort=1">All</a></li>
-                    <li><a href="product.php?gender=men&sort=1">Men</a></li>
-                    <li><a href="product.php?gender=women&sort=1">Women</a></li>
-                    <li><a href="product.php?category=backpack&sort=1">Backpack</a></li>
-                    <li><a href="product.php?category=handbag&sort=1">HandBag</a></li>
+            <div class="col-md-3">
+                <ul class="list-group">
+                    <li class="list-group-item"><a href="product.php?category=all&sort=1">All</a></li>
+                    <li class="list-group-item"><a href="product.php?gender=men&sort=1">Men</a></li>
+                    <li class="list-group-item"><a href="product.php?gender=women&sort=1">Women</a></li>
+                    <li class="list-group-item"><a href="product.php?category=backpack&sort=1">Backpack</a></li>
+                    <li class="list-group-item"><a href="product.php?category=handbag&sort=1">HandBag</a></li>
                 </ul>
             </div>
 
@@ -351,11 +368,11 @@
                             if(!isset($getProduct[$i])){
                                 break;
                             }
-                            $productList = explode("-", $getProduct[$i]["images"]);
+                            $productList = $getProduct[$i]["image"];
                     ?>
-                    <div class="item col-lg-6 col-xs-4 div-product-thumbnail" >
+                    <div class="item col-lg-6 col-xs-6 div-product-thumbnail" >
                         <div class="thumbnail product_thumbnail">
-                            <img src="images/<?=$productList[0]?>.jpg" class="img-responsive" alt="Image"/>
+                            <img src="images/<?=$productList?>" class="img-responsive" alt="Image"/>
                             <h4 class="list-group-item-heading"><span style="color: #3aa5ab;"><?=$getProduct[$i]["prod_name"]?></span>
                             </h4>
                             <h5 class="list-group-item-text"><?php $summary = explode(".",$getProduct[$i]["prod_description"]); echo $summary[0]."..."?></h5>
