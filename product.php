@@ -385,7 +385,7 @@
                             </h4>
                             <h5 class="list-group-item-text"><?php $summary = explode(".",$getProduct[$i]["prod_description"]); echo $summary[0]."..."?></h5>
                             <div class="show-view-image-product" >
-                                <a href="product_detail.php?<?=$getProduct[$i]['prod_id']?>" style="padding: 16px 26px; background-color: #5450506b; color: white;">View</a>
+                                <a href="product_detail.php?product_id=<?=$getProduct[$i]['prod_id']?>" style="padding: 16px 26px; background-color: #5450506b; color: white;">View</a>
                             </div>
                         </div>
                         <br/><br/><br/><br/><br/>

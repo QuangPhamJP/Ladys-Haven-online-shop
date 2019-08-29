@@ -26,7 +26,12 @@
             padding: 15px 50px;
             display: block;
         }
+        body{
+            background-color: #fafafa;
+        }
+
     </style>
+
 </head>
 
 <body>
@@ -50,7 +55,14 @@
     </nav>
 
     <div class="container">
-        
+        <div class="row"> <!-- Detail product-->
+            <div class="col-xs-5 col-md-5 col-lg-5">
+                
+            </div>
+            <div class="col-xs-7 col-md-7 col-lg-7"></div>
+        </div>
+        <div class="row"></div>
+        <div class="row"></div>
     </div>
 
     <footer class="footer-bottom footer-style">

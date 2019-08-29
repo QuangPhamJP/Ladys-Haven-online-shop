@@ -43,7 +43,7 @@
                                 <div style="top:57%; position: absolute; width: 74%; left: 13%;">
                                     <h4 style="text-align:center;" class="text-danger" >'.$row["prod_price"].'</h4>
                                     Brand : '.$row["name"].'<br/>
-                                    <a class="btn btn-success" style="width: 100%;display: block; margin-bottom: 3px;" href="product_detail.php" >View</a>
+                                    <a class="btn btn-success" style="width: 100%;display: block; margin-bottom: 3px;" href="product_detail.php?product_id='.$row["prod_id"].'" >View</a>
                                     <a class="btn btn-success" style="width: 100%;" href="#">Add to Cart</a>
                                 </div>
                             </div>
