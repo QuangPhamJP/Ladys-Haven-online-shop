@@ -2,6 +2,13 @@
     require_once 'database/databaseConnect.php';
     require_once 'Constants/constants.php';
     $conn = DatabaseConnect::connect();
+    if(isset($_REQUEST["product_id"])){
+        $getProduct =DatabaseConnect::getResult("select * from products p, brand b where p.prod_id like '".$_REQUEST["product_id"]."' and p.brand_id = b.id", $conn);
+        DatabaseConnect::closeConnect($conn);
+    }
+    else{
+        header('location: product.php');
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,8 +21,11 @@
     <script src="main.js"></script>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/styling.css">
+    <link rel="stylesheet" href="css/style-Quang.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+
     <style>
         .nav-li{
             display: inline-block;
@@ -55,13 +65,92 @@
     </nav>
 
     <div class="container">
-        <div class="row"> <!-- Detail product-->
-            <div class="col-xs-5 col-md-5 col-lg-5">
-                
+        <div class="container">
+            <div class="row"> <!-- Detail product-->
+                <div class="col-xs-5 col-md-4 col-lg-4" class="img-product-detail-container">
+                    <div class="detail-image-child-container">
+                        <img src="images/<?=$getProduct[0]['image']?>.jpg">
+                    </div>
+
+                    <div class="row list-image">
+                        <ul class="list-group container-list-item">
+                            <li class="list-group-item container-list-item">
+                                <img src="images/<?=$getProduct[0]['image_2']?>.jpg">
+                            </li><!--
+                            --><li class="list-group-item container-list-item
+                            ">
+                                <img src="images/<?=$getProduct[0]['image_3']?>.jpg">
+                            </li><!--
+                            --><li class="list-group-item container-list-item
+                            ">
+                                <img src="images/<?=$getProduct[0]['image_4']?>.jpg">
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-xs-7 col-md-8 col-lg-8">
+                    <div class="product-detail">
+                        <h3><?=$getProduct[0]["prod_name"]?></h3>
+                        <div class="icon">
+                            <div>
+                                <i class="fa fa-star-o" aria-hidden="true"></i>
+                                <i class="fa fa-star-o" aria-hidden="true"></i>
+                                <i class="fa fa-star-o" aria-hidden="true"></i>
+                                <i class="fa fa-star-o" aria-hidden="true"></i>
+                                <i class="fa fa-star-o" aria-hidden="true"></i>
+                            </div>
+                        </div>
+
+                        <div class="icon icon-margin">
+                            <span>0</span>
+                            <span>/5</span>
+                        </div>
+
+                        <div>
+                            <span></span>
+                            
+                            <div>
+                                <button></button>
+                                <input type="text" name="">
+                                <button></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="row">
+                            <div class="col-xs-6 col-md-6 col-lg-6">
+                                <span>Price</span>
+                            </div>
+                            <div class="col-xs-6 col-md-6 col-lg-6">$</div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12 col-lg-12">
+                            <button type="button" class="btn btn-danger">Buy Now</button>
+                            <button type="button" class="btn btn-danger">Add to Cart</button>
+                            <button type="button" class="btn btn-danger">Add to Wishlist </button>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-md-12 col-lg-12">
+                        <div>Product Detail</div>
+                        <div>Brand</div>
+                        <div>Review</div>
+                    </div>
+
+                </div>
             </div>
-            <div class="col-xs-7 col-md-7 col-lg-7"></div>
+
+            
         </div>
-        <div class="row"></div>
+
+
+        <div class="row">
+            
+        </div>
         <div class="row"></div>
     </div>
 
