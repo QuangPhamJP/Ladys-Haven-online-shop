@@ -4,7 +4,6 @@
     $conn = DatabaseConnect::connect();
     if(isset($_REQUEST["product_id"])){
         $getProduct =DatabaseConnect::getResult("select * from products p, brand b where p.prod_id like '".$_REQUEST["product_id"]."' and p.brand_id = b.id", $conn);
-        DatabaseConnect::closeConnect($conn);
     }
     else{
         header('location: product.php');
@@ -36,9 +35,20 @@
             padding: 15px 50px;
             display: block;
         }
+        .color-star, .icon i{
+            color:gold;
+        }
+        .price-detail{
+            font-size: 24px;
+        }
+        .price{
+            line-height: 30px;
+            font-size: 21px;
+        }
         body{
             background-color: #fafafa;
         }
+
 
     </style>
 
@@ -103,35 +113,78 @@
                         </div>
 
                         <div class="icon icon-margin">
-                            <span>0</span>
-                            <span>/5</span>
+                            <span>
+                                <?php
+                                    $getProduct_ = DatabaseConnect::getResult("select sum(rating)/(select count(*) from product_rating where product_id like '".$_REQUEST["product_id"]."') as Rating from product_rating where product_id like '".$_REQUEST["product_id"]."'", $conn);
+                                    if(count($getProduct_) > 0){
+                                        $star = explode(".", $getProduct_[0]['Rating']);
+                                        for($i = 0; $i < $star[0]; $i++){
+                                                echo "<script>
+                                                    $('.icon i').eq(".$i.").removeClass('fa-star-o');
+                                                    $('.icon i').eq(".$i.").addClass('fa-star color-star');
+                                                </script>";  
+                                        }
+                                        if($star[1] == 0){
+                                            echo (int)$getProduct_[0]['Rating']."/5";      
+                                        }
+                                        else{
+                                            $number = 1;
+                                            for($i = 0; $i < strlen(strval($star[1])); $i++){
+                                                $number = $number*10;
+                                            }
+                                            echo number_format($getProduct_[0]['Rating'], 1)."/5" ;
+                                            if($star[1]/$number>= 0.5){
+                                                echo "<script>
+                                                    $('.icon i').eq(".$star[0].").addClass('fa-star-half-o color-star');
+                                                </script>";       
+                                            }
+                                        }
+                                    }
+                                    else{
+                                        echo "0/5";
+                                    }
+                                ?>
+                            </span>
                         </div>
 
-                        <div>
-                            <span></span>
-                            
-                            <div>
-                                <button></button>
-                                <input type="text" name="">
-                                <button></button>
-                            </div>
-                        </div>
+                        <div class="icon" style="margin-left:20px;"><span>Review</span></div>
                     </div>
 
-                    <div class="row">
+                    <div class="product-detail" style="margin-top: 20px;">
                         <div class="row">
-                            <div class="col-xs-6 col-md-6 col-lg-6">
+                            <div class="col-xs-2 col-md-2 col-lg-2 price">
                                 <span>Price</span>
                             </div>
-                            <div class="col-xs-6 col-md-6 col-lg-6">$</div>
+                            <div class="col-xs-6 col-md-6 col-lg-6 price-detail"><?=$getProduct[0]['prod_price']?>$</div>
                         </div>
                     </div>
                     
-                    <div class="row">
-                        <div class="col-xs-12 col-md-12 col-lg-12">
-                            <button type="button" class="btn btn-danger">Buy Now</button>
-                            <button type="button" class="btn btn-danger">Add to Cart</button>
-                            <button type="button" class="btn btn-danger">Add to Wishlist </button>
+                    <hr>
+                    <div class="product-detail">
+                        <div class="row">
+                            <div class="col-xs-2 col-md-2 col-lg-2">
+                                <span>Quality</span>
+                            </div>
+
+                            <div class="col-xs-6 col-md-6 col-lg-6 price-detail">
+                                <div>
+                                    <button>
+                                        <i></i>
+                                    </button>
+                                    <button>
+                                        <i></i>
+                                    </button>
+                                    <button>
+                                        <i></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-md-12 col-lg-12">
+                                <button type="button" class="btn btn-danger">Buy Now</button>
+                                <button type="button" class="btn btn-danger">Add to Cart</button>
+                                <button type="button" class="btn btn-danger">Add to Wishlist </button>
+                            </div>
                         </div>
                     </div>
 
