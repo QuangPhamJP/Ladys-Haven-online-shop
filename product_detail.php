@@ -22,6 +22,9 @@
     <link rel="stylesheet" href="css/styling.css">
     <link rel="stylesheet" href="css/style-Quang.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="css/custombox.min.css" rel="stylesheet">
+    <script src="js/custombox.min.js"></script>
+    <script src="js/custombox.legacy.min.js"></script>
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
 
@@ -44,6 +47,29 @@
         .price{
             line-height: 30px;
             font-size: 21px;
+        }
+        .quality{
+            display: flex;
+        }
+        .quality button{
+            display: inline-block;
+            width: 12%;
+            height: 33px;
+        }
+        .quality div{
+            width: 12%;
+            height: 33px;
+        }
+        .quality input{
+            width: 100%;
+            height: 100%;
+        }
+        .product-anchor{
+            margin-top: 40px;
+        }
+        .product-anchor div{
+            text-align: center;
+            border-bottom: 1px solid black;
         }
         body{
             background-color: #fafafa;
@@ -85,6 +111,9 @@
                     <div class="row list-image">
                         <ul class="list-group container-list-item">
                             <li class="list-group-item container-list-item">
+                                <img src="images/<?=$getProduct[0]['image']?>.jpg">
+                            </li><!--
+                            --><li class="list-group-item container-list-item">
                                 <img src="images/<?=$getProduct[0]['image_2']?>.jpg">
                             </li><!--
                             --><li class="list-group-item container-list-item
@@ -167,19 +196,18 @@
                             </div>
 
                             <div class="col-xs-6 col-md-6 col-lg-6 price-detail">
-                                <div>
-                                    <button>
-                                        <i></i>
-                                    </button>
-                                    <button>
-                                        <i></i>
-                                    </button>
-                                    <button>
-                                        <i></i>
-                                    </button>
+                                <div class="quality">
+                                    <div>
+                                        <input type="number" name="" id="quality_input" value="1" min="1" max="99">
+                                    </div>
                                 </div>
-                            </div>
+                            </div>   
+                        </div>
+                    </div>
+                    <hr>
 
+                    <div class="product-detail">
+                        <div class="row">
                             <div class="col-xs-12 col-md-12 col-lg-12">
                                 <button type="button" class="btn btn-danger">Buy Now</button>
                                 <button type="button" class="btn btn-danger">Add to Cart</button>
@@ -187,13 +215,12 @@
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="col-xs-12 col-md-12 col-lg-12">
-                        <div>Product Detail</div>
-                        <div>Brand</div>
-                        <div>Review</div>
-                    </div>
-
+                <div class="col-xs-12 col-md-12 col-lg-12 product-anchor">
+                    <div class="col-xs-4 col-md-4 col-lg-4">Product Detail</div>
+                    <div class="col-xs-4 col-md-4 col-lg-4">Brand</div>
+                    <div class="col-xs-4 col-md-4 col-lg-4">Review</div>
                 </div>
             </div>
 
@@ -246,11 +273,62 @@
 
                 </div>
             </div>
-
-
         </div>
 
     </footer>
 </body>
+<script>
+    $("#quality_input").keydown(function(event){
+        if(event.which == 8){
+            if($(this).val().length <= 1){
+                if($(this).val() !== "1"){
+                    $(this).val("1");
+                }
+                event.preventDefault();
+            }
+        }
+        else{
+            if($(this).val().length == 0){
+                $(this).val("1");
+            }
+        }
+    });
+    $(".list-group-item img").hover(function(){
+        var src = $(this).attr("src");
+        $(".detail-image-child-container img").attr('src', src);
+
+    });
+
+    $(".list-group-item img").click(function(){
+        if($(".list-group-item img").hasClass("selected-item-img")){
+            $(".list-group-item img").removeClass("selected-item-img");
+        }
+        $(this).addClass("selected-item-img");
+        // Instantiate new modal
+        var modal = new Custombox.modal({
+          content: {
+            effect: 'fadein',
+            target: '.selected-item-img'
+          }
+        });
+        modal.open();
+    });
+
+    $(".detail-image-child-container img").click(function(){
+        $(this).addClass("selected-detail-image-child-container");
+        // Instantiate new modal
+        var modal_ = new Custombox.modal({
+          content: {
+            effect: 'fadein',
+            target: '.selected-detail-image-child-container'
+          }
+        });
+        modal_.open();
+    });
+
+
+
+
+</script>
 
 </html>
