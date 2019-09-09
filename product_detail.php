@@ -250,7 +250,7 @@
                 foreach ($getProductCategory as $value) {
                     $count++;
             ?>        
-                    <div style="height: 100%; width: 22%; display: inline-block; margin-left: 2%;" class="relate-container">
+                    <a style="height: 100%; width: 22%; display: inline-block; margin-left: 2%; text-decoration: none;" href="product_detail.php?product_id=<?=$value['prod_id'] ?>" class="relate-container">
                         <img src="images/<?=$value['image']?>.jpg" style="width: 100%; height: 50%;">
                         <h3><?=$value['prod_name']?></h3>
                         <p><?=$value['prod_price']?>$</p>
@@ -261,7 +261,7 @@
                             <i class="fa fa-star-o" aria-hidden="true"></i>
                             <i class="fa fa-star-o" aria-hidden="true"></i>
                         </div>
-                    </div>
+                    </a>
             <?php    
                     if($count <= 4){
                         echo "<script>$('.relate-container').eq(".($count-1).").addClass('relate-show')</script>";
@@ -376,21 +376,76 @@
 
 
     $(".relate-left-nav").click(function(){
-        // if($(".relate-left-hide").length >= 4){
-        //     for($i = 0; $i < 4; $i++){
-        //         $(".relate-show").eq(0).addClass("relate-left-hide");
-        //         $(".relate-show").eq(0).removeClass("relate-show");
-        //         $(".relate-right-hide").eq(0).addClass("relate-show");
-        //         $(".relate-right-hide").eq(0).removeClass("relate-right-hide");
-        //     }
-        // }   
+        if($(".relate-left-hide").length >= 4){
+            $length = $(".relate-left-hide").length;
+            for($i = $length-1, $indexofend= $(".relate-show").length-1; $i >= $length-4; $i--){
+                $relate_left_hide = $(".relate-left-hide").length-1;
+                $(".relate-show").eq($indexofend).addClass("relate-right-hide");
+                $(".relate-show").eq($indexofend).removeClass("relate-show");
+                $(".relate-left-hide").eq($relate_left_hide).addClass("relate-show");
+                $(".relate-left-hide").eq($relate_left_hide).removeClass("relate-left-hide");
+            }
+
+            for($i = $length-1; $i >= $length-4; $i--){
+                $(".relate-right-hide").eq($i).css({"position":"absolute", "left":""+($i*25)+"%", "top":"0"});
+                $(".relate-show").eq($i).css({"position":"relative", "left":"-75%"});    
+            }
+
+            for($i = $length-1; $i >= $length-4; $i--){
+                $(".relate-right-hide").eq($i).animate({
+                    left:""+(100+($i*25))+"%",
+                }, {duration:200, queue: false});
+            }
+
+            
+
+            $(".relate-show").animate({
+                left: "0"
+            }, {duration:200, queue: false});
+
+        }   
         // else{
-        //     $length_left = $(".relate-left-hide").length;
-        //     for($i = 0; $i < $length_left; $i++){
-        //         $(".relate-show").eq(0).addClass("relate-left-hide");
-        //         $(".relate-show").eq(0).removeClass("relate-show");
-        //         $(".relate-right-hide").eq(0).addClass("relate-show");
-        //         $(".relate-right-hide").eq(0).removeClass("relate-right-hide");
+        //     if($(".relate-left-hide").length != 0){
+        //         $length = $(".relate-right-hide").length;
+        //         $position = 0;
+        //         $new_relate_show = 0;
+        //         for($i = 0; $i < $length; $i++){
+        //             $(".relate-show").eq(0).addClass("relate-left-hide");
+        //             $(".relate-show").eq(0).removeClass("relate-show");
+        //             $(".relate-right-hide").eq(0).addClass("relate-show");
+        //             $(".relate-right-hide").eq(0).removeClass("relate-right-hide");
+        //             $new_relate_show++;
+        //         }
+        //         for($i = $(".relate-left-hide").length - $length, $count_element = 0; $i < $(".relate-left-hide").length; $i++){
+        //             $(".relate-left-hide").eq($i).css({"position":"absolute", "left":""+$position+"%"});
+        //             $(".relate-show").eq($count_element).css({"position":"absolute", "left":""+(($count_element+$new_relate_show)*25)+"%"});
+        //             $position += 25;
+        //             $count_element++;
+        //         }
+
+        //         for($i = $(".relate-show").length - $new_relate_show, $position_new_relate_show = 0; $i < $(".relate-show").length; $i++){
+        //             $(".relate-show").eq($i).css({"position":"absolute", "top":"0", "left":""+(100+$position_new_relate_show)+"%"});
+        //             $position_new_relate_show += 25;
+        //         }
+
+        //         $(".relate-left-hide").animate({
+        //             left: "-100%"
+        //         }, {duration:300, queue: false});
+
+
+        //         for($i = 0, $position_new_relate_show = 0; $i < $(".relate-show").length-$new_relate_show; $i++){
+        //             $(".relate-show").eq($i).animate({
+        //                 left: ""+$position_new_relate_show*25+"%"
+        //             }, {duration:200, queue: false});
+        //             $position_new_relate_show++;
+        //         }
+
+        //         for($i = $(".relate-show").length - $new_relate_show, $position_new_relate_show = 0; $i < $(".relate-show").length; $i++){
+        //             $(".relate-show").eq($i).animate({
+        //                 left: ""+(($new_relate_show+$position_new_relate_show)*25)+"%"
+        //             }, {duration:200, queue: false});
+        //             $position_new_relate_show++;
+        //         }
         //     }
         // }
     });
@@ -419,12 +474,47 @@
 
         }   
         else{
-            $length = $(".relate-right-hide").length;
-            for($i = 0; $i < $length; $i++){
-                $(".relate-show").eq(0).addClass("relate-left-hide");
-                $(".relate-show").eq(0).removeClass("relate-show");
-                $(".relate-right-hide").eq(0).addClass("relate-show");
-                $(".relate-right-hide").eq(0).removeClass("relate-right-hide");
+            if($(".relate-right-hide").length != 0){
+                $length = $(".relate-right-hide").length;
+                $position = 0;
+                $new_relate_show = 0;
+                for($i = 0; $i < $length; $i++){
+                    $(".relate-show").eq(0).addClass("relate-left-hide");
+                    $(".relate-show").eq(0).removeClass("relate-show");
+                    $(".relate-right-hide").eq(0).addClass("relate-show");
+                    $(".relate-right-hide").eq(0).removeClass("relate-right-hide");
+                    $new_relate_show++;
+                }
+                for($i = $(".relate-left-hide").length - $length, $count_element = 0; $i < $(".relate-left-hide").length; $i++){
+                    $(".relate-left-hide").eq($i).css({"position":"absolute", "left":""+$position+"%"});
+                    $(".relate-show").eq($count_element).css({"position":"absolute", "left":""+(($count_element+$new_relate_show)*25)+"%"});
+                    $position += 25;
+                    $count_element++;
+                }
+
+                for($i = $(".relate-show").length - $new_relate_show, $position_new_relate_show = 0; $i < $(".relate-show").length; $i++){
+                    $(".relate-show").eq($i).css({"position":"absolute", "top":"0", "left":""+(100+$position_new_relate_show)+"%"});
+                    $position_new_relate_show += 25;
+                }
+
+                $(".relate-left-hide").animate({
+                    left: "-100%"
+                }, {duration:300, queue: false});
+
+
+                for($i = 0, $position_new_relate_show = 0; $i < $(".relate-show").length-$new_relate_show; $i++){
+                    $(".relate-show").eq($i).animate({
+                        left: ""+$position_new_relate_show*25+"%"
+                    }, {duration:200, queue: false});
+                    $position_new_relate_show++;
+                }
+
+                for($i = $(".relate-show").length - $new_relate_show, $position_new_relate_show = 0; $i < $(".relate-show").length; $i++){
+                    $(".relate-show").eq($i).animate({
+                        left: ""+(($new_relate_show+$position_new_relate_show)*25)+"%"
+                    }, {duration:200, queue: false});
+                    $position_new_relate_show++;
+                }
             }
         }
     });
