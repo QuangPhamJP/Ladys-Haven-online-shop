@@ -71,6 +71,15 @@
             text-align: center;
             border-bottom: 1px solid black;
         }
+        .relate-right-hide{
+            
+        }
+        .relate-left-hide{
+
+        }
+        .relate-show{
+            
+        }
         body{
             background-color: #fafafa;
         }
@@ -192,7 +201,7 @@
                     <div class="product-detail">
                         <div class="row">
                             <div class="col-xs-2 col-md-2 col-lg-2">
-                                <span>Quality</span>
+                                <span>Quantity</span>
                             </div>
 
                             <div class="col-xs-6 col-md-6 col-lg-6 price-detail">
@@ -222,15 +231,54 @@
                     <div class="col-xs-4 col-md-4 col-lg-4">Brand</div>
                     <div class="col-xs-4 col-md-4 col-lg-4">Review</div>
                 </div>
+            </div>            
+        </div>
+
+
+        <div class="row" style="margin-top: 10%; text-align: center; font-size: 26px;">
+            <div class="col-xs-3 col-md-3 col-lg-3">
+                Relate Product
             </div>
-
-            
+            <div class="col-xs-3 col-md-3 col-lg-3">
+                Relate Brand
+            </div>
+        </div>
+        <div class="row" style="overflow: hidden; position: relative; height: 320px;">
+            <?php  
+                $getProductCategory = DatabaseConnect::getResult("select * from products p, brand b where p.brand_id = b.id and p.product_category like '".$getProduct[0]['product_category']."'",$conn);
+                $count = 0;
+                foreach ($getProductCategory as $value) {
+                    $count++;
+            ?>        
+                    <div style="height: 100%; width: 22%; display: inline-block; margin-left: 2%;" class="relate-container">
+                        <img src="images/<?=$value['image']?>.jpg" style="width: 100%; height: 50%;">
+                        <h3><?=$value['prod_name']?></h3>
+                        <p><?=$value['prod_price']?>$</p>
+                        <div class="list-product-relate-star">
+                            <i class="fa fa-star-o" aria-hidden="true"></i>
+                            <i class="fa fa-star-o" aria-hidden="true"></i>
+                            <i class="fa fa-star-o" aria-hidden="true"></i>
+                            <i class="fa fa-star-o" aria-hidden="true"></i>
+                            <i class="fa fa-star-o" aria-hidden="true"></i>
+                        </div>
+                    </div>
+            <?php    
+                    if($count <= 4){
+                        echo "<script>$('.relate-container').eq(".($count-1).").addClass('relate-show')</script>";
+                    }
+                    else{
+                        echo "<script>$('.relate-container').eq(".($count-1).").addClass('relate-right-hide')</script>";
+                    }
+                }
+            ?>
+            <div style="width: 20px; height: 40px; position: absolute; top:40%;" class="relate-left-nav">
+                <i class="glyphicon glyphicon-menu-left" style="width: 100%; height: 100%; line-height: 40px; color: #a52a2a; background-color: #efefef;"></i>
+            </div>
+            <div style="width: 20px; height: 40px; position: absolute; top:40%; right: 0.7%;" class="relate-right-nav">
+                <i class="glyphicon glyphicon-menu-right" style="width: 100%; height: 100%; line-height: 40px; color: #a52a2a; background-color: #efefef;"></i>
+            </div>
         </div>
 
-
-        <div class="row">
-            
-        </div>
         <div class="row"></div>
     </div>
 
@@ -327,7 +375,59 @@
     });
 
 
+    $(".relate-left-nav").click(function(){
+        // if($(".relate-left-hide").length >= 4){
+        //     for($i = 0; $i < 4; $i++){
+        //         $(".relate-show").eq(0).addClass("relate-left-hide");
+        //         $(".relate-show").eq(0).removeClass("relate-show");
+        //         $(".relate-right-hide").eq(0).addClass("relate-show");
+        //         $(".relate-right-hide").eq(0).removeClass("relate-right-hide");
+        //     }
+        // }   
+        // else{
+        //     $length_left = $(".relate-left-hide").length;
+        //     for($i = 0; $i < $length_left; $i++){
+        //         $(".relate-show").eq(0).addClass("relate-left-hide");
+        //         $(".relate-show").eq(0).removeClass("relate-show");
+        //         $(".relate-right-hide").eq(0).addClass("relate-show");
+        //         $(".relate-right-hide").eq(0).removeClass("relate-right-hide");
+        //     }
+        // }
+    });
 
+    $(".relate-right-nav").click(function(){
+        if($(".relate-right-hide").length >= 4){
+            for($i = 0; $i < 4; $i++){
+                $(".relate-show").eq(0).addClass("relate-left-hide");
+                $(".relate-show").eq(0).removeClass("relate-show");
+                $(".relate-right-hide").eq(0).addClass("relate-show");
+                $(".relate-right-hide").eq(0).removeClass("relate-right-hide");
+            }
+
+            for($i = $(".relate-left-hide").length - 4; $i < $(".relate-left-hide").length; $i++){
+                $(".relate-left-hide").eq($i).css({"position":"absolute", "left":""+($i*25)+"%"});
+                $(".relate-show").eq($i).css({"position":"relative", "left":""+(($i+4)*25)+"%"});
+                
+            }
+            $(".relate-left-hide").animate({
+                left: "-100%"
+            }, {duration:300, queue: false});
+
+            $(".relate-show").animate({
+                left: "0"
+            }, {duration:200, queue: false});
+
+        }   
+        else{
+            $length = $(".relate-right-hide").length;
+            for($i = 0; $i < $length; $i++){
+                $(".relate-show").eq(0).addClass("relate-left-hide");
+                $(".relate-show").eq(0).removeClass("relate-show");
+                $(".relate-right-hide").eq(0).addClass("relate-show");
+                $(".relate-right-hide").eq(0).removeClass("relate-right-hide");
+            }
+        }
+    });
 
 </script>
 
