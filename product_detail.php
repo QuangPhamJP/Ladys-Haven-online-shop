@@ -118,6 +118,40 @@
             border-left: 1px solid #ececec;
             border-right: 1px solid #ececec;
         }
+        .side {
+          float: left;
+          width: 16%;
+          margin-top:10px;
+          font-size: 12px;
+        }
+
+        .middle {
+          margin-top:10px;
+          float: left;
+          width: 70%;
+        }
+
+        /* Clear floats after the columns */
+        .row:after {
+          content: "";
+          display: table;
+          clear: both;
+        }
+
+        /* The bar container */
+        .bar-container {
+          width: 100%;
+          background-color: #f1f1f1;
+          text-align: center;
+          color: white;
+        }
+
+        /* Individual bars */
+        .bar-5 {width: 60%; height: 18px; background-color: #4CAF50;}
+        .bar-4 {width: 30%; height: 18px; background-color: #2196F3;}
+        .bar-3 {width: 10%; height: 18px; background-color: #00bcd4;}
+        .bar-2 {width: 4%; height: 18px; background-color: #ff9800;}
+        .bar-1 {width: 15%; height: 18px; background-color: #f44336;}
         body{
             background-color: #fafafa;
         }
@@ -248,9 +282,7 @@
 
 
         <div class="row" style="margin-top: 10%; text-align: center; font-size: 26px;">
-            <div class="col-xs-3 col-md-3 col-lg-3">
-                Relate Product
-            </div>
+            Relate Product
         </div>
         <div class="row" style="overflow: hidden; position: relative; height: 320px;">
             <?php  
@@ -273,9 +305,9 @@
                             <i class="fa fa-star-o" aria-hidden="true"></i>
                         </div>
             <?php 
-                        $getProduct_ = DatabaseConnect::getResult("select sum(rating)/(select count(*) from product_rating where product_id like '".$value['prod_id']."') as Rating from product_rating where product_id like '".$value['prod_id']."'", $conn);
+                        $getProduct_W = DatabaseConnect::getResult("select sum(rating)/(select count(*) from product_rating where product_id like '".$value['prod_id']."') as Rating from product_rating where product_id like '".$value['prod_id']."'", $conn);
                         $countReview = DatabaseConnect::getResult("select count(*) as Rating from product_rating where product_id like '".$value['prod_id']."'", $conn);
-                        getStar($getProduct_,"icon_relate_".$className,0);
+                        getStar($getProduct_W,"icon_relate_".$className,0);
                         if(!is_null($countReview[0]['Rating'])){
                             echo $countReview[0]['Rating']." Review";
                         }
@@ -302,9 +334,7 @@
         </div>
 
         <div class="row" style="margin-top: 10%; text-align: center; font-size: 24px;">
-            <div class="col-xs-3 col-md-3 col-lg-3" style="text-align: left;">
-                Product
-            </div>
+            Product
         </div>
 
         <div class="row" style="font-size: 20px;">
@@ -362,6 +392,108 @@
                 <div class="row detail_line">
                     <div class="col-xs-6 col-md-6 col-lg-6">Style</div>
                     <div class="col-xs-6 col-md-6 col-lg-6"><?=$getProduct[0]['style']?></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 10%; text-align: center;">
+            <h3>Review</h3>
+        </div>
+        <div class="row" style="text-align: center; font-size: 24px; border-right: 1px solid #ececec;">
+            <div class="col-xs-3 col-md-3 col-lg-3" style="border: 1px solid #ececec; border-bottom: none;">
+                <a style="width: 70%; height: 300px; display: block; margin: auto; text-decoration: none;" href="product_detail.php?product_id=<?=$getProduct[0]['prod_id']?>">
+                    <img src="images/<?=$getProduct[0]['image']?>.jpg" style="display: block; width: 100%;height: 50%;">
+                    <h6><?=$getProduct[0]['prod_name']?></h6>
+                    <p><?=$getProduct[0]['prod_price']?>$</p>
+                    <div class="icon_review">
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                    </div>
+                </a>
+                <?php 
+                    getStar($getProduct_,"icon_review",0);
+                ?>
+            </div>
+            <div class="col-xs-9 col-md-9 col-lg-9" style="border: 1px solid #ececec; border-bottom: none;">
+                <div class="row" style="border-bottom: 1px solid #ececec;">
+                    <div class="col-xs-2 col-md-2 col-lg-2">
+                        <div style="padding: 50px 0;">
+                            <?php 
+                                if(is_null($getProduct_[0]['Rating'])){
+                                    echo "No review"; 
+                                }
+                                else{
+                                    echo getStar($getProduct_,"",1)."/5";
+                            ?>
+                                    <i class="fa fa-star color-star"></i>
+                            <?php 
+                                $countReview = DatabaseConnect::getResult("select count(*) as Rating from product_rating where product_id like '".$_REQUEST['product_id']."'", $conn);
+                            ?>
+                                    <p style="font-size: 12px;"><?=$countReview[0]['Rating']." Review"?></p>
+                            <?php
+                                }
+                            ?>
+                        </div>
+                    </div>
+                    <div class="col-xs-5 col-md-5 col-lg-5">
+                        <div class="row">
+
+                          <div class="side">
+                            <div>5 <span class="fa fa-star"></span></div>
+                          </div>
+
+                          <div class="middle">
+                            <div class="bar-container">
+                              <div class="bar-5"></div>
+                            </div>
+                          </div>
+
+                          <div class="side">
+                            <div>4 <span class="fa fa-star"></span></div>
+                          </div>
+
+                          <div class="middle">
+                            <div class="bar-container">
+                              <div class="bar-4"></div>
+                            </div>
+                          </div>
+
+                          <div class="side">
+                            <div>3 <span class="fa fa-star"></span></div>
+                          </div>
+
+                          <div class="middle">
+                            <div class="bar-container">
+                              <div class="bar-3"></div>
+                            </div>
+                          </div>
+
+                          <div class="side">
+                            <div>2 <span class="fa fa-star"></span></div>
+                          </div>
+
+                          <div class="middle">
+                            <div class="bar-container">
+                              <div class="bar-2"></div>
+                            </div>
+                          </div>
+
+                          <div class="side">
+                            <div>1 <span class="fa fa-star"></span></div>
+                          </div>
+
+                          <div class="middle">
+                            <div class="bar-container">
+                              <div class="bar-1"></div>
+                            </div>
+                          </div>
+
+                        </div>
+                    </div>
+                    <div class="col-xs-5 col-md-5 col-lg-5"></div>
                 </div>
             </div>
         </div>
