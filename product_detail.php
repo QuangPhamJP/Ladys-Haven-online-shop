@@ -403,7 +403,7 @@
 
             for($i = 3; $i >= 0; $i--){
                 $(".relate-show").eq($i).animate({
-                    left: ""+($i*25)+"%"
+                    left: ""+($i*24.4)+"%"
                 }, {duration:200, queue: false});
             }
         }   
@@ -426,14 +426,14 @@
                     }, {duration:200, queue: false});
 
                     $(".relate-show").eq($index).animate({
-                        left: ""+($index*25)+"%"
+                        left: ""+($index*24.4)+"%"
                     }, {duration:200, queue: false});
                 }
 
                 for($i = $length-1, $count = 1; $i >= 0; $i--, $count++){
                     $(".relate-show").eq($i).css({"position":"absolute", "left":""+($count*(-25))+"%"});
                     $(".relate-show").eq($i).animate({
-                        left: ""+($i*25)+"%"
+                        left: ""+($i*24.4)+"%"
                     }, {duration:200, queue: false});
                 }
             }
@@ -449,19 +449,23 @@
                 $(".relate-right-hide").eq(0).removeClass("relate-right-hide");
             }
 
-            for($i = $(".relate-left-hide").length - 4; $i < $(".relate-left-hide").length; $i++){
-                $(".relate-left-hide").eq($i).css({"position":"absolute", "left":""+($i*25)+"%"});
-                $(".relate-show").eq($i).css({"position":"relative", "left":""+(($i+4)*25)+"%"});
-                
+            for($i = 0; $i < $(".relate-right-hide").length; $i++){
+                $(".relate-right-hide").css({"position":"absolute", "right":"100%", "top":"0"});
             }
-            $(".relate-left-hide").animate({
-                left: "-100%"
-            }, {duration:300, queue: false});
 
-            $(".relate-show").animate({
-                left: "0"
-            }, {duration:200, queue: false});
+            for($i = $(".relate-left-hide").length - 4, $index = 0, $count = 4; $i < $(".relate-left-hide").length; $i++, $index++, $count--){
+                $(".relate-left-hide").eq($i).css({"position":"absolute", "top":"0", "left":""+($index*25)+"%"});
+                $(".relate-left-hide").eq($i).animate({
+                    left: "-100%"
+                }, {duration:200, queue: false});   
+            }
 
+            for($i = 0; $i < 4; $i++){
+                $(".relate-show").eq($i).css({"position":"absolute", "top":"0", "left":""+(($i+4)*25)+"%"});
+                $(".relate-show").eq($i).animate({
+                    left: ""+($i*24.4)+"%"
+                }, {duration:200, queue: false});
+            }
         }   
         else{
             if($(".relate-right-hide").length != 0){
@@ -494,14 +498,14 @@
 
                 for($i = 0, $position_new_relate_show = 0; $i < $(".relate-show").length-$new_relate_show; $i++){
                     $(".relate-show").eq($i).animate({
-                        left: ""+$position_new_relate_show*25+"%"
+                        left: ""+$position_new_relate_show*24.4+"%"
                     }, {duration:200, queue: false});
                     $position_new_relate_show++;
                 }
 
                 for($i = $(".relate-show").length - $new_relate_show, $position_new_relate_show = 0; $i < $(".relate-show").length; $i++){
                     $(".relate-show").eq($i).animate({
-                        left: ""+(($new_relate_show+$position_new_relate_show)*25)+"%"
+                        left: ""+(($new_relate_show+$position_new_relate_show)*24.4)+"%"
                     }, {duration:200, queue: false});
                     $position_new_relate_show++;
                 }
