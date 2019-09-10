@@ -109,8 +109,14 @@
             text-align: center;
             border-bottom: 1px solid black;
         }
-        .review-relate-product{
-
+        .detail_line{
+            border-bottom: 1px solid #ececec;
+            padding: 12px 0;
+        }
+        .border_line{
+            border-bottom: 1px solid #ececec;
+            border-left: 1px solid #ececec;
+            border-right: 1px solid #ececec;
         }
         body{
             background-color: #fafafa;
@@ -295,7 +301,70 @@
             </div>
         </div>
 
-        <div class="row"></div>
+        <div class="row" style="margin-top: 10%; text-align: center; font-size: 24px;">
+            <div class="col-xs-3 col-md-3 col-lg-3" style="text-align: left;">
+                Product
+            </div>
+        </div>
+
+        <div class="row" style="font-size: 20px;">
+            <div class="col-xs-8 col-md-8 col-lg-8" style="text-align: left; background-color: #e5e5e5; padding: 12px 20px; border-right: 1px solid #d6d4d4;">
+                Information
+            </div>
+            <div class="col-xs-4 col-md-4 col-lg-4" style="text-align: left; background-color: #e5e5e5; padding: 12px 20px;">
+                Specifications
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-8 col-md-8 col-lg-8 border_line" style="border-right: 1px solid #d6d4d4; height: 489px;">
+                <h4>Overview <?=$getProduct[0]['prod_name']?></h4>
+                <p><?=$getProduct[0]['prod_description']?></p>
+            </div>
+            <div class="col-xs-4 col-md-4 col-lg-4 border_line">
+                <h4>General information</h4>
+                <div class="row detail_line">
+                    <div class="col-xs-6 col-md-6 col-lg-6">Brand</div>
+                    <div class="col-xs-6 col-md-6 col-lg-6"><?=$getProduct[0]['name']?></div>
+                </div>
+                <div class="row detail_line">
+                    <div class="col-xs-6 col-md-6 col-lg-6">Material</div>
+                    <div class="col-xs-6 col-md-6 col-lg-6"><?=$getProduct[0]['material']?></div>
+                </div>
+                <div class="row detail_line">
+                    <div class="col-xs-6 col-md-6 col-lg-6">Detail</div>
+                    <div class="col-xs-6 col-md-6 col-lg-6"><?=$getProduct[0]['detail']?></div>
+                </div>
+                <div class="row detail_line">
+                    <div class="col-xs-6 col-md-6 col-lg-6">Size</div>
+                    <div class="col-xs-6 col-md-6 col-lg-6"><?=$getProduct[0]['detail_size']?></div>
+                </div>
+                <div class="row detail_line">
+                    <div class="col-xs-6 col-md-6 col-lg-6">Strap Material</div>
+                    <div class="col-xs-6 col-md-6 col-lg-6"><?=$getProduct[0]['strap_material']?></div>
+                </div>
+                <div class="row detail_line">
+                    <div class="col-xs-6 col-md-6 col-lg-6">Strap Length</div>
+                    <div class="col-xs-6 col-md-6 col-lg-6"><?=$getProduct[0]['strap_length']?></div>
+                </div>
+                <div class="row detail_line">
+                    <div class="col-xs-6 col-md-6 col-lg-6">Zip Type</div>
+                    <div class="col-xs-6 col-md-6 col-lg-6"><?=$getProduct[0]['zip_type']?></div>
+                </div>
+                <div class="row detail_line">
+                    <div class="col-xs-6 col-md-6 col-lg-6">Slot Num</div>
+                    <div class="col-xs-6 col-md-6 col-lg-6"><?=$getProduct[0]['slot_num']?></div>
+                </div>
+                <div class="row detail_line">
+                    <div class="col-xs-6 col-md-6 col-lg-6">Simple Size</div>
+                    <div class="col-xs-6 col-md-6 col-lg-6"><?=$getProduct[0]['simple_size']?></div>
+                </div>
+                <div class="row detail_line">
+                    <div class="col-xs-6 col-md-6 col-lg-6">Style</div>
+                    <div class="col-xs-6 col-md-6 col-lg-6"><?=$getProduct[0]['style']?></div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <footer class="footer-bottom footer-style">
@@ -433,18 +502,18 @@
                     $(".relate-left-hide").eq($relate_left_hide).removeClass("relate-left-hide");
                 }
 
-                for($i = $length-1, $index = 4-$length, $count = 1; $i >= 0; $i--, $index--, $count--){
-                    $(".relate-right-hide").eq($i).css({"position":"absolute", "left":""+($index*25)+"%", "top":"0"});
+                for($i = $length-1, $index = 0; $i >= 0; $i--, $index++){
+                    $(".relate-right-hide").eq($i).css({"position":"absolute", "left":""+((3-$index)*25)+"%", "top":"0"});
                     $(".relate-right-hide").eq($i).animate({
                         left:"100%",
                     }, {duration:200, queue: false});                    
                 }
 
                 //Sap xep relate-show
-                for($i = 3, $index = 4-$length; $i >= 0; $i--,$index--){
-                    $(".relate-show").eq($i).css({"position":"absolute", "left":""+(($index-1)*25)+"%"});
+                for($i = 3, $index = $length; $i >= 0; $i--, $index++){
+                    $(".relate-show").eq($i).css({"position":"absolute", "left":""+((3-$index)*25)+"%"});
                     $(".relate-show").eq($i).animate({
-                        left: ""+($index*24.4)+"%"
+                        left: ""+((3-$index+$length)*24.4)+"%"
                     }, {duration:200, queue: false});
                 }
             }
