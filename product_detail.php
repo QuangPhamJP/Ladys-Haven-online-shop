@@ -8,6 +8,44 @@
     else{
         header('location: product.php');
     }
+    function getStar($getProduct_, $icon, $flag){
+        if(count($getProduct_) > 0){
+            if(!is_null($getProduct_[0]['Rating'])){
+                $star = explode(".", $getProduct_[0]['Rating']);
+                for($i = 0; $i < $star[0]; $i++){
+                        echo "<script>
+                            $('.".$icon." i').eq(".$i.").removeClass('fa-star-o');
+                            $('.".$icon." i').eq(".$i.").addClass('fa-star color-star');
+                        </script>";  
+                }
+                if($star[1] == 0){
+                    if($flag == 1){
+                        echo "<span class='review-relate-product'>".(int)$getProduct_[0]['Rating']."</span>";                              
+                    }
+                }
+                else{
+                    $number = 1;
+                    for($i = 0; $i < strlen(strval($star[1])); $i++){
+                        $number = $number*10;
+                    }
+                    if($flag == 1){
+                        echo "<span class='review-relate-product'>".number_format($getProduct_[0]['Rating'], 1)."</span>" ;
+                    }
+                    if($star[1]/$number>= 0.5){
+                        echo "<script>
+                            $('.".$icon." i').eq(".$star[0].").addClass('fa-star-half-o color-star');
+                        </script>";       
+                    }
+                }
+            }
+            else{
+                if($flag == 1){
+                    echo "0";
+                }
+            }
+            echo "<script>$('.".$icon."').addClass('color-star')</script>";
+        }
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,7 +76,7 @@
             padding: 15px 50px;
             display: block;
         }
-        .color-star, .icon i{
+        .color-star, .icon i, .icon_relate i{
             color:gold;
         }
         .price-detail{
@@ -71,14 +109,8 @@
             text-align: center;
             border-bottom: 1px solid black;
         }
-        .relate-right-hide{
-            
-        }
-        .relate-left-hide{
+        .review-relate-product{
 
-        }
-        .relate-show{
-            
         }
         body{
             background-color: #fafafa;
@@ -154,33 +186,7 @@
                             <span>
                                 <?php
                                     $getProduct_ = DatabaseConnect::getResult("select sum(rating)/(select count(*) from product_rating where product_id like '".$_REQUEST["product_id"]."') as Rating from product_rating where product_id like '".$_REQUEST["product_id"]."'", $conn);
-                                    if(count($getProduct_) > 0){
-                                        $star = explode(".", $getProduct_[0]['Rating']);
-                                        for($i = 0; $i < $star[0]; $i++){
-                                                echo "<script>
-                                                    $('.icon i').eq(".$i.").removeClass('fa-star-o');
-                                                    $('.icon i').eq(".$i.").addClass('fa-star color-star');
-                                                </script>";  
-                                        }
-                                        if($star[1] == 0){
-                                            echo (int)$getProduct_[0]['Rating']."/5";      
-                                        }
-                                        else{
-                                            $number = 1;
-                                            for($i = 0; $i < strlen(strval($star[1])); $i++){
-                                                $number = $number*10;
-                                            }
-                                            echo number_format($getProduct_[0]['Rating'], 1)."/5" ;
-                                            if($star[1]/$number>= 0.5){
-                                                echo "<script>
-                                                    $('.icon i').eq(".$star[0].").addClass('fa-star-half-o color-star');
-                                                </script>";       
-                                            }
-                                        }
-                                    }
-                                    else{
-                                        echo "0/5";
-                                    }
+                                        echo getStar($getProduct_,"icon",1)."/5";
                                 ?>
                             </span>
                         </div>
@@ -239,28 +245,38 @@
             <div class="col-xs-3 col-md-3 col-lg-3">
                 Relate Product
             </div>
-            <div class="col-xs-3 col-md-3 col-lg-3">
-                Relate Brand
-            </div>
         </div>
         <div class="row" style="overflow: hidden; position: relative; height: 320px;">
             <?php  
                 $getProductCategory = DatabaseConnect::getResult("select * from products p, brand b where p.brand_id = b.id and p.product_category like '".$getProduct[0]['product_category']."'",$conn);
                 $count = 0;
+                $className = 0;
                 foreach ($getProductCategory as $value) {
+                    $className++;
                     $count++;
             ?>        
                     <a style="height: 100%; width: 22%; display: inline-block; margin-left: 2%; text-decoration: none;" href="product_detail.php?product_id=<?=$value['prod_id'] ?>" class="relate-container">
                         <img src="images/<?=$value['image']?>.jpg" style="width: 100%; height: 50%;">
                         <h3><?=$value['prod_name']?></h3>
                         <p><?=$value['prod_price']?>$</p>
-                        <div class="list-product-relate-star">
+                        <div class="list-product-relate-star icon_relate_<?=$className?>">
                             <i class="fa fa-star-o" aria-hidden="true"></i>
                             <i class="fa fa-star-o" aria-hidden="true"></i>
                             <i class="fa fa-star-o" aria-hidden="true"></i>
                             <i class="fa fa-star-o" aria-hidden="true"></i>
                             <i class="fa fa-star-o" aria-hidden="true"></i>
                         </div>
+            <?php 
+                        $getProduct_ = DatabaseConnect::getResult("select sum(rating)/(select count(*) from product_rating where product_id like '".$value['prod_id']."') as Rating from product_rating where product_id like '".$value['prod_id']."'", $conn);
+                        $countReview = DatabaseConnect::getResult("select count(*) as Rating from product_rating where product_id like '".$value['prod_id']."'", $conn);
+                        getStar($getProduct_,"icon_relate_".$className,0);
+                        if(!is_null($countReview[0]['Rating'])){
+                            echo $countReview[0]['Rating']." Review";
+                        }
+                        else{
+                            echo "0 Review";
+                        }
+            ?>
                     </a>
             <?php    
                     if($count <= 4){
@@ -322,7 +338,6 @@
                 </div>
             </div>
         </div>
-
     </footer>
 </body>
 <script>
@@ -418,22 +433,18 @@
                     $(".relate-left-hide").eq($relate_left_hide).removeClass("relate-left-hide");
                 }
 
-                for($i = $length-1, $index = 3, $count = 1; $i >= 0; $i--, $index--, $count--){
+                for($i = $length-1, $index = 4-$length, $count = 1; $i >= 0; $i--, $index--, $count--){
                     $(".relate-right-hide").eq($i).css({"position":"absolute", "left":""+($index*25)+"%", "top":"0"});
-                    $(".relate-show").eq($index).css({"position":"absolute", "left":""+($count*(25))+"%"});
                     $(".relate-right-hide").eq($i).animate({
                         left:"100%",
-                    }, {duration:200, queue: false});
-
-                    $(".relate-show").eq($index).animate({
-                        left: ""+($index*24.4)+"%"
-                    }, {duration:200, queue: false});
+                    }, {duration:200, queue: false});                    
                 }
 
-                for($i = $length-1, $count = 1; $i >= 0; $i--, $count++){
-                    $(".relate-show").eq($i).css({"position":"absolute", "left":""+($count*(-25))+"%"});
+                //Sap xep relate-show
+                for($i = 3, $index = 4-$length; $i >= 0; $i--,$index--){
+                    $(".relate-show").eq($i).css({"position":"absolute", "left":""+(($index-1)*25)+"%"});
                     $(".relate-show").eq($i).animate({
-                        left: ""+($i*24.4)+"%"
+                        left: ""+($index*24.4)+"%"
                     }, {duration:200, queue: false});
                 }
             }
@@ -472,6 +483,9 @@
                 $length = $(".relate-right-hide").length;
                 $position = 0;
                 $new_relate_show = 0;
+                //$new_relate_show = 3 (co 3 phan tu ben phai can dich chuyen)
+                //thay the 3 phan tu ben phai doi ten thanh show 
+                //3 phan tu hien tai tinh tu phan tu xuat hien 0->2 thanh left 0 1 2 
                 for($i = 0; $i < $length; $i++){
                     $(".relate-show").eq(0).addClass("relate-left-hide");
                     $(".relate-show").eq(0).removeClass("relate-show");
@@ -479,36 +493,31 @@
                     $(".relate-right-hide").eq(0).removeClass("relate-right-hide");
                     $new_relate_show++;
                 }
-                for($i = $(".relate-left-hide").length - $length, $count_element = 0; $i < $(".relate-left-hide").length; $i++){
-                    $(".relate-left-hide").eq($i).css({"position":"absolute", "left":""+$position+"%"});
-                    $(".relate-show").eq($count_element).css({"position":"absolute", "left":""+(($count_element+$new_relate_show)*25)+"%"});
+                
+                /* 
+                    $length = 3 (phan tu ben phai)
+                    Lap lai 3 lan duyet 3 phan tu cuoi trong list relate-left-hide va dat giu vi tri' ban dau (chua di chuyen sang ben trai)
+                    relate-show la nhung phan tu ben phai (chua dich chuyen sang trai de hien thi)                   
+
+                */
+                for($i = $(".relate-left-hide").length - $length; $i < $(".relate-left-hide").length; $i++){
+                    $(".relate-left-hide").eq($i).css({"position":"absolute", "top":"0", "left":""+$position+"%"});
                     $position += 25;
-                    $count_element++;
                 }
 
-                for($i = $(".relate-show").length - $new_relate_show, $position_new_relate_show = 0; $i < $(".relate-show").length; $i++){
-                    $(".relate-show").eq($i).css({"position":"absolute", "top":"0", "left":""+(100+$position_new_relate_show)+"%"});
-                    $position_new_relate_show += 25;
+                //Dat vi tri nhung phan tu show dang hien thi tai man hinh va nhung phan tu chua hien thi o man hinh (phan tu chua hien thi nam ben phai)
+                //$count de tinh vi tri cac phan tu show va $length la so phan tu ben phai ban dau
+                for($i = 0, $count = $length; $i < 4; $i++, $count++){
+                    $(".relate-show").eq($i).css({"position":"absolute", "top":"0", "left":""+($count*25)+"%"});
+                    $(".relate-show").eq($i).animate({
+                        left: ""+(($count-$length)*24.4)+"%"
+                    }, {duration:200, queue: false});
                 }
 
                 $(".relate-left-hide").animate({
                     left: "-100%"
                 }, {duration:300, queue: false});
 
-
-                for($i = 0, $position_new_relate_show = 0; $i < $(".relate-show").length-$new_relate_show; $i++){
-                    $(".relate-show").eq($i).animate({
-                        left: ""+$position_new_relate_show*24.4+"%"
-                    }, {duration:200, queue: false});
-                    $position_new_relate_show++;
-                }
-
-                for($i = $(".relate-show").length - $new_relate_show, $position_new_relate_show = 0; $i < $(".relate-show").length; $i++){
-                    $(".relate-show").eq($i).animate({
-                        left: ""+(($new_relate_show+$position_new_relate_show)*24.4)+"%"
-                    }, {duration:200, queue: false});
-                    $position_new_relate_show++;
-                }
             }
         }
     });
