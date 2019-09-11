@@ -1,6 +1,4 @@
 <?php  
-    session_start();
-    $_SESSION['username'] = "cuvip";
     require_once 'database/databaseConnect.php';
     require_once 'Constants/constants.php';
     $conn = DatabaseConnect::connect();
@@ -164,6 +162,120 @@
         .bar-2 {width: 0%; height: 18px; background-color: #ffc120;}
         .bar-1 {width: 0%; height: 18px; background-color: #ffc120;}
 
+        /* Set a style for all buttons */
+        .login {
+          background-color: #4CAF50;
+          color: white;
+          padding: 14px 20px;
+          margin: 8px 0;
+          border: none;
+          cursor: pointer;
+          width: 100%;
+        }
+
+                /* Full-width input fields */
+        input[type=text], input[type=password] {
+          width: 100%;
+          padding: 12px 20px;
+          margin: 8px 0;
+          display: inline-block;
+          border: 1px solid #ccc;
+          box-sizing: border-box;
+        }
+
+        /* Extra styles for the cancel button */
+        .cancelbtn {
+          width: auto;
+          padding: 10px 18px;
+          background-color: #f44336;
+        }
+
+        /* Center the image and position the close button */
+        .imgcontainer {
+          text-align: center;
+          margin: 24px 0 12px 0;
+          position: relative;
+        }
+
+        img.avatar {
+          width: 40%;
+          border-radius: 50%;
+        }
+
+        .container {
+          padding: 16px;
+        }
+
+        span.psw {
+          float: right;
+          padding-top: 16px;
+        }
+
+        /* The Modal (background) */
+        .modal {
+          display: none; /* Hidden by default */
+          position: fixed; /* Stay in place */
+          z-index: 1; /* Sit on top */
+          left: 0;
+          top: 0;
+          width: 100%; /* Full width */
+          height: 100%; /* Full height */
+          overflow: auto; /* Enable scroll if needed */
+          background-color: rgb(0,0,0); /* Fallback color */
+          background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+          padding-top: 60px;
+        }
+
+        /* Modal Content/Box */
+        .modal-content {
+          background-color: #fefefe;
+          margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+          border: 1px solid #888;
+          width: 80%; /* Could be more or less, depending on screen size */
+        }
+
+        /* The Close Button (x) */
+        .close {
+          position: absolute;
+          right: 25px;
+          top: 0;
+          color: #000;
+          font-size: 35px;
+          font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+          color: red;
+          cursor: pointer;
+        }
+
+        /* Add Zoom Animation */
+        .animate {
+          -webkit-animation: animatezoom 0.6s;
+          animation: animatezoom 0.6s
+        }
+
+        @-webkit-keyframes animatezoom {
+          from {-webkit-transform: scale(0)} 
+          to {-webkit-transform: scale(1)}
+        }
+          
+        @keyframes animatezoom {
+          from {transform: scale(0)} 
+          to {transform: scale(1)}
+        }
+
+        /* Change styles for span and cancel button on extra small screens */
+        @media screen and (max-width: 300px) {
+          span.psw {
+             display: block;
+             float: none;
+          }
+          .cancelbtn {
+             width: 100%;
+          }
+        }
         body{
             background-color: #fafafa;
         }
@@ -239,7 +351,7 @@
                             </span>
                         </div>
 
-                        <div class="icon" style="margin-left:20px;"><span>Review</span></div>
+                        <div class="icon review_scroll_down" style="margin-left:20px;"><span>Review</span></div>
                     </div>
 
                     <div class="product-detail" style="margin-top: 20px;">
@@ -404,7 +516,7 @@
             </div>
         </div>
 
-        <div class="row" style="margin-top: 10%; text-align: center;">
+        <div class="row review_scroll_down_destination" style="margin-top: 10%; text-align: center;">
             <h3>Review</h3>
         </div>
         <div class="row" style="text-align: center; font-size: 24px; border-right: 1px solid #ececec;">
@@ -604,7 +716,7 @@
                             else{
                         ?>
                                 <div style="height: 155px;line-height: 155px;">
-                                    <button style="height: 26%;line-height: 26%; background-color: rgb(255, 193, 32); border-color: rgb(255, 193, 32); font-size: 18px;">Writting Review</button>
+                                    <button class="writting_review" style="height: 26%;line-height: 26%; background-color: rgb(255, 193, 32); border-color: rgb(255, 193, 32); font-size: 18px;">Writting Review</button>
                                 </div>
                         <?php
                             }
@@ -655,6 +767,26 @@
             </div>
         </div>
     </footer>
+    <div id="id01" class="modal">
+  
+  <div class="modal-content animate">
+    <div class="imgcontainer">
+      <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+    </div>
+
+    <div class="container">
+      <label for="uname"><b>Username</b></label>
+      <input type="text" placeholder="Enter Username" name="uname" required>
+      <label for="psw"><b>Password</b></label>
+      <input type="password" placeholder="Enter Password" name="psw" required>        
+      <button class="login" type="submit">Login</button>
+    </div>
+
+    <div class="container" style="background-color:#f1f1f1">
+      <button type="button" onclick="document.getElementById('id01').style.display='none'" style="width: 100%;" class="cancelbtn">Cancel</button>
+    </div>
+  </div>
+</div>
     <input type="hidden" name="" id="product_id_hidden" value="<?=$_REQUEST['product_id']?>">
 </body>
 <script src="js/product_detail.js"></script>
@@ -677,6 +809,22 @@
             });
         }
 
-        
+        $(".review_scroll_down").click(function(){
+            $('html,body').animate({
+                scrollTop: $('.review_scroll_down_destination').offset().top
+            },700);
+        });
+
+        $('.writting_review').click(function(){
+            $("#id01").css({'display':'block','width':'auto'});
+        });
+
+        var modal = document.getElementById('id01');
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
 </script>
 </html>
