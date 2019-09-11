@@ -580,7 +580,7 @@
                         ?>
                                     <div style="height: 155px;line-height: 155px;">
                                         <p style="height: 26%; font-size: 18px; color: rgb(255, 193, 32);">You have rated</p>
-                                        <div class="col-xs-8 col-md-8 col-lg-8 icon-review">
+                                        <div class="col-xs-12 col-md-12 col-lg-12 icon-review-rated">
                                             <i class="fa fa-star-o color-star"></i>
                                             <i class="fa fa-star-o color-star"></i>
                                             <i class="fa fa-star-o color-star"></i>
@@ -589,6 +589,14 @@
                                         </div>
                                     </div>
                         <?php
+                                    $rate = DatabaseConnect::getResult("select * from product_rating where product_id like '".$_REQUEST['product_id']."' and customer_id like '".$_SESSION['username']."'",$conn);
+                                    echo "<script>
+                                            for(var i = 0; i < ".$rate[0]['rating']."; i++){
+                                                $('.icon-review-rated i').eq(i).removeClass('fa-star-o');
+                                                $('.icon-review-rated i').eq(i).addClass('fa-star');
+                                            }
+                                    </script>";
+
                                 }
                         ?>
                         <?php
@@ -668,5 +676,7 @@
                 });
             });
         }
+
+        
 </script>
 </html>
