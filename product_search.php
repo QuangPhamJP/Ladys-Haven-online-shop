@@ -52,10 +52,24 @@
                 <li><a href="contact.html"><b>Contact</b></a></li>
                 <li><a href="aboutus.html"><b>About us</b></a></li>
             </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="Register.html"><span class="glyphicon glyphicon-user"></span> Sign up</a></li>
-                <li><a href="Login.html"><span class="glyphicon glyphicon-log-in"></span> Sign in</a></li>
-            </ul>
+            <?php 
+                if(isset($_SESSION['username'])){
+            ?>
+                    <ul style="float: right; list-style: none; position: relative; width: 22%;top: 16px;">
+                        <li style="display: inline-block;"><span class="glyphicon glyphicon-user"></span><a href="customer_info.php"><?=$_SESSION['username']?></a></li>
+                        <li style="display: inline-block; margin-left: 16px;"><span class="glyphicon glyphicon-log-in"></span><a id="logout">Log out</a></li>
+                    </ul>
+            <?php
+                }
+                else{
+            ?>
+                    <ul style="float: right; list-style: none; position: relative; width: 22%;top: 16px;">
+                        <li style="display: inline-block;"><span class="glyphicon glyphicon-user"></span><a href="#">Log in</a></li>
+                        <li style="display: inline-block; margin-left: 16px;"><span class="glyphicon glyphicon-log-in"></span><a href="#">Sign up</a></li>
+                    </ul>
+            <?php
+                }
+            ?>
         </div>
     </nav>
     
@@ -213,7 +227,7 @@
 
     </footer>
 
-
+    <div class="error"></div>
 </body>
 
 <style>
@@ -260,6 +274,18 @@
             filter();
         });
     });
+
+    if(typeof($("#logout")) != 'undefinded' && $("#logout") !== null){
+        $("#logout").click(function(){
+            $.ajax({
+                url: "Logout.php",
+                method: "post",
+                success:function(data){
+                    $('.error').html(data);
+                }
+            });
+        }); 
+    }
 </script>
 
 </html>
