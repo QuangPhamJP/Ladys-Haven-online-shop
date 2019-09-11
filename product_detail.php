@@ -12,11 +12,13 @@
         if(count($getProduct_) > 0){
             if(!is_null($getProduct_[0]['Rating'])){
                 $star = explode(".", $getProduct_[0]['Rating']);
-                for($i = 0; $i < $star[0]; $i++){
-                        echo "<script>
-                            $('.".$icon." i').eq(".$i.").removeClass('fa-star-o');
-                            $('.".$icon." i').eq(".$i.").addClass('fa-star color-star');
-                        </script>";  
+                if($icon !== ""){
+                    for($i = 0; $i < $star[0]; $i++){
+                            echo "<script>
+                                $('.".$icon." i').eq(".$i.").removeClass('fa-star-o');
+                                $('.".$icon." i').eq(".$i.").addClass('fa-star color-star');
+                            </script>";  
+                    }
                 }
                 if($star[1] == 0){
                     if($flag == 1){
@@ -31,11 +33,13 @@
                     if($flag == 1){
                         echo "<span class='review-relate-product'>".number_format($getProduct_[0]['Rating'], 1)."</span>" ;
                     }
-                    if($star[1]/$number>= 0.5){
-                        echo "<script>
-                            $('.".$icon." i').eq(".$star[0].").addClass('fa-star-half-o color-star');
-                        </script>";       
-                    }
+                    if($icon !== ""){
+                        if($star[1]/$number>= 0.5){
+                            echo "<script>
+                                $('.".$icon." i').eq(".$star[0].").addClass('fa-star-half-o color-star');
+                            </script>";       
+                        }
+                    }  
                 }
             }
             else{
@@ -43,7 +47,9 @@
                     echo "0";
                 }
             }
+            if($icon !== ""){
             echo "<script>$('.".$icon."').addClass('color-star')</script>";
+            }
         }
     }
 ?>
@@ -55,7 +61,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Product Detail</title>
-    <script src="main.js"></script>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/styling.css">
     <link rel="stylesheet" href="css/style-Quang.css">
@@ -145,13 +150,17 @@
           text-align: center;
           color: white;
         }
+        [class*='right']{
+            text-align: right;
+            width: 5%;
+        }
 
         /* Individual bars */
-        .bar-5 {width: 60%; height: 18px; background-color: #4CAF50;}
-        .bar-4 {width: 30%; height: 18px; background-color: #2196F3;}
-        .bar-3 {width: 10%; height: 18px; background-color: #00bcd4;}
-        .bar-2 {width: 4%; height: 18px; background-color: #ff9800;}
-        .bar-1 {width: 15%; height: 18px; background-color: #f44336;}
+        .bar-5 {width: 0%; height: 18px; background-color: #ffc120;}
+        .bar-4 {width: 0%; height: 18px; background-color: #ffc120;}
+        .bar-3 {width: 0%; height: 18px; background-color: #ffc120;}
+        .bar-2 {width: 0%; height: 18px; background-color: #ffc120;}
+        .bar-1 {width: 0%; height: 18px; background-color: #ffc120;}
         body{
             background-color: #fafafa;
         }
@@ -284,7 +293,7 @@
         <div class="row" style="margin-top: 10%; text-align: center; font-size: 26px;">
             Relate Product
         </div>
-        <div class="row" style="overflow: hidden; position: relative; height: 320px;">
+        <div class="row" style="overflow: hidden; position: relative; height: 370px;">
             <?php  
                 $getProductCategory = DatabaseConnect::getResult("select * from products p, brand b where p.brand_id = b.id and p.product_category like '".$getProduct[0]['product_category']."'",$conn);
                 $count = 0;
@@ -438,61 +447,105 @@
                             ?>
                         </div>
                     </div>
+                    
                     <div class="col-xs-5 col-md-5 col-lg-5">
                         <div class="row">
 
-                          <div class="side">
-                            <div>5 <span class="fa fa-star"></span></div>
-                          </div>
-
-                          <div class="middle">
-                            <div class="bar-container">
-                              <div class="bar-5"></div>
+                            <div class="side">
+                                <div>5 <span class="fa fa-star"></span></div>
                             </div>
-                          </div>
 
-                          <div class="side">
-                            <div>4 <span class="fa fa-star"></span></div>
-                          </div>
-
-                          <div class="middle">
-                            <div class="bar-container">
-                              <div class="bar-4"></div>
+                            <div class="middle">
+                                <div class="bar-container">
+                                  <div class="bar-5"></div>
+                                </div>
                             </div>
-                          </div>
 
-                          <div class="side">
-                            <div>3 <span class="fa fa-star"></span></div>
-                          </div>
+                            <div class="side right-5"></div>
 
-                          <div class="middle">
-                            <div class="bar-container">
-                              <div class="bar-3"></div>
+                            <div class="side">
+                                <div>4 <span class="fa fa-star"></span></div>
                             </div>
-                          </div>
 
-                          <div class="side">
-                            <div>2 <span class="fa fa-star"></span></div>
-                          </div>
-
-                          <div class="middle">
-                            <div class="bar-container">
-                              <div class="bar-2"></div>
+                            <div class="middle">
+                                <div class="bar-container">
+                                  <div class="bar-4"></div>
+                                </div>
                             </div>
-                          </div>
 
-                          <div class="side">
-                            <div>1 <span class="fa fa-star"></span></div>
-                          </div>
+                            <div class="side right-4"></div>
 
-                          <div class="middle">
-                            <div class="bar-container">
-                              <div class="bar-1"></div>
+                            <div class="side">
+                                <div>3 <span class="fa fa-star"></span></div>
                             </div>
-                          </div>
+
+                            <div class="middle">
+                                <div class="bar-container">
+                                  <div class="bar-3"></div>
+                                </div>
+                            </div>
+
+                            <div class="side right-3">
+                            </div>
+
+                            <div class="side">
+                                <div>2 <span class="fa fa-star"></span></div>
+                            </div>
+
+                            <div class="middle">
+                                <div class="bar-container">
+                                  <div class="bar-2"></div>
+                                </div>
+                            </div>
+
+                            <div class="side right-2"></div>
+
+                            <div class="side">
+                                <div>1 <span class="fa fa-star"></span></div>
+                            </div>
+
+                            <div class="middle">
+                                <div class="bar-container">
+                                  <div class="bar-1"></div>
+                                </div>
+                            </div>
+
+                            <div class="side right-1"></div>
 
                         </div>
                     </div>
+                    <?php 
+                        $getProduct_W = DatabaseConnect::getResult("select rating, count(rating)/(SELECT COUNT(*) from product_rating WHERE product_id like '".$_REQUEST['product_id']."') as Rating, count(rating) as Num from product_rating where product_id like ".$_REQUEST['product_id']." GROUP BY rating", $conn);
+                        $exits_value = [];
+                        $not_exits_value = [];
+                        foreach ($getProduct_W as $value) {
+                            echo "<script>$('.bar-".$value['rating']."').css('width','".($value['Rating']*100)."%');
+                                    $('.right-".$value['rating']."').html('".$value['Num']."');
+                            </script>";
+                            array_push($exits_value,$value['rating']);
+                        }   
+
+                        for($i = 1; $i < 6; $i++){
+                            for($j = 0; $j < count($exits_value); $j++){
+                                $flag = false;
+                                if($i == $exits_value[$j]){
+                                    $flag = true;
+                                    break;
+                                }
+                            }
+                            if($flag == false){
+                                array_push($not_exits_value,$i);
+                            }
+                        }
+
+                        if(count($not_exits_value) > 0){
+                            echo "<script>";
+                            for($i = 0; $i < count($not_exits_value); $i++){
+                                echo "$('.right-".$not_exits_value[$i]."').html('0');";
+                            }
+                            echo "</script>";
+                        }
+                    ?>
                     <div class="col-xs-5 col-md-5 col-lg-5"></div>
                 </div>
             </div>
@@ -535,194 +588,10 @@
                         <li><a href="Register.html">Sign up</a></li>
                         <li><a href="Login.html">Sign in</a></li>
                     </ul>
-
                 </div>
             </div>
         </div>
     </footer>
 </body>
-<script>
-    $("#quality_input").keydown(function(event){
-        if(event.which == 8){
-            if($(this).val().length <= 1){
-                if($(this).val() !== "1"){
-                    $(this).val("1");
-                }
-                event.preventDefault();
-            }
-        }
-        else{
-            if($(this).val().length == 0){
-                $(this).val("1");
-            }
-        }
-    });
-    $(".list-group-item img").hover(function(){
-        var src = $(this).attr("src");
-        $(".detail-image-child-container img").attr('src', src);
-
-    });
-
-    $(".list-group-item img").click(function(){
-        if($(".list-group-item img").hasClass("selected-item-img")){
-            $(".list-group-item img").removeClass("selected-item-img");
-        }
-        $(this).addClass("selected-item-img");
-        // Instantiate new modal
-        var modal = new Custombox.modal({
-          content: {
-            effect: 'fadein',
-            target: '.selected-item-img'
-          }
-        });
-        modal.open();
-    });
-
-    $(".detail-image-child-container img").click(function(){
-        $(this).addClass("selected-detail-image-child-container");
-        // Instantiate new modal
-        var modal_ = new Custombox.modal({
-          content: {
-            effect: 'fadein',
-            target: '.selected-detail-image-child-container'
-          }
-        });
-        modal_.open();
-    });
-
-
-    $(".relate-left-nav").click(function(){
-        if($(".relate-left-hide").length >= 4){
-            $length = $(".relate-left-hide").length;
-            for($i = $length-1, $indexofend= $(".relate-show").length-1; $i >= $length-4; $i--){
-                $relate_left_hide = $(".relate-left-hide").length-1;
-                $(".relate-show").eq($indexofend).addClass("relate-right-hide");
-                $(".relate-show").eq($indexofend).removeClass("relate-show");
-                $(".relate-left-hide").eq($relate_left_hide).addClass("relate-show");
-                $(".relate-left-hide").eq($relate_left_hide).removeClass("relate-left-hide");
-            }
-
-            for($i =  $(".relate-right-hide").length - 1; $i >= 0; $i--){
-                $(".relate-right-hide").eq($i).css({"position":"absolute", "top":"0","left":"-100%"});
-            }
-
-            for($i =3, $count = 1; $i >= 0; $i--, $count++){
-                $(".relate-right-hide").eq($i).css({"position":"absolute", "left":""+($i*25)+"%", "top":"0"});
-                $(".relate-show").eq($i).css({"position":"absolute", "left":""+($count*(-25))+"%"});
-            }
-
-            for($i = 3; $i >= 0; $i--){
-                $(".relate-right-hide").eq($i).animate({
-                    left:""+(100+($i*25))+"%",
-                }, {duration:200, queue: false});
-            }
-
-            for($i = 3; $i >= 0; $i--){
-                $(".relate-show").eq($i).animate({
-                    left: ""+($i*24.4)+"%"
-                }, {duration:200, queue: false});
-            }
-        }   
-        else{
-            if($(".relate-left-hide").length != 0){
-                $length = $(".relate-left-hide").length;
-                for($i = $length-1, $indexofend= $(".relate-show").length-1; $i >= 0; $i--){
-                    $relate_left_hide = $(".relate-left-hide").length-1;
-                    $(".relate-show").eq($indexofend).addClass("relate-right-hide");
-                    $(".relate-show").eq($indexofend).removeClass("relate-show");
-                    $(".relate-left-hide").eq($relate_left_hide).addClass("relate-show");
-                    $(".relate-left-hide").eq($relate_left_hide).removeClass("relate-left-hide");
-                }
-
-                for($i = $length-1, $index = 0; $i >= 0; $i--, $index++){
-                    $(".relate-right-hide").eq($i).css({"position":"absolute", "left":""+((3-$index)*25)+"%", "top":"0"});
-                    $(".relate-right-hide").eq($i).animate({
-                        left:"100%",
-                    }, {duration:200, queue: false});                    
-                }
-
-                //Sap xep relate-show
-                for($i = 3, $index = $length; $i >= 0; $i--, $index++){
-                    $(".relate-show").eq($i).css({"position":"absolute", "left":""+((3-$index)*25)+"%"});
-                    $(".relate-show").eq($i).animate({
-                        left: ""+((3-$index+$length)*24.4)+"%"
-                    }, {duration:200, queue: false});
-                }
-            }
-        }
-    });
-
-    $(".relate-right-nav").click(function(){
-        if($(".relate-right-hide").length >= 4){
-            for($i = 0; $i < 4; $i++){
-                $(".relate-show").eq(0).addClass("relate-left-hide");
-                $(".relate-show").eq(0).removeClass("relate-show");
-                $(".relate-right-hide").eq(0).addClass("relate-show");
-                $(".relate-right-hide").eq(0).removeClass("relate-right-hide");
-            }
-
-            for($i = 0; $i < $(".relate-right-hide").length; $i++){
-                $(".relate-right-hide").css({"position":"absolute", "right":"100%", "top":"0"});
-            }
-
-            for($i = $(".relate-left-hide").length - 4, $index = 0, $count = 4; $i < $(".relate-left-hide").length; $i++, $index++, $count--){
-                $(".relate-left-hide").eq($i).css({"position":"absolute", "top":"0", "left":""+($index*25)+"%"});
-                $(".relate-left-hide").eq($i).animate({
-                    left: "-100%"
-                }, {duration:200, queue: false});   
-            }
-
-            for($i = 0; $i < 4; $i++){
-                $(".relate-show").eq($i).css({"position":"absolute", "top":"0", "left":""+(($i+4)*25)+"%"});
-                $(".relate-show").eq($i).animate({
-                    left: ""+($i*24.4)+"%"
-                }, {duration:200, queue: false});
-            }
-        }   
-        else{
-            if($(".relate-right-hide").length != 0){
-                $length = $(".relate-right-hide").length;
-                $position = 0;
-                $new_relate_show = 0;
-                //$new_relate_show = 3 (co 3 phan tu ben phai can dich chuyen)
-                //thay the 3 phan tu ben phai doi ten thanh show 
-                //3 phan tu hien tai tinh tu phan tu xuat hien 0->2 thanh left 0 1 2 
-                for($i = 0; $i < $length; $i++){
-                    $(".relate-show").eq(0).addClass("relate-left-hide");
-                    $(".relate-show").eq(0).removeClass("relate-show");
-                    $(".relate-right-hide").eq(0).addClass("relate-show");
-                    $(".relate-right-hide").eq(0).removeClass("relate-right-hide");
-                    $new_relate_show++;
-                }
-                
-                /* 
-                    $length = 3 (phan tu ben phai)
-                    Lap lai 3 lan duyet 3 phan tu cuoi trong list relate-left-hide va dat giu vi tri' ban dau (chua di chuyen sang ben trai)
-                    relate-show la nhung phan tu ben phai (chua dich chuyen sang trai de hien thi)                   
-
-                */
-                for($i = $(".relate-left-hide").length - $length; $i < $(".relate-left-hide").length; $i++){
-                    $(".relate-left-hide").eq($i).css({"position":"absolute", "top":"0", "left":""+$position+"%"});
-                    $position += 25;
-                }
-
-                //Dat vi tri nhung phan tu show dang hien thi tai man hinh va nhung phan tu chua hien thi o man hinh (phan tu chua hien thi nam ben phai)
-                //$count de tinh vi tri cac phan tu show va $length la so phan tu ben phai ban dau
-                for($i = 0, $count = $length; $i < 4; $i++, $count++){
-                    $(".relate-show").eq($i).css({"position":"absolute", "top":"0", "left":""+($count*25)+"%"});
-                    $(".relate-show").eq($i).animate({
-                        left: ""+(($count-$length)*24.4)+"%"
-                    }, {duration:200, queue: false});
-                }
-
-                $(".relate-left-hide").animate({
-                    left: "-100%"
-                }, {duration:300, queue: false});
-
-            }
-        }
-    });
-
-</script>
-
+<script src="js/product_detail.js"></script>
 </html>
