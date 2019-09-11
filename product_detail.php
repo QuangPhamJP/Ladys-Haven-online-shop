@@ -525,9 +525,10 @@
                             array_push($exits_value,$value['rating']);
                         }   
 
+
                         for($i = 1; $i < 6; $i++){
+                            $flag = false;
                             for($j = 0; $j < count($exits_value); $j++){
-                                $flag = false;
                                 if($i == $exits_value[$j]){
                                     $flag = true;
                                     break;
@@ -541,7 +542,7 @@
                         if(count($not_exits_value) > 0){
                             echo "<script>";
                             for($i = 0; $i < count($not_exits_value); $i++){
-                                echo "$('.right-".$not_exits_value[$i]."').html('0');";
+                                echo "$('.right-".$not_exits_value[$i]."').html(0);";
                             }
                             echo "</script>";
                         }
