@@ -1,6 +1,7 @@
 <?php  
     require_once 'database/databaseConnect.php';
     require_once 'Constants/constants.php';
+    session_start();
     $conn = DatabaseConnect::connect();
     if(isset($_REQUEST["product_id"])){
         $getProduct =DatabaseConnect::getResult("select * from products p, brand b where p.prod_id like '".$_REQUEST["product_id"]."' and p.brand_id = b.id", $conn);
@@ -294,10 +295,29 @@
             </div>
             <ul class="nav navbar-nav">
                 <li><a href="Home.html"><span class="glyphicon glyphicon-home"></span><b> Home</b></a></li>
-                <li class="active"><a href="product.php"><b>Products</b></a></li>
+                <li><a href="product.php"><b>Products</b></a></li>
                 <li><a href="contact.html"><b>Contact</b></a></li>
                 <li><a href="aboutus.html"><b>About us</b></a></li>
             </ul>
+            <?php 
+                if(isset($_SESSION['username'])){
+            ?>
+                    <ul style="float: right; list-style: none; position: relative; width: 22%;top: 16px;">
+                        <li style="display: inline-block;"><span class="glyphicon glyphicon-user"></span><a href="customer_info.php"><?=$_SESSION['username']?></a></li>
+                        <li style="display: inline-block; margin-left: 16px;"><span class="glyphicon glyphicon-log-in"></span><a id="logout">Log out</a></li>
+                    </ul>
+            <?php
+                }
+                else{
+            ?>
+                    <ul style="float: right; list-style: none; position: relative; width: 22%;top: 16px;">
+                        <li style="display: inline-block;"><span class="glyphicon glyphicon-user"></span><a href="#">Log in</a></li>
+                        <li style="display: inline-block; margin-left: 16px;"><span class="glyphicon glyphicon-log-in"></span><a href="#">Sign up</a></li>
+                    </ul>
+            <?php
+                }
+            ?>
+            
         </div>
     </nav>
 
@@ -767,27 +787,30 @@
             </div>
         </div>
     </footer>
+
     <div id="id01" class="modal">
-  
-  <div class="modal-content animate">
-    <div class="imgcontainer">
-      <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+      <div class="modal-content animate">
+        <div class="imgcontainer">
+          <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+        </div>
+        <form id="login-form" onsubmit="return false;">
+            <div class="container">
+              <label for="uname"><b>Username</b></label>
+              <input type="text" placeholder="Enter Username" name="uname"  id="login-username" required>
+              <label for="psw"><b>Password</b></label>
+              <input type="password" placeholder="Enter Password" name="psw" id="login-password" required>        
+              <button class="login" id="login-btn" type="submit">Login</button>
+            </div>
+        </form>
+
+        <div class="container" style="background-color:#f1f1f1">
+          <button type="button" onclick="document.getElementById('id01').style.display='none'" style="width: 100%;" class="cancelbtn">Cancel</button>
+        </div>
+      </div>
     </div>
 
-    <div class="container">
-      <label for="uname"><b>Username</b></label>
-      <input type="text" placeholder="Enter Username" name="uname" required>
-      <label for="psw"><b>Password</b></label>
-      <input type="password" placeholder="Enter Password" name="psw" required>        
-      <button class="login" type="submit">Login</button>
-    </div>
-
-    <div class="container" style="background-color:#f1f1f1">
-      <button type="button" onclick="document.getElementById('id01').style.display='none'" style="width: 100%;" class="cancelbtn">Cancel</button>
-    </div>
-  </div>
-</div>
     <input type="hidden" name="" id="product_id_hidden" value="<?=$_REQUEST['product_id']?>">
+    <div class="error"></div>
 </body>
 <script src="js/product_detail.js"></script>
 <script>
@@ -802,7 +825,6 @@
                     method: "post",
                     data:{content:txt_content, num_star:num_star, product_id:product_id},
                     success:function(data){
-                        alert(data);
                         location.reload();
                     }
                 });
@@ -825,6 +847,34 @@
                 modal.style.display = 'none';
             }
         }
+
+        $("#login-btn").click(function(){
+            if($("#login-form input").eq(0).val().length > 0 && $("#login-form input").eq(1).val().length > 0){
+                var username = $("#login-username").val();
+                var password = $("#login-password").val();
+                $.ajax({
+                    url: "login_product_detail.php",
+                    method: "post",
+                    data:{username:username, password:password},
+                    success:function(data){
+                        $('.error').html(data);
+                    }
+                });
+            }   
+        });
+
+        if(typeof($("#logout")) != 'undefinded' && $("#logout") !== null){
+            $("#logout").click(function(){
+                $.ajax({
+                    url: "Logout.php",
+                    method: "post",
+                    success:function(data){
+                        $('.error').html(data);
+                    }
+                });
+            }); 
+        }
+        
 
 </script>
 </html>
