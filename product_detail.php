@@ -1,4 +1,5 @@
 <?php  
+    session_start();
     $_SESSION['username'] = "cuvip";
     require_once 'database/databaseConnect.php';
     require_once 'Constants/constants.php';
@@ -565,21 +566,12 @@
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-xs-4 col-md-4 col-lg-4">
-                                            <span style="font-size: 12px;">Review title:</span>
-                                        </div>
-                                        <div class="col-xs-8 col-md-8 col-lg-8">
-                                            <input type="text" name="" placeholder="Enter the review title" style="display: block; width: 100%; font-size: 14px;">
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
                                         <div class="col-xs-4 col-md-4 col-lg-4" style="padding: 0; height: 100px;">
                                             <span style="font-size: 11px;">Content rated:</span>
-                                            <input style="background-color: rgb(255, 193, 32); border-color: rgb(255, 193, 32); font-size: 14px; height: 40%;" type="submit" value="Send Review">
+                                            <button style="background-color: rgb(255, 193, 32); border-color: rgb(255, 193, 32); font-size: 14px; height: 40%;" id="send_value">Send Review</button>
                                         </div>
                                         <div class="col-xs-8 col-md-8 col-lg-8">
-                                            <textarea rows="4" placeholder="Your review about the product" style="font-size: 14px; width: 100%;"></textarea>
+                                            <textarea rows="4" placeholder="Your review about the product" id="content" style="font-size: 14px; width: 100%;"></textarea>
                                         </div>
                                     </div>
                         <?php
@@ -588,6 +580,13 @@
                         ?>
                                     <div style="height: 155px;line-height: 155px;">
                                         <p style="height: 26%; font-size: 18px; color: rgb(255, 193, 32);">You have rated</p>
+                                        <div class="col-xs-8 col-md-8 col-lg-8 icon-review">
+                                            <i class="fa fa-star-o color-star"></i>
+                                            <i class="fa fa-star-o color-star"></i>
+                                            <i class="fa fa-star-o color-star"></i>
+                                            <i class="fa fa-star-o color-star"></i>
+                                            <i class="fa fa-star-o color-star"></i>
+                                        </div>
                                     </div>
                         <?php
                                 }
@@ -648,6 +647,26 @@
             </div>
         </div>
     </footer>
+    <input type="hidden" name="" id="product_id_hidden" value="<?=$_REQUEST['product_id']?>">
 </body>
 <script src="js/product_detail.js"></script>
+<script>
+        if(typeof($("#send_value"))!= 'undefinded' && $("#send_value") !== null){
+            $("#send_value").click(function(){
+                var num_star = $(".active-star").length;
+                var txt_content = $("#content").val();
+                var product_id = $("#product_id_hidden").val();
+
+                $.ajax({
+                    url: "review.php",
+                    method: "post",
+                    data:{content:txt_content, num_star:num_star, product_id:product_id},
+                    success:function(data){
+                        alert(data);
+                        location.reload();
+                    }
+                });
+            });
+        }
+</script>
 </html>
