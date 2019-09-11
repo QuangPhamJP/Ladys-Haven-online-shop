@@ -10,14 +10,9 @@ jQuery(function(){
 
 	$("#form-register").validate({
         rules:{
-            firstName: {
+            fullName: {
                 required: true,
-                minlength: 3,
-                maxlength: 100
-            },
-            lastName: {
-                required: true,
-                minlength: 3,
+                minlength: 10,
                 maxlength: 100
             },
             oldpassword: {
@@ -49,15 +44,10 @@ jQuery(function(){
             
         },
         messages:{
-            firstName: {
-                required :"Please enter your firstname",
-                minlength:"FirstName must be at least 3 characters",
-                maxlength:"FirstName limit 100 characters"
-            },
-            lastName: {
-                required :"Please enter your lastname",
-                minlength:"LastName must be at least 3 characters",
-                maxlength:"LastName limit 100 characters"
+            fullName: {
+                required :"Please enter your Name",
+                minlength:"Name must be at least 10 characters",
+                maxlength:"Name limit 100 characters"
             },
             email:{
             	required:"Please enter your email",

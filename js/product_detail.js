@@ -179,4 +179,42 @@
             }
         }
     });
+
+    $(".icon-review i").hover(function(){
+        for($i = 0; $i <= $(this).index(); $i++){
+            $(".icon-review i").eq($i).removeClass("fa-star-o");
+            $(".icon-review i").eq($i).addClass("fa-star");
+        }
+        for($i = ($(this).index()+1); $i < $(".icon-review i").length; $i++){
+            $(".icon-review i").eq($i).removeClass("fa-star");
+            $(".icon-review i").eq($i).addClass("fa-star-o");
+        }
+    }, function(){
+        for($i = 0; $i <= $(this).index(); $i++){
+            $(".icon-review i").eq($i).removeClass("fa-star");
+            $(".icon-review i").eq($i).addClass("fa-star-o");
+        }
+        if(typeof($(".active-star")) != "undefined" && $(".active-star") !== null) {
+            for($i = 0; $i < $(".active-star").length; $i++){
+                $(".active-star").eq($i).removeClass("fa-star-o");
+                $(".active-star").eq($i).addClass("fa-star");
+            }
+        }
+        
+    });
+
+    $(".icon-review i").click(function(){
+        for($i = 0; $i <= $(this).index(); $i++){
+            $(".icon-review i").eq($i).addClass("active-star");
+        }
+        for($i = 0; $i <= $(this).index(); $i++){
+            $(".icon-review i").eq($i).removeClass("fa-star-o");
+            $(".icon-review i").eq($i).addClass("fa-star");    
+        }
+        for($i = $(this).index()+1; $i < $(".icon-review i").length; $i++){
+            $(".icon-review i").eq($i).removeClass("active-star");
+            $(".icon-review i").eq($i).removeClass("fa-star");
+            $(".icon-review i").eq($i).addClass("fa-star-o");
+        }
+    });
  

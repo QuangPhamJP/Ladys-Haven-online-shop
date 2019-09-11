@@ -162,6 +162,7 @@
         .bar-3 {width: 0%; height: 18px; background-color: #ffc120;}
         .bar-2 {width: 0%; height: 18px; background-color: #ffc120;}
         .bar-1 {width: 0%; height: 18px; background-color: #ffc120;}
+
         body{
             background-color: #fafafa;
         }
@@ -550,12 +551,11 @@
                                 $rate = DatabaseConnect::getResult("select * from review where customer_id like '".$_SESSION['username']."' and product_ID like '".$_REQUEST['product_id']."'",$conn);
                                 if(count($rate) == 0){
                         ?>  
-                                <form action="" method="post">
                                     <div class="row">
                                         <div class="col-xs-4 col-md-4 col-lg-4">
                                             <span style="font-size: 12px;">Your Review:</span>
                                         </div>
-                                        <div class="col-xs-8 col-md-8 col-lg-8">
+                                        <div class="col-xs-8 col-md-8 col-lg-8 icon-review">
                                             <i class="fa fa-star-o color-star"></i>
                                             <i class="fa fa-star-o color-star"></i>
                                             <i class="fa fa-star-o color-star"></i>
@@ -582,7 +582,6 @@
                                             <textarea rows="4" placeholder="Your review about the product" style="font-size: 14px; width: 100%;"></textarea>
                                         </div>
                                     </div>
-                                </form>
                         <?php
                                 }
                                 else{
