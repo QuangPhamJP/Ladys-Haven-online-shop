@@ -564,7 +564,7 @@
                     getStar($getProduct_,"icon_review",0);
                 ?>
             </div>
-            <div class="col-xs-9 col-md-9 col-lg-9" style="border: 1px solid #ececec; border-bottom: none;">
+            <div class="col-xs-9 col-md-9 col-lg-9" style="border: 1px solid #ececec; border-bottom: none; padding: 0;">
                 <div class="row" style="border-bottom: 1px solid #ececec;">
                     <div class="col-xs-2 col-md-2 col-lg-2">
                         <div style="padding: 50px 0;">
@@ -750,6 +750,33 @@
                          ?>
                     </div>
                 </div>
+                
+                <?php 
+                    $rate = DatabaseConnect::getResult("select * from product_rating r, customer c, review re where r.product_id like '".$_REQUEST['product_id']."' and r.customer_id = c.customer_username and re.product_ID = r.product_id",$conn);
+                    if(count($rate) > 0){
+                        foreach ($rate as $value)     
+                        {
+                ?>
+                            <div class="row">
+                                <div class="col-xs-1 col-md-1 col-lg-1"></div>
+                                <div class="col-xs-11 col-md-11 col-lg-11" style="text-align: left; overflow-wrap: break-word;">
+                                    <p style="font-size: 13px; margin:0;"><?=$value['customer_name']?></p>
+                                    <div class="col-xs-12 col-md-12 col-lg-12" style="padding: 0;">
+                                        <i class="fa fa-star-o color-star" style="font-size: 14px;"></i>
+                                        <i class="fa fa-star-o color-star" style="font-size: 14px;"></i>
+                                        <i class="fa fa-star-o color-star" style="font-size: 14px;"></i>
+                                        <i class="fa fa-star-o color-star" style="font-size: 14px;"></i>
+                                        <i class="fa fa-star-o color-star" style="font-size: 14px;"></i>
+                                    </div>
+                                    <p style="color: #666; font-size: 12px;"></p>
+                                </div>
+                            </div>
+                            <hr style="border: 0.7px solid rgb(227, 227, 227); width: 100%; margin:0;">
+                <?php
+                        }
+                    }
+                ?>
+
             </div>
         </div>
     </div>
