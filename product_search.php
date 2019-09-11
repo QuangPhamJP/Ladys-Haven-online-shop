@@ -159,7 +159,7 @@
                     ?>
                         <div class = "col-lg-4 col-md-4 col-xs-4">
                             <div style="border:1px solid #ccc; border-radius:5px;padding:16px; margin-bottom:16px; height:360px;">
-                                <img style="width: 200px; height: 140px;" src="images/<?=$row['image']?>" alt="" class="img-responsive"/>
+                                <img style="width: 200px; height: 140px;" src="images/<?=$row['image']?>.jpg" alt="" class="img-responsive"/>
                                     <p align="center"><strong><a href="#"><?=$row['prod_name']?><a/></strong></p>
                                 <div style="top:57%; position: absolute; width: 74%; left: 13%;">
                                     <h4 style="text-align:center;" class="text-danger" ><?=$row['prod_price']?></h4>
