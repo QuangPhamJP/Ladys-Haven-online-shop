@@ -284,6 +284,14 @@
             right: 20px;
             display:none;
         }
+        #go_review:hover{
+            cursor: pointer;
+        }
+        #go_review{
+            position: relative;
+            bottom: 50px;
+            font-size: 14px;
+        }
         body{
             background-color: #fafafa;
         }
@@ -717,7 +725,7 @@
                                 }
                                 else{
                         ?>
-                                    <div style="height: 155px;line-height: 155px;">
+                                    <div style="height: 79px;line-height: 79px;">
                                         <p style="height: 26%; font-size: 18px; color: rgb(255, 193, 32);">You have rated</p>
                                         <div class="col-xs-12 col-md-12 col-lg-12 icon-review-rated">
                                             <i class="fa fa-star-o color-star"></i>
@@ -726,7 +734,9 @@
                                             <i class="fa fa-star-o color-star"></i>
                                             <i class="fa fa-star-o color-star"></i>
                                         </div>
+                                        <a id="go_review" style="text-decoration: none;">Go to Your Review</a>
                                     </div>
+
                         <?php
                                     $rate = DatabaseConnect::getResult("select * from product_rating where product_id like '".$_REQUEST['product_id']."' and customer_id like '".$_SESSION['username']."'",$conn);
                                     echo "<script>
@@ -734,6 +744,11 @@
                                                 $('.icon-review-rated i').eq(i).removeClass('fa-star-o');
                                                 $('.icon-review-rated i').eq(i).addClass('fa-star');
                                             }
+                                            $('#go_review').click(function(){
+                                                $('html,body').animate({
+                                                    scrollTop: $('#".$_SESSION['username']."').offset().top
+                                                },700);
+                                            });
                                     </script>";
 
                                 }
@@ -752,27 +767,40 @@
                 </div>
                 
                 <?php 
-                    $rate = DatabaseConnect::getResult("select * from product_rating r, customer c, review re where r.product_id like '".$_REQUEST['product_id']."' and r.customer_id = c.customer_username and re.product_ID = r.product_id",$conn);
+                    $rate = DatabaseConnect::getResult("select * from product_rating p, customer c where p.product_id like '".$_REQUEST['product_id']."' and p.customer_id = c.customer_username",$conn);
+                    $review = DatabaseConnect::getResult("select * from customer c, review r where r.product_id like '".$_REQUEST['product_id']."' and r.customer_id = c.customer_username",$conn);
                     if(count($rate) > 0){
-                        foreach ($rate as $value)     
+                        $count = 0;
+                        foreach ($rate as $value) 
                         {
                 ?>
                             <div class="row">
                                 <div class="col-xs-1 col-md-1 col-lg-1"></div>
-                                <div class="col-xs-11 col-md-11 col-lg-11" style="text-align: left; overflow-wrap: break-word;">
+                                <div class="col-xs-11 col-md-11 col-lg-11" style="text-align: left; overflow-wrap: break-word;" id="<?=$value['customer_username']?>">
                                     <p style="font-size: 13px; margin:0;"><?=$value['customer_name']?></p>
                                     <div class="col-xs-12 col-md-12 col-lg-12" style="padding: 0;">
-                                        <i class="fa fa-star-o color-star" style="font-size: 14px;"></i>
-                                        <i class="fa fa-star-o color-star" style="font-size: 14px;"></i>
-                                        <i class="fa fa-star-o color-star" style="font-size: 14px;"></i>
-                                        <i class="fa fa-star-o color-star" style="font-size: 14px;"></i>
-                                        <i class="fa fa-star-o color-star" style="font-size: 14px;"></i>
+                                        <?php 
+                                            for($i = 0; $i < $value['rating']; $i++){
+                                        ?>
+                                                <i class="fa fa-star color-star" style="font-size: 14px;"></i>
+                                        <?php 
+                                                if($i == $value['rating']-1){
+                                                    for($j = 0; $j < 5-$value['rating']; $j++){
+                                        ?>
+                                                        <i class="fa fa-star-o color-star" style="font-size: 14px;"></i>
+                                        <?php 
+                                                    }
+                                                }
+                                            }
+                                        ?>
+                                        
                                     </div>
-                                    <p style="color: #666; font-size: 12px;"></p>
+                                    <p style="color: #666; font-size: 12px;"><?=$review[$count]['content'] ?></p>
                                 </div>
                             </div>
                             <hr style="border: 0.7px solid rgb(227, 227, 227); width: 100%; margin:0;">
                 <?php
+                            $count++;
                         }
                     }
                 ?>
@@ -929,6 +957,5 @@
         });
         
         $('#back-to-top').tooltip('show');
-
 </script>
 </html>
