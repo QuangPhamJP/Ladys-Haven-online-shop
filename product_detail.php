@@ -812,6 +812,9 @@
             </div>
         </div>
     </div>
+    <?php  
+        DatabaseConnect::closeConnect($conn);
+    ?>
 
     <footer class="footer-bottom footer-style">
         <div class="container">

@@ -117,6 +117,7 @@
                 <li><a href="aboutus.html"><b>About us</b></a></li>
             </ul>
             <?php 
+                session_start();
                 if(isset($_SESSION['username'])){
             ?>
                     <ul style="float: right; list-style: none; position: relative; width: 22%;top: 16px;">

@@ -70,7 +70,7 @@
             </div>
             <ul class="nav navbar-nav">
                 <li><a href="#"><span class="glyphicon glyphicon-home"></span><b> Home</b></a></li>
-                <li><a href="producMain.html"><b>Products</b></a></li>
+                <li><a href="product.php"><b>Products</b></a></li>
                 <li><a href="contact.html"><b>Contact</b></a></li>
                 <li><a href="aboutus.html"><b></b></a></li>
             </ul>
