@@ -885,23 +885,6 @@
 </body>
 <script src="js/product_detail.js"></script>
 <script>
-        if(typeof($("#send_value"))!= 'undefinded' && $("#send_value") !== null){
-            $("#send_value").click(function(){
-                var num_star = $(".active-star").length;
-                var txt_content = $("#content").val();
-                var product_id = $("#product_id_hidden").val();
-
-                $.ajax({
-                    url: "review.php",
-                    method: "post",
-                    data:{content:txt_content, num_star:num_star, product_id:product_id},
-                    success:function(data){
-                        location.reload();
-                    }
-                });
-            });
-        }
-
         $(".review_scroll_down").click(function(){
             $('html,body').animate({
                 scrollTop: $('.review_scroll_down_destination').offset().top
@@ -976,5 +959,30 @@
                 scrollTop: $('.review_scroll_down_destination').offset().top
             },700);
         });
+
+
+        
+            $("#send_value").click(function(){
+                if($(".icon-review i").hasClass("active-star")){
+                    var num_star = $(".active-star").length;
+                    var txt_content = $("#content").val();
+                    var product_id = $("#product_id_hidden").val();
+
+                    $.ajax({
+                        url: "review.php",
+                        method: "post",
+                        data:{content:txt_content, num_star:num_star, product_id:product_id},
+                        success:function(data){
+                            alert("Send Successfully!");
+                            location.reload();
+                        }
+                    });
+                }
+                else{
+                    alert("Please vote star!");
+                }
+            });
+        
+
 </script>
 </html>
