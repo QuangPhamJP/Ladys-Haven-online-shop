@@ -292,6 +292,10 @@
             bottom: 50px;
             font-size: 14px;
         }
+        .review_scroll_down span:hover{
+            cursor: pointer;
+            color: #337ab7;
+        }
         body{
             background-color: #fafafa;
         }
@@ -428,9 +432,9 @@
                 </div>
 
                 <div class="col-xs-12 col-md-12 col-lg-12 product-anchor">
-                    <div class="col-xs-4 col-md-4 col-lg-4">Product Detail</div>
-                    <div class="col-xs-4 col-md-4 col-lg-4">Brand</div>
-                    <div class="col-xs-4 col-md-4 col-lg-4">Review</div>
+                    <div class="col-xs-4 col-md-4 col-lg-4" id="product_detail">Product Detail</div>
+                    <div class="col-xs-4 col-md-4 col-lg-4" id="product_brand">Brand</div>
+                    <div class="col-xs-4 col-md-4 col-lg-4" id="product_review">Review</div>
                 </div>
             </div>            
         </div>
@@ -492,7 +496,7 @@
             Product
         </div>
 
-        <div class="row" style="font-size: 20px;">
+        <div class="row" style="font-size: 20px;" id="detail">
             <div class="col-xs-8 col-md-8 col-lg-8" style="text-align: left; background-color: #e5e5e5; padding: 12px 20px; border-right: 1px solid #d6d4d4;">
                 Information
             </div>
@@ -957,5 +961,17 @@
         });
         
         $('#back-to-top').tooltip('show');
+
+        $("#product_detail, #product_brand").click(function(){
+            $('html,body').animate({
+                scrollTop: $('#detail').offset().top
+            },700);
+        });
+
+        $("#product_review").click(function(){
+            $('html,body').animate({
+                scrollTop: $('.review_scroll_down_destination').offset().top
+            },700);
+        });
 </script>
 </html>
