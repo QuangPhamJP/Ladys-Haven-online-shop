@@ -508,7 +508,7 @@
         <div class="row">
             <div class="col-xs-8 col-md-8 col-lg-8 border_line" style="border-right: 1px solid #d6d4d4; height: 489px;">
                 <h4>Overview <?=$getProduct[0]['prod_name']?></h4>
-                <p><?=$getProduct[0]['prod_description']?></p>
+                <p style="word-break: break-all;"><?=$getProduct[0]['prod_description']?></p>
             </div>
             <div class="col-xs-4 col-md-4 col-lg-4 border_line">
                 <h4>General information</h4>

@@ -54,6 +54,17 @@ if (!isset($_SESSION['registered_admin'])) {
         $gender = $_POST['editGender'];
         $cat = $_POST['editCat'];
         $des = $_POST['editDes'];
+        $brand = $_POST['brand'];
+        $editMaterial = $_POST['editMaterial'];
+        $editDetail = $_POST['editDetail'];
+        $editDetailSize = $_POST['editDetailSize'];
+        $editStrapMaterial = $_POST['editStrapMaterial'];
+        $editStrapLength = $_POST['editStrapLength'];
+        $editZipType = $_POST['editZipType'];
+        $editSlotNum = $_POST['editSlotNum'];
+        $editSimpleSize = $_POST['editSimpleSize'];
+        $editStyle = $_POST['editStyle'];
+
         if(isset($_REQUEST['image'])){
             $query .= "`image` = '".$_REQUEST['image']."',";
         }
@@ -66,7 +77,7 @@ if (!isset($_SESSION['registered_admin'])) {
         if(isset($_REQUEST['image_4'])){
             $query .= "`image_4` = '".$_REQUEST['image_4']."',";
         }
-        $updateSQL = "update products set ".$query." `prod_name` = '$name', `prod_price` = $price, `quantity` = $stock, `product_gender` = '$gender', `product_category` = '$cat' where `prod_id` = $id ";
+        $updateSQL = "update products set ".$query." `prod_name` = '$name', `prod_price` = $price, `quantity` = $stock, `product_gender` = '$gender', `product_category` = '$cat', `prod_description` = '$des', `brand_id` = '$brand' , `material` = '$editMaterial', `detail` = '$editDetail' , `detail_size` = '$editDetailSize' , `strap_material` = '$editStrapMaterial' , `strap_length` = '$editStrapLength', `zip_type` = '$editZipType', `slot_num` = '$editSlotNum', `simple_size` = '$editSimpleSize', `style` = '$editStyle' where `prod_id` = $id";
 
         if (mysqli_query($link, $updateSQL)) {
             $_SESSION['edit_success'] = "Product successfully edited";
@@ -210,7 +221,42 @@ if (!isset($_SESSION['registered_admin'])) {
                                     <tr><td>Product's description</td>
                                         <td><textarea rows='4' cols='50' name='editDes'><?php echo $row[3] ?></textarea></tr>
                                     <tr>
-                                        <td><input type='submit' name='imgChange1' value='Click here to change products image 1_1'></td>
+
+                                    <tr>
+                                    <td>Product's Brand:</td>
+                                    <td><select name='brand' required>
+                                            <?php
+                                            $brandGet = "select * from brand";
+                                            $brandRes = mysqli_query($link, $brandGet);
+                                            while ($row_ = mysqli_fetch_row($brandRes)) {
+                                                ?>
+                                                <option value='<?php echo $row_[0] ?>'><?php echo $row_[1] ?></option> 
+                                                <?php
+
+                                                } 
+                                                    echo "<script>$('[name=brand]').val('".$row[11]."');</script>";
+                                                ?>
+                                        </select></td>
+                                    </tr>
+                                    <tr><td>Product's Material</td>
+                                        <td><input type='text' name='editMaterial' value="<?php echo $row[12] ?>"></tr>
+                                    <tr><td>Product's Detail</td>
+                                        <td><input type='text' name='editDetail' value="<?php echo $row[13] ?>"></tr>
+                                    <tr><td>Product's detail size</td>
+                                        <td><input type='text' name='editDetailSize' value="<?php echo $row[14] ?>"></tr>
+                                    <tr><td>Product's Strap Material</td>
+                                        <td><input type='text' name='editStrapMaterial' value="<?php echo $row[15] ?>"></tr>
+                                    <tr><td>Product's Strap Length</td>
+                                        <td><input type='text' name='editStrapLength' value="<?php echo $row[16] ?>"></tr>
+                                    <tr><td>Product's Zip Type</td>
+                                        <td><input type='text' name='editZipType' value="<?php echo $row[17] ?>"></tr>
+                                    <tr><td>Product's Slot Num</td>
+                                        <td><input type='text' name='editSlotNum' value="<?php echo $row[18] ?>"></tr>
+                                    <tr><td>Product's Simple Size</td>
+                                        <td><input type='number' name='editSimpleSize' value="<?php echo $row[19] ?>"></tr>
+                                    <tr><td>Product's Style</td>
+                                        <td><input type='number' name='editStyle' value="<?php echo $row[20] ?>"></tr>
+                                    <td><input type='submit' name='imgChange1' value='Click here to change products image 1_1'></td>
                                     </tr>
                                     <tr>
                                         <td><input type='submit' name='imgChange2' value='Click here to change products image 1_2'></td>
