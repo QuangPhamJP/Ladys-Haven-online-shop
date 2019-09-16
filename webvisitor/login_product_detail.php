@@ -1,7 +1,6 @@
 <?php 
 	require_once '../database/databaseConnect.php';
 	require_once '../Constants/constants.php';
-
 	session_start();
  	$conn = DatabaseConnect::connect();
  	$showProduct = "";

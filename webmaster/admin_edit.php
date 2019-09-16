@@ -2,7 +2,9 @@
 session_start();
 if (!isset($_SESSION['registered_admin'])) {
     header("location:../TestLogin.php");
+    exit;
 }
+
 ?>
 
 
@@ -10,28 +12,103 @@ if (!isset($_SESSION['registered_admin'])) {
 <html lang="en">
     <?php
     $id = $_GET['prodlist'];
-    include_once '../connect.inc';
+    require_once '../connect.inc';
     $selectProductSpecific = "select * from products where prod_id = '$id'";
     $res = mysqli_query($link, $selectProductSpecific);
     $row = mysqli_fetch_row($res);
+    $filename = $row[4];
+    $filename_2 = $row[5];
+    $filename_3 = $row[6];
+    $filename_4 = $row[7];
+    $string = "";
+    if(isset($_SESSION['error_upload'])){
+        echo "<script>alert('Error selected image')</script>";
+        unset($_SESSION['error_upload']);
+    }
 
+    if(isset($_REQUEST['image'])){
+        $filename = $_REQUEST['image'];
+        $string .= "&image=".$filename;
+    }
+
+    if(isset($_REQUEST['image_2'])){
+        $filename_2 = $_REQUEST['image_2'];
+        $string .= "&image_2=".$filename_2;
+    }
+
+    if(isset($_REQUEST['image_3'])){
+        $filename_3 = $_REQUEST['image_3'];
+        $string .= "&image_3=".$filename_3;
+    }
+    
+    if(isset($_REQUEST['image_4'])){
+        $filename_4 = $_REQUEST['image_4'];
+        $string .= "&image_4=".$filename_4;
+    }
+    
     if (isset($_POST['btnEdit'])) {
+        $query = "";
         $name = $_POST['editName'];
         $price = $_POST['editPrice'];
         $stock = $_POST['editStock'];
         $gender = $_POST['editGender'];
         $cat = $_POST['editCat'];
         $des = $_POST['editDes'];
-        $imgname = $_POST['fileUpload'];
-        $updateSQL = "update products set `prod_name` = '$name', `prod_price` = $price, `quantity` = $stock, `product_gender` = '$gender', `product_category` = '$cat' where `prod_id` = $id ";
+        if(isset($_REQUEST['image'])){
+            $query .= "`image` = '".$_REQUEST['image']."',";
+        }
+        if(isset($_REQUEST['image_2'])){
+            $query .= "`image_2` = '".$_REQUEST['image_2']."',";
+        }
+        if(isset($_REQUEST['image_3'])){
+            $query .= "`image_3` = '".$_REQUEST['image_3']."',";
+        }
+        if(isset($_REQUEST['image_4'])){
+            $query .= "`image_4` = '".$_REQUEST['image_4']."',";
+        }
+        $updateSQL = "update products set ".$query." `prod_name` = '$name', `prod_price` = $price, `quantity` = $stock, `product_gender` = '$gender', `product_category` = '$cat' where `prod_id` = $id ";
+
         if (mysqli_query($link, $updateSQL)) {
             $_SESSION['edit_success'] = "Product successfully edited";
             header("location:admin_product_dashboard.php");
+            exit;
         } else {
             header("location:admin_dashboard.php");
+            exit;
         }
-    } else if (isset($_POST['imgChange'])) {
-        header("location: upload_page.php?prodlist=$id");
+    } else {
+        if (isset($_POST['imgChange1'])) {
+            if(!isset($_REQUEST['image'])){
+                $string .= "&image=".$filename;
+            }
+            $_SESSION['imgChange1'] = "";
+            header("location: upload_page.php?prodlist=$id".$string);
+            exit;
+        }
+        else if(isset($_POST['imgChange2'])){
+            if(!isset($_REQUEST['image_2'])){
+                $string .= "&image_2=".$filename_2;
+            }
+            $_SESSION['imgChange2'] = "";
+            header("location: upload_page.php?prodlist=$id".$string);
+            exit;
+        }
+        else if(isset($_POST['imgChange3'])){
+            if(!isset($_REQUEST['image_3'])){
+                $string .= "&image_3=".$filename_3;
+            }
+            $_SESSION['imgChange3'] = "";
+            header("location: upload_page.php?prodlist=$id".$string);
+            exit;
+        }
+        else if(isset($_POST['imgChange4'])){
+            if(!isset($_REQUEST['image_4'])){
+                $string .= "&image_4=".$filename_4;
+            }
+            $_SESSION['imgChange4'] = "";
+            header("location: upload_page.php?prodlist=$id".$string);
+            exit;
+        }
     }
     ?>
 
@@ -49,6 +126,8 @@ if (!isset($_SESSION['registered_admin'])) {
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <!-- Custom styles for this template -->
         <link href="../frameworks/sidebar.css" rel="stylesheet" type="text/css">
+        <script src="../js/jquery-3.3.1.min.js"></script>
+        <script src="../js/bootstrap.min.js"></script>
 
     </head>
 
@@ -104,47 +183,53 @@ if (!isset($_SESSION['registered_admin'])) {
                         <form method='POST' enctype="multipart/form-data">
 
                             <table class='table'>
-                                <tr>
-                                    <td><img src="../img/<?php echo $row[4] ?>" width="200" height="300"></td>
-                                </tr>
-                                <tr>
-                                    <td>Product's name:</td>
-                                    <td><input type='text' name='editName' value="<?php echo $row[1] ?>"</td>
-                                </tr>
-                                <tr>
-                                    <td>Product's Price:</td>
-                                    <td><input type='number' name='editPrice' value="<?php echo "$row[2]" ?>"></td>
-                                </tr>
-                                <tr>
-                                    <td>Product's stock</td>
-                                    <td><input type='number' name='editStock' value="<?php echo $row[8] ?>"></td>
-                                </tr>
-                                <tr><td>Product's gender</td>
-                                    <td><input type='text' name='editGender' value="<?php echo $row[9] ?>"></td></tr>
+                                <tbody style="width: 100%; display: block; height: 200px;">
+                                    <tr style="display: block; height: 100%;">
+                                        <td style="width: 26%; height: 100%; display: inline-block;"><img src="../img/<?php echo $filename; ?>" width="100%" height="100%" name="image"></td>
+                                        <td style="width: 24.2%; height: 100%; display: inline-block;"><img src="../img/<?php echo $filename_2; ?>" width="100%" height="100%" name="image"></td>
+                                        <td style="width: 24.1%; height: 100%; display: inline-block;"><img src="../img/<?php echo $filename_3; ?>" width="100%" height="100%" name="image"></td>
+                                        <td style="width: 24.1%; height: 100%; display: inline-block;"><img src="../img/<?php echo $filename_4; ?>" width="100%" height="100%" name="image"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Product's name:</td>
+                                        <td><input type='text' name='editName' value="<?php echo $row[1] ?>"</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Product's Price:</td>
+                                        <td><input type='number' name='editPrice' value="<?php echo "$row[2]" ?>"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Product's stock</td>
+                                        <td><input type='number' name='editStock' value="<?php echo $row[8] ?>"></td>
+                                    </tr>
+                                    <tr><td>Product's gender</td>
+                                        <td><input type='text' name='editGender' value="<?php echo $row[9] ?>"></td></tr>
 
-                                <tr><td>Product's category (handbag or backpack)</td>
-                                    <td><input type='text' name='editCat' value="<?php echo $row[10] ?>"></tr>
-                                <tr><td>Product's description</td>
-                                    <td><textarea rows='4' cols='50' name='editDes'><?php echo $row[3] ?></textarea></tr>
-                                <tr>
-                                    <td><input type='submit' name='imgChange' value='Click here to change products image'></td>
-                                </tr>
-                                <tr><td><input type='submit' name='btnEdit' value='Edit'></td></tr>
+                                    <tr><td>Product's category (handbag or backpack)</td>
+                                        <td><input type='text' name='editCat' value="<?php echo $row[10] ?>"></tr>
+                                    <tr><td>Product's description</td>
+                                        <td><textarea rows='4' cols='50' name='editDes'><?php echo $row[3] ?></textarea></tr>
+                                    <tr>
+                                        <td><input type='submit' name='imgChange1' value='Click here to change products image 1_1'></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type='submit' name='imgChange2' value='Click here to change products image 1_2'></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type='submit' name='imgChange3' value='Click here to change products image 1_3'></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type='submit' name='imgChange4' value='Click here to change products image 1_4'></td>
+                                    </tr>
+                                    <tr><td><input type='submit' name='btnEdit' value='Edit' id="btn_edit"></td></tr>
+                                </tbody>
                             </table>
                         </form>
-
                     </div>
                 </div>
             </div>
             <!-- /#page-content-wrapper -->
-
         </div>
         <!-- /#wrapper -->
-
-
-
-
     </body>
-
-
 </html>

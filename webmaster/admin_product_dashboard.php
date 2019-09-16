@@ -14,11 +14,11 @@ if (isset($_SESSION['edit_success'])) {
     echo "</script>";
     unset($_SESSION['edit_success']);
 }
-if (isset($_SESSION['imgerror'])) {
-    $imgerror = $_SESSION['imgerror'];
-    echo "<script> alert(\"$imgerror\") </script>";
-    unset($_SESSION['imgerror']);
-}
+// if (isset($_SESSION['imgerror'])) {
+//     $imgerror = $_SESSION['imgerror'];
+//     echo "<script> alert(\"$imgerror\") </script>";
+//     unset($_SESSION['imgerror']);
+// }
 ?>
 <!DOCTYPE html>
 <html lang="en">

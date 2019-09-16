@@ -121,20 +121,24 @@ session_start();
                     <li><a href="contact.php"><b>Contact</b></a></li>
                     <li><a href="aboutus.php"><b>About us</b></a></li>
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <?php
-                    if (isset($_SESSION['username'])) {
-                        $name = $_SESSION['username'];
-                        echo '<li style = "margin-right:50px;"><a href = "shopping_cart.php"><span class = "fa fa-cart-plus"</a></li>';
-                        echo "<li><a href='customer_info.php'><span class='glyphicon glyphicon-user'></span> $name</a></li> ";
-                        echo "<li><a href='../webvisitor/user_logout.php'><span class='glyphicon glyphicon-off'></span> Log out</a></li>";
-                    } else {
-                        echo "<li style = 'margin-right:50px;'><a href = 'shopping_cart.php'><span class = 'fa fa-cart-plus'> <span class='badge' id='cart'></span></span></a></li>";
-                        echo '<li><a href="../webvisitor/TestRegister.php"><span class="glyphicon glyphicon-user"></span> Sign up</a></li>';
-                        echo '<li><a href="../webvisitor/TestLogin.php"><span class="glyphicon glyphicon-log-in"></span> Sign in</a></li>';
+                 <?php 
+                if(isset($_SESSION['username'])){
+                ?>
+                        <ul style="float: right; list-style: none; position: relative; width: 22%;top: 16px;">
+                            <li style="display: inline-block;"><span class="glyphicon glyphicon-user"></span><a href="customer_info.php"><?=$_SESSION['username']?></a></li>
+                            <li style="display: inline-block; margin-left: 16px;"><span class="glyphicon glyphicon-log-in"></span><a id="logout">Log out</a></li>
+                        </ul>
+                <?php
                     }
-                    ?>
-                </ul>
+                    else{
+                ?>
+                        <ul style="float: right; list-style: none; position: relative; width: 22%;top: 16px;">
+                            <li style="display: inline-block;"><span class="glyphicon glyphicon-user"></span><a href="TestLogin.php">Log in</a></li>
+                            <li style="display: inline-block; margin-left: 16px;"><span class="glyphicon glyphicon-log-in"></span><a href="TestRegister.php">Sign up</a></li>
+                        </ul>
+                <?php
+                    }
+                ?>
             </div>
         </nav>
 
@@ -375,7 +379,7 @@ session_start();
                             ?>
                             <div class="item col-lg-6 col-xs-6 div-product-thumbnail" >
                                 <div class="thumbnail product_thumbnail">
-                                    <img src="../img/<?= $productList ?>" class="img-responsive" alt="Image"/>
+                                    <img src="../img/<?=$productList ?>" class="img-responsive" alt="Image"/>
                                     <h4 class="list-group-item-heading"><span style="color: #3aa5ab;"><?= $getProduct[$i]["prod_name"] ?></span>
                                     </h4>
                                     <h5 class="list-group-item-text"><?php

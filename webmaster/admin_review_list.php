@@ -2,6 +2,7 @@
 session_start();
 if (!isset($_SESSION['registered_admin'])) {
     header("location: admin_login.php");
+    exit;
 }
 ?>
 <!DOCTYPE html>
@@ -23,10 +24,28 @@ if (!isset($_SESSION['registered_admin'])) {
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="../js/jquery-3.3.1.min.js"></script>
+        <script src="../js/bootstrap.min.js"></script>
+        
     </head>
 
     <body>
         <?php include_once '../connect.inc'; ?>
+
+        <div id="deleted"></div>
+
+        <script>
+            function showStatus(id) {
+                $.ajax({
+                    url: "updateReviewStatus.php",
+                    method: "post",
+                    data:{id:id},
+                    success:function(data){
+                        $('#update_content_'+id).html(data);
+                    }
+                });
+            }
+        </script>
 
         <div class="d-flex" id="wrapper">
 
@@ -83,25 +102,25 @@ if (!isset($_SESSION['registered_admin'])) {
                     <th>Product's id</th>
                     <th>Product's name</th>
                     <th>Number of reviews</th>
-                    <th></th>
+                    <th>Change Review Content</th>
                     </thead>
                     <tbody>
                         <?php
                         include_once '../connect.inc';
-                        $getReview = "select a.product_ID, b.prod_name, count(*) from review a, products b where a.product_ID = b.prod_id group by a.product_ID";
+                        $getReview = "select a.product_ID, b.prod_name, count(*) from product_rating a, products b where a.product_ID = b.prod_id group by a.product_ID";
                         $res = mysqli_query($link, $getReview);
                         while ($row = mysqli_fetch_row($res)) {
                             echo "<td>$row[0]</td>";
                             echo "<td>$row[1]</td>";
                             echo "<td>$row[2]</td>";
-                            echo "<td><button type='button' class='btn btn-sm btn-info' data-toggle='modal' data-target='#modal-$row[0]'>Check status</button></td>";
+                            echo "<td><button type='button' class='btn btn-sm btn-info' data-toggle='modal' data-target='#modal-$row[0]'>Edit</button></td>";
                         }
                         ?>
                     </tbody>
                 </table>
                 <!-- The Modal -->
                 <?php
-                $getReviewWithContent = "select a.id, a.customer_id, a.content, b.prod_name, a.product_ID, a.review_status from review a, products b where a.product_ID = b.prod_id";
+                $getReviewWithContent = "select a.id, a.customer_id, a.rating_content, b.prod_name, a.product_ID from product_rating a, products b where a.product_ID = b.prod_id";
                 $contentResult = mysqli_query($link, $getReviewWithContent);
                 $res2 = mysqli_query($link, $getReview);
                 while ($row2 = mysqli_fetch_row($res2)) {
@@ -123,25 +142,15 @@ if (!isset($_SESSION['registered_admin'])) {
                                         <th>Review's ID</th>
                                         <th>Customer's ID</th>
                                         <th>Review's Content</th>
-                                        <th>Review's Status</th>
-                                        <th>Change review Status</th>
+                                        <th>Delete review content</th>
                                         </thead>
                                         <tbody>
                                             <?php while ($row = mysqli_fetch_row($contentResult)) { ?>
                                                 <tr>
                                                     <td><?php echo "$row[0]" ?></td>
                                                     <td><?php echo "$row[1]" ?></td>
-                                                    <td><?php echo "$row[2]" ?></td>
-                                                    <td id="<?php echo $row[0] ?>"><?php
-                                                        if ($row[5] == 0) {
-                                                            echo "Hidden";
-                                                        } else {
-                                                            echo "Shown";
-                                                        }
-                                                        ?></td>
-                                                    <?php
-                                                    echo "<td><button type='button' class='btn btn-primary btn-sm' onclick='showStatus($row[0])' ><b>Change status</b></button></td>";
-                                                    ?>
+                                                    <td id="update_content_<?=$row[0]?>" style = "word-break: break-all;"><?php echo "$row[2]" ?></td>
+                                                    <td><button onclick="showStatus(<?=$row[0]?>);">Delete content</button></td>
                                                 </tr>
                                             <?php } ?>
                                         </tbody>
@@ -156,8 +165,10 @@ if (!isset($_SESSION['registered_admin'])) {
 
                             </div>
                         </div>
-                    <?php } ?>
-                </div>
+                    </div>
+                <?php 
+                    } 
+                ?>
             </div>
             <!-- /#page-content-wrapper -->
 
@@ -165,18 +176,5 @@ if (!isset($_SESSION['registered_admin'])) {
         <!-- /#wrapper -->
 
     </body>
-    <script>
-
-        function showStatus(id, stat) {
-            xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    document.getElementById(id).innerHTML = this.responseText;
-                }
-            };
-            xhttp.open("GET", "updateReviewStatus.php?id=" + id, true);
-            xhttp.send();
-        }
-    </script>
 
 </html>

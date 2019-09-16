@@ -1,15 +1,17 @@
 <?php
 
 include '../connect.inc';
-$id = $_GET['id'];
-$getStats = "select review_status from review where id = $id";
-$res = mysqli_fetch_array(mysqli_query($link, $getStats));
-if ($res[0] == 0) {
-    $newstatus = 1;
-} else if ($res[0] == 1) {
-    $newstatus = 0;
-}
-$query = "update review set review_status = $newstatus where id = $id";
+$id = $_POST['id'];
+$query = "update product_rating set rating_content = '' where id = $id";
 if (mysqli_query($link, $query)) {
-    echo $newstatus?"Shown" : "Hidden";
+    $query = "select rating_content from product_rating where id = $id";
+    $res = mysqli_query($link, $query);
+  	while($row = mysqli_fetch_row($res)){
+  		echo $row[0];
+  	}
+  	echo "<script>alert('Deleted Success');</script>";
 }   
+else{
+	echo "<script>alert('Error');</script>";
+}
+?>
