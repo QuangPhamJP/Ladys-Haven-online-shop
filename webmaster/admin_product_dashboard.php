@@ -1,7 +1,5 @@
 <?php
-if (!isset($_SESSION)) {
     session_start();
-}
 
 if (!isset($_SESSION['registered_admin'])) {
     header("location:../TestLogin.php");
@@ -13,6 +11,10 @@ if (isset($_SESSION['edit_success'])) {
     echo "alert(\"$editmsg\")";
     echo "</script>";
     unset($_SESSION['edit_success']);
+}
+if(isset($_SESSION['del_unsuccess'])){
+    echo "<script>alert('Deleted error');</script>";
+    unset($_SESSION['del_unsuccess']);
 }
 // if (isset($_SESSION['imgerror'])) {
 //     $imgerror = $_SESSION['imgerror'];
